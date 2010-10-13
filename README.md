@@ -33,6 +33,11 @@ You can specify a few extra parameters when you call the `init` method of the `S
 - `limitRight` *(boolean)*: Prohibits the slider from moving right
 - `init` *(function)*: Function to invoke when we're done setting up the slider
 
+For example, let's provide a slider with next/previous buttons:
+
+    var slider = new Yum.TouchSlider();
+    slider.init('.slider', {next: '.next', previous: '.previous'});
+
 ## Hook System
 
 Yum is designed to give you a great deal of visibility of its insides. To help you extend Yum, we've provided a simple hook system for you to tap into. Hooks have specific names and are invoked at specific times in the execution of the slider's timeline. 
@@ -51,3 +56,5 @@ The hooks available to you are:
 - `end`: Triggered when the user lifts her finger off of the slider
 - `endNoMove`: Triggered when the user lifts her finger off of the slider and did not move the slider
 - `animationEnd`: Triggered when the slide animation has completed
+
+The callback function that you provide the `subscribe` function give your callback a single parameter: the `Slider` or `TouchSlider` instance you are manipulating. This allows you to perform external tasks when the hook is invoked or augment the behaviour of the slider itself.
