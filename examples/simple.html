@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <title>Simple</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+  <script src="../yumslider.js" type="text/javascript"></script>
+  <style>
+    .slider {
+      width: 300px;
+    }
+    .slider .item {
+      width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div class="slider">
+    <div class="items">
+      <div class="item">Hello world</div>
+      <div class="item">Hello world</div>
+      <div class="item">Hello world</div>
+      <div class="item">Hello world</div>
+    </div>
+    <a href="" class="next">Next</a>
+    <a href="" class="previous">Previous</a>
+  </div>
+
+  <script type="text/javascript">
+  $(function() {
+    var slider = new Yum.Slider();
+    slider.init('.slider', {next: '.next', previous: '.previous'});
+  });
+  </script>
+</body>
+</html>
