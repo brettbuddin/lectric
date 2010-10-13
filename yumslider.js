@@ -53,7 +53,7 @@
     this.hooks = new Subscription();
 
     var $element = $(element);
-    $element.children('.item').wrapAll('.items');
+    $element.find('.item').wrapAll('<div class="items">');
     $element.css('overflow', 'hidden');
     this.element = $element.find('.items');
     this.element.css('width', '1000000px');
