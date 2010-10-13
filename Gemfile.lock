@@ -1,0 +1,10 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    closure-compiler (0.3.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  closure-compiler
