@@ -1,5 +1,5 @@
 (function(window) {
-  var Yum = {};
+  var Lectric = {};
   var Browser = {};
 
   var ua = navigator.userAgent.toLowerCase();
@@ -10,7 +10,7 @@
   } catch (e) {
     Browser.supportsTouch = false;
   }
-  Yum.Browser = Browser;
+  Lectric.Browser = Browser;
 
 
 
@@ -285,8 +285,8 @@
     this.element.css({'-webkit-transition-property': '-webkit-transform'});
   };
 
-  Yum.Slider = Slider;
-  Yum.TouchSlider = TouchSlider;
+  Lectric.Slider = Slider;
+  Lectric.TouchSlider = TouchSlider;
 
-  window.Yum = Yum;
+  window.Lectric = Lectric;
 })(window);

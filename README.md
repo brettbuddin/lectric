@@ -1,6 +1,8 @@
-# Yum Slider
+# Lectric Slider
 
-Yum Slider is a JavaScript slider that is touch enabled and looks awesome on Apple touch devices.
+Lectric is a JavaScript slider that is touch enabled and looks awesome on Apple touch devices.
+
+It's Electric!
 
 **Requires:** [jQuery](http://github.com/jquery/jquery)
 
@@ -9,7 +11,7 @@ Yum Slider is a JavaScript slider that is touch enabled and looks awesome on App
 Put this in your `<head>`:
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
-    <script src="/path/to/yumslider.js" type="text/javascript"></script>
+    <script src="/path/to/lectric.js" type="text/javascript"></script>
 
 ## Usage
 
@@ -24,12 +26,12 @@ HTML:
 
 ### Non-Touch Slider
 
-    var slider = new Yum.Slider();
+    var slider = new Lectric.Slider();
     slider.init('.slider');
 
 ### Touch Enabled Slider
 
-    var slider = new Yum.TouchSlider();
+    var slider = new Lectric.TouchSlider();
     slider.init('.slider');
 
 ## Optional Parameters
@@ -44,12 +46,12 @@ You can specify a few extra parameters when you call the `init` method of the `S
 
 For example, let's provide a slider with next/previous buttons:
 
-    var slider = new Yum.TouchSlider();
+    var slider = new Lectric.TouchSlider();
     slider.init('.slider', {next: '.next', previous: '.previous'});
 
 ## Hook System
 
-Yum is designed to give you a great deal of visibility of its insides. To help you extend Yum, we've provided a simple hook system for you to tap into. Hooks have specific names and are invoked at specific times in the execution of the slider's timeline. 
+Lectric is designed to give you a great deal of visibility of its insides. To help you extend Lectric, we've provided a simple hook system for you to tap into. Hooks have specific names and are invoked at specific times in the execution of the slider's timeline. 
 
 Subscribing to a hook looks something like this:
 
