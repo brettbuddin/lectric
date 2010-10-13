@@ -13,6 +13,15 @@ Put this in your `<head>`:
 
 ## Usage
 
+HTML:
+
+    <div class="slider">
+      <div class="item">Hello world</div>
+      <div class="item">Hello world</div>
+      <div class="item">Hello world</div>
+      <div class="item">Hello world</div>
+    </div>
+
 ### Non-Touch Slider
 
     var slider = new Yum.Slider();
