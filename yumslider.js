@@ -18,7 +18,7 @@
     this.hooks = [];  
   };
 
-  Subscription.prototype.subscribe = function(hook, fn) {
+  Subscription.prototype.push = function(hook, fn) {
     if (this.hooks[hook] === undefined) {
       this.hooks[hook] = [];
     }
@@ -68,7 +68,6 @@
         self.currentX = self.limitXBounds(self.nextPageX(self.currentX));
         if (self.currentX !== previous) {
           self.update();
-          self.hooks.invoke('move', self);
         }
 
         return false;
@@ -94,7 +93,7 @@
   };
 
   Slider.prototype.update = function(opts) {
-    var opts = jQuery.extend({animate: true, callHook: true}, opts||{});
+    var opts = jQuery.extend({animate: true, invokeMove: true}, opts||{});
 
     var self = this;
     var after = function() {
@@ -108,7 +107,11 @@
       this.element.css({'margin-left': this.currentX + 'px'}).queue(after);
     }
 
-    if (opts.callHook) { this.hooks.invoke('update', this); }
+    if (opts.invokeMove) { this.hooks.invoke('move', this); }
+  };
+
+  Slider.prototype.subscribe = function(name, fn) {
+    return this.hooks.push(name, fn);
   };
 
   Slider.prototype.structure = function(element) {
@@ -189,11 +192,11 @@
   };
 
   TouchSlider.prototype.update = function(opts) {
-    var opts = jQuery.extend({animate: true, callHook: true}, opts||{});
+    var opts = jQuery.extend({animate: true, invokeMove: true}, opts||{});
     if (opts.animate) { this.decayOn(); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.currentX + 'px, 0, 0)'}); 
 
-    if (opts.callHook) { this.hooks.invoke('update', this); }
+    if (opts.invokeMove) { this.hooks.invoke('move', this); }
   };
 
   TouchSlider.prototype.handleEvent = function(e) { this[e.type](e); };
@@ -205,7 +208,7 @@
   };
 
   TouchSlider.prototype.touchstart = function(e) {
-    this.current_target = e.currentTarget;
+    this.currentTarget = e.currentTarget;
     this.startX = e.touches[0].pageX - this.currentX;
     this.startY = e.touches[0].pageY - this.currentY;
     this.moved = false;
@@ -218,7 +221,7 @@
 
     this.decayOff();
 
-    this.hooks.invoke('touchStart', this);
+    this.hooks.invoke('start', this);
   };
 
   TouchSlider.prototype.touchmove = function(e) {
@@ -231,17 +234,16 @@
         e.preventDefault();
       }
 
-      this.hooks.invoke('firstTouchMove', this);
+      this.hooks.invoke('firstMove', this);
     }
 
     this.moved = true;
     this.lastX = this.currentX;
-    this.last_move_time = new Date();
+    this.lastMoveTime = new Date();
 
     this.currentX = this.limitXBounds(e.touches[0].pageX - this.startX);
 
     this.update();
-    this.hooks.invoke('touchMove', this);
   };
 
   TouchSlider.prototype.touchend = function(e) {
@@ -252,18 +254,18 @@
 
     if (this.moved) {
       var dx = this.currentX - this.lastX;
-      var dt = (new Date()) - this.last_move_time + 1; 
+      var dt = (new Date()) - this.lastMoveTime + 1; 
       
       var tossedX = this.limitXBounds(this.currentX + dx * 100 / dt);
       this.currentX = this.nearestPageX(tossedX);
 
       this.update();
-      this.hooks.invoke('touchMove', this);
+      this.hooks.invoke('end', this);
     } else {
-      this.hooks.invoke('touchEndNoMove', this);
+      this.hooks.invoke('endNoMove', this);
     }
 
-    this.current_target = undefined;
+    this.currentTarget = undefined;
   };
 
   TouchSlider.prototype.webkitTransitionEnd = function(e) {
