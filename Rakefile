@@ -1,16 +1,17 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'closure-compiler'
+require 'jslint'
 
 prefix = File.dirname(__FILE__)
 lectric = File.join(prefix, 'js', 'lectric.js')
 lectric_min = File.join(prefix, 'js', 'lectric.min.js')
 version = File.join(prefix, 'VERSION')
 
-task :default => :all
+task :default => :build
 
 desc "Build and minify Lectric."
-task :all => [:stamp_version, :minify] do
+task :build => [:lint, :stamp_version, :minify] do
   puts "Lectric build complete."
 end
 
@@ -20,6 +21,14 @@ task :stamp_version => :version do
   file = File.open(lectric, 'w')
   file.puts contents.gsub(/(Lectric v)([\d\w\.-]+)/, "\\1#{@version}")
   file.close
+end
+
+task :lint do
+  lint = JSLint::Lint.new(
+    :paths => ['js/**/*.js'],
+    :exclude_paths => ['js/**/*.min.js']
+  )
+  lint.run
 end
 
 desc "Compress the library using Google's Closure Compiler"

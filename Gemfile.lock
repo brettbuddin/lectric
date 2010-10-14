@@ -2,9 +2,11 @@ GEM
   remote: http://rubygems.org/
   specs:
     closure-compiler (0.3.3)
+    jslint_on_rails (1.0.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   closure-compiler
+  jslint_on_rails

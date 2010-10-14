@@ -79,7 +79,7 @@
   };
 
   Slider.prototype.update = function(opts) {
-    var opts = jQuery.extend({animate: true, triggerMove: true}, opts||{});
+    var options = jQuery.extend({animate: true, triggerMove: true}, opts);
 
     var self = this;
     var after = function() {
@@ -87,13 +87,13 @@
       $(this).dequeue();
     };
 
-    if (opts.animate) {
+    if (options.animate) {
       this.element.animate({'margin-left': this.currentX + 'px'}).queue(after);
     } else {
       this.element.css({'margin-left': this.currentX + 'px'}).queue(after);
     }
 
-    if (opts.triggerMove) { this.element.trigger('lectric.move'); }
+    if (options.triggerMove) { this.element.trigger('lectric.move'); }
   };
 
   Slider.prototype.subscribe = function(name, fn) {
@@ -110,14 +110,14 @@
     var first = function() { return element.find('.item').eq(0); };
 
     structure.itemCount = function() { return element.find('.item').size(); };
-    structure.itemHeight = function() { return parseInt(first().height()); };
+    structure.itemHeight = function() { return parseInt(first().height(), 10); };
 
     structure.itemSpacing = function() { 
       var marginRight = first().css('marginRight');
-      return (marginRight !== undefined) ? parseInt(marginRight.replace('px', '')) : 0;
+      return (marginRight !== undefined) ? parseInt(marginRight.replace('px', ''), 10) : 0;
     };
     structure.itemWidth = function() { 
-      return (structure.itemSpacing() + parseInt(first().width())); 
+      return (structure.itemSpacing() + parseInt(first().width(), 10)); 
     };
 
     return structure;
@@ -153,10 +153,15 @@
   Slider.prototype.limitXBounds = function(currentX) {
     var total_width = this.structure.itemWidth() * this.structure.itemCount();
     if (this.opts.reverse) {
-      currentX = (currentX > total_width - this.structure.itemWidth()) ? total_width - this.structure.itemWidth() : currentX;
+      currentX = (currentX > total_width - this.structure.itemWidth()) ? 
+                   total_width - this.structure.itemWidth() : 
+                   currentX;
+
       currentX = (currentX < 0) ? 0 : currentX;
     } else {
-    currentX = (currentX < -total_width + this.structure.itemWidth()) ? -total_width + this.structure.itemWidth() : currentX;
+    currentX = (currentX < -total_width + this.structure.itemWidth()) ? 
+                 -total_width + this.structure.itemWidth() : 
+                 currentX;
       currentX = (currentX > 0) ? 0 : currentX;
     }
 
@@ -184,11 +189,11 @@
   };
 
   TouchSlider.prototype.update = function(opts) {
-    var opts = jQuery.extend({animate: true, triggerMove: true}, opts||{});
-    if (opts.animate) { this.decayOn(); }
+    var options = jQuery.extend({animate: true, triggerMove: true}, opts);
+    if (options.animate) { this.decayOn(); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.currentX + 'px, 0, 0)'}); 
 
-    if (opts.triggerMove) { this.element.trigger('lectric.move'); }
+    if (options.triggerMove) { this.element.trigger('lectric.move'); }
   };
 
   TouchSlider.prototype.handleEvent = function(e) { this[e.type](e); };
