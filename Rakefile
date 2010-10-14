@@ -23,6 +23,7 @@ task :stamp_version => :version do
   file.close
 end
 
+desc "Run library against JSLint"
 task :lint do
   lint = JSLint::Lint.new(
     :paths => ['js/**/*.js'],
