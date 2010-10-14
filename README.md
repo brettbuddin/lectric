@@ -33,10 +33,14 @@ HTML:
     var slider = new Lectric.Slider();
     slider.init('.slider');
 
+This slider uses `margin-left` for movement.
+
 ### Touch Slider
 
     var slider = new Lectric.TouchSlider();
     slider.init('.slider');
+
+This slider uses `-webkit-transform` (using `translate3d`) for movement. It also provides bindings for touch events.
 
 ## Optional Parameters
 
