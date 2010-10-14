@@ -1,0 +1,10 @@
+.lectric-slider-touch {
+  -webkit-transform: translate3d(0, 0, 0);
+}
+.lectric-slider-touch .items {
+  -webkit-transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  -webkit-font-smoothing: antialiased;
+}
+.lectric-slider-touch .item {
+  -webkit-transform: translate3d(0, 0, 0);
+}

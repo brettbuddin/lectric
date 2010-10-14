@@ -26,29 +26,6 @@
 
 
 
-  var Subscription = function() {
-    this.hooks = [];  
-  };
-
-  Subscription.prototype.push = function(hook, fn) {
-    if (this.hooks[hook] === undefined) {
-      this.hooks[hook] = [];
-    }
-    this.hooks[hook].push(fn);
-  };
-
-  Subscription.prototype.invoke = function(hook) {
-    if (this.hooks[hook] !== undefined) {
-      var args = Array().slice.call(arguments);
-      var self = this;
-      jQuery.each(this.hooks[hook], function(i, fn) {
-        fn.apply(self, args.slice(1));
-      });
-    }
-  };
-
-
-
   var Slider = function() {};
 
   Slider.prototype.init = function(element, opts) {
@@ -62,7 +39,6 @@
 
     this.currentX = 0;
     this.currentY = 0;
-    this.hooks = new Subscription();
 
     var $element = $(element);
     $element.find('.item').wrapAll('<div class="items">');
@@ -92,7 +68,6 @@
         self.currentX = self.limitXBounds(self.previousPageX(self.currentX));
         if (self.currentX !== previous) {
           self.update();
-          self.hooks.invoke('move', self);
         }
 
         return false;
@@ -105,11 +80,11 @@
   };
 
   Slider.prototype.update = function(opts) {
-    var opts = jQuery.extend({animate: true, invokeMove: true}, opts||{});
+    var opts = jQuery.extend({animate: true, triggerMove: true}, opts||{});
 
     var self = this;
     var after = function() {
-      self.hooks.invoke('animationEnd', self);
+      this.element.trigger('lectric.animationEnd');
       $(this).dequeue();
     };
 
@@ -119,11 +94,16 @@
       this.element.css({'margin-left': this.currentX + 'px'}).queue(after);
     }
 
-    if (opts.invokeMove) { this.hooks.invoke('move', this); }
+    if (opts.triggerMove) { this.element.trigger('lectric.move'); }
   };
 
   Slider.prototype.subscribe = function(name, fn) {
-    return this.hooks.push(name, fn);
+    var self = this;
+    return this.element.bind('lectric.' + name, function(e) {
+      if (e.target == self.element[0]) {
+        fn(self);
+      }
+    });
   };
 
   Slider.prototype.structure = function(element) {
@@ -196,6 +176,7 @@
 
   TouchSlider.prototype.init = function(element, structure, opts) {
     TouchSlider.superobject.init.call(this, element, structure, opts);
+    this.element.parent().addClass('lectric-slider-touch');
 
     this.gesturing = false;
     var $element = $(element);
@@ -204,11 +185,11 @@
   };
 
   TouchSlider.prototype.update = function(opts) {
-    var opts = jQuery.extend({animate: true, invokeMove: true}, opts||{});
+    var opts = jQuery.extend({animate: true, triggerMove: true}, opts||{});
     if (opts.animate) { this.decayOn(); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.currentX + 'px, 0, 0)'}); 
 
-    if (opts.invokeMove) { this.hooks.invoke('move', this); }
+    if (opts.triggerMove) { this.element.trigger('lectric.move'); }
   };
 
   TouchSlider.prototype.handleEvent = function(e) { this[e.type](e); };
@@ -233,7 +214,7 @@
 
     this.decayOff();
 
-    this.hooks.invoke('start', this);
+    this.element.trigger('lectric.start');
   };
 
   TouchSlider.prototype.touchmove = function(e) {
@@ -246,7 +227,7 @@
         e.preventDefault();
       }
 
-      this.hooks.invoke('firstMove', this);
+      this.element.trigger('lectric.firstMove');
     }
 
     this.moved = true;
@@ -272,16 +253,16 @@
       this.currentX = this.nearestPageX(tossedX);
 
       this.update();
-      this.hooks.invoke('end', this);
+      this.element.trigger('lectric.end');
     } else {
-      this.hooks.invoke('endNoMove', this);
+      this.element.trigger('lectric.endNoMove');
     }
 
     this.currentTarget = undefined;
   };
 
   TouchSlider.prototype.webkitTransitionEnd = function(e) {
-    this.hooks.invoke('animationEnd', this);
+    this.element.trigger('lectric.animationEnd');
   };
 
   TouchSlider.prototype.gesturestart = function(e) { this.gesturing = true; };

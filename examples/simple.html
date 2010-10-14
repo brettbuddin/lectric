@@ -3,30 +3,37 @@
 <head>
   <title>Simple</title>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
-  <script src="../lectric.js" type="text/javascript"></script>
+
+  <link href="../css/lectric.css" rel="stylesheet" media="screen" type="text/css">
+  <script src="../js/lectric.js" type="text/javascript"></script>
+
   <style>
-    .slider {
-      width: 300px;
+    #slider {
+      height: 300px;
+      width: 500px;
     }
-    .slider .item {
-      width: 300px;
+    #slider .item {
+      height: 300px;
+      width: 500px;
+      margin-right: 50px;
     }
   </style>
 </head>
 <body>
-  <div class="slider">
+  <div id="slider">
     <div class="item">Hello world</div>
     <div class="item">Hello world</div>
     <div class="item">Hello world</div>
     <div class="item">Hello world</div>
   </div>
+
   <a href="" class="next">Next</a>
   <a href="" class="previous">Previous</a>
 
   <script type="text/javascript">
   $(function() {
     var slider = new Lectric.TouchSlider();
-    slider.init('.slider', {next: '.next', previous: '.previous'});
+    slider.init('#slider', {next: '.next', previous: '.previous'});
   });
   </script>
 </body>

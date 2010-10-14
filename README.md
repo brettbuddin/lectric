@@ -9,9 +9,13 @@ It's Electric!
 ## Installation
 
 Put this in your `<head>`:
+    
+    <link href="/path/to/css/lectric.css" rel="stylesheet" type="text/css" media="screen">
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
-    <script src="/path/to/lectric.js" type="text/javascript"></script>
+    <script src="/path/to/js/lectric.js" type="text/javascript"></script>
+
+The stylesheet is required if you intend on using `TouchSlider`, because you need to establish a baseline transform when the page loads; otherwise, you'll end up with some blinking and jitter.
 
 ## Usage
 
@@ -29,7 +33,7 @@ HTML:
     var slider = new Lectric.Slider();
     slider.init('.slider');
 
-### Touch Enabled Slider
+### Touch Slider
 
     var slider = new Lectric.TouchSlider();
     slider.init('.slider');

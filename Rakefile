@@ -3,8 +3,8 @@ require 'bundler/setup'
 require 'closure-compiler'
 
 prefix = File.dirname(__FILE__)
-lectric = File.join(prefix, 'lectric.js')
-lectric_min = File.join(prefix, 'lectric.min.js')
+lectric = File.join(prefix, 'js', 'lectric.js')
+lectric_min = File.join(prefix, 'js', 'lectric.min.js')
 
 task :default => :all
 
