@@ -26,7 +26,7 @@
   }
 
   var Slider = function() {
-    if (Browser.supportsTouch && Browser.isWebKit) {
+    if (Browser.supportsTouch && Browser.isWebkit) {
       return new TouchSlider();
     } else {
       return new BaseSlider();
