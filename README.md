@@ -15,36 +15,25 @@ Put this in your `<head>`:
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
     <script src="/path/to/js/lectric.js" type="text/javascript"></script>
 
-The stylesheet is required if you intend on using `TouchSlider`, because you need to establish a baseline transform when the page loads; otherwise, you'll end up with some blinking and jitter.
-
 ## Usage
 
 HTML:
 
-    <div class="slider">
+    <div id="slider">
       <div class="item">Hello world</div>
       <div class="item">Hello world</div>
       <div class="item">Hello world</div>
       <div class="item">Hello world</div>
     </div>
 
-### Non-Touch Slider
+JavaScript:
 
     var slider = new Lectric.Slider();
-    slider.init('.slider');
-
-This slider uses `margin-left` for movement.
-
-### Touch Slider
-
-    var slider = new Lectric.TouchSlider();
-    slider.init('.slider');
-
-This slider uses `-webkit-transform` (using `translate3d`) for movement. It also provides bindings for touch events.
+    slider.init('#slider');
 
 ## Optional Parameters
 
-You can specify a few extra parameters when you call the `init` method of the `Slider` or `TouchSlider` objects. Those include:
+You can specify a few extra parameters when you call the `init` method. Those include:
 
 - `next` *(selector)*: Next button
 - `previous` *(selector)*: Previous button
@@ -54,7 +43,7 @@ You can specify a few extra parameters when you call the `init` method of the `S
 
 For example, let's provide a slider with next/previous buttons:
 
-    var slider = new Lectric.TouchSlider();
+    var slider = new Lectric.Slider();
     slider.init('.slider', {next: '.next', previous: '.previous'});
 
 ## Hook System

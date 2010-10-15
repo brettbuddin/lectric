@@ -14,20 +14,28 @@
   var Browser = {};
 
   var ua = navigator.userAgent.toLowerCase();
-  Browser.isWebkit = ua.indexOf('applewebkit/') > -1;
+  Browser.isWebkit = !!ua.match(/applewebkit/i);
+  Browser.isChrome = !!ua.match(/chrome/i);
+  Browser.isIE = !!ua.match(/msie/i);
+  Browser.isFirefox = ua.match(/firefox/);
   try {
     document.createEvent("TouchEvent");
     Browser.supportsTouch = true;
   } catch (e) {
     Browser.supportsTouch = false;
   }
-  Lectric.Browser = Browser;
 
+  var Slider = function() {
+    if (Browser.supportsTouch && Browser.isWebKit) {
+      return new TouchSlider();
+    } else {
+      return new BaseSlider();
+    }
+  };
 
+  var BaseSlider = function() {};
 
-  var Slider = function() {};
-
-  Slider.prototype.init = function(element, opts) {
+  BaseSlider.prototype.init = function(element, opts) {
     this.opts = jQuery.extend({
       next: undefined, 
       previous: undefined, 
@@ -78,7 +86,7 @@
     }
   };
 
-  Slider.prototype.update = function(opts) {
+  BaseSlider.prototype.update = function(opts) {
     var options = jQuery.extend({animate: true, triggerMove: true}, opts);
 
     var self = this;
@@ -96,7 +104,7 @@
     if (options.triggerMove) { this.element.trigger('lectric.move'); }
   };
 
-  Slider.prototype.subscribe = function(name, fn) {
+  BaseSlider.prototype.subscribe = function(name, fn) {
     var self = this;
     return this.element.bind('lectric.' + name, function(e) {
       if (e.target == self.element[0]) {
@@ -105,7 +113,7 @@
     });
   };
 
-  Slider.prototype.structure = function(element) {
+  BaseSlider.prototype.structure = function(element) {
     var structure = {};
     var first = function() { return element.find('.item').eq(0); };
 
@@ -123,34 +131,34 @@
     return structure;
   };
 
-  Slider.prototype.page = function(currentX) {
+  BaseSlider.prototype.page = function(currentX) {
     return Math.abs(Math.round(currentX / this.structure.itemWidth()));
   };
 
-  Slider.prototype.nearestPageX = function(currentX) {
+  BaseSlider.prototype.nearestPageX = function(currentX) {
     return Math.round(currentX / this.structure.itemWidth()) * this.structure.itemWidth();
   };
 
-  Slider.prototype.pageX = function(index) {
+  BaseSlider.prototype.pageX = function(index) {
     var flip = (this.opts.reverse) ? 1 : -1;
     return flip * index * this.structure.itemWidth();
   };
 
-  Slider.prototype.nextPageX = function(currentX) {
+  BaseSlider.prototype.nextPageX = function(currentX) {
     if (this.page(currentX) + 1 <= this.structure.itemCount() - 1) {
       currentX = currentX -this.structure.itemWidth();
     }
     return currentX;
   };
 
-  Slider.prototype.previousPageX = function(currentX) {
+  BaseSlider.prototype.previousPageX = function(currentX) {
     if (this.page(currentX) >= 0) {
       currentX = currentX + this.structure.itemWidth();
     }
     return currentX;
   };
 
-  Slider.prototype.limitXBounds = function(currentX) {
+  BaseSlider.prototype.limitXBounds = function(currentX) {
     var total_width = this.structure.itemWidth() * this.structure.itemCount();
     if (this.opts.reverse) {
       currentX = (currentX > total_width - this.structure.itemWidth()) ? 
@@ -175,8 +183,8 @@
 
 
   var TouchSlider = function() {};
-  TouchSlider.prototype = new Slider();
-  TouchSlider.superobject = Slider.prototype;
+  TouchSlider.prototype = new BaseSlider();
+  TouchSlider.superobject = BaseSlider.prototype;
 
   TouchSlider.prototype.init = function(element, structure, opts) {
     TouchSlider.superobject.init.call(this, element, structure, opts);
@@ -283,6 +291,7 @@
   };
 
   Lectric.Slider = Slider;
+  Lectric.BaseSlider = BaseSlider;
   Lectric.TouchSlider = TouchSlider;
 
   window.Lectric = Lectric;
