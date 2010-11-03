@@ -91,7 +91,7 @@
 
     var self = this;
     var after = function() {
-      this.element.trigger('lectric.animationEnd');
+      self.element.trigger('lectric.animationEnd');
       $(this).dequeue();
     };
 
