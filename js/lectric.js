@@ -91,7 +91,7 @@
 
     var self = this;
     var after = function() {
-      self.element.trigger('lectric.animationEnd');
+      self.element.trigger('animationEnd.lectric');
       $(this).dequeue();
     };
 
@@ -101,12 +101,12 @@
       this.element.css({'margin-left': this.currentX + 'px'}).queue(after);
     }
 
-    if (options.triggerMove) { this.element.trigger('lectric.move'); }
+    if (options.triggerMove) { this.element.trigger('move.lectric'); }
   };
 
   BaseSlider.prototype.subscribe = function(name, fn) {
     var self = this;
-    return this.element.bind('lectric.' + name, function(e) {
+    return this.element.bind(name + '.lectric', function(e) {
       if (e.target == self.element[0]) {
         fn(self);
       }
@@ -201,7 +201,7 @@
     if (options.animate) { this.decayOn(); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.currentX + 'px, 0, 0)'}); 
 
-    if (options.triggerMove) { this.element.trigger('lectric.move'); }
+    if (options.triggerMove) { this.element.trigger('move.lectric'); }
   };
 
   TouchSlider.prototype.handleEvent = function(e) { this[e.type](e); };
@@ -226,7 +226,7 @@
 
     this.decayOff();
 
-    this.element.trigger('lectric.start');
+    this.element.trigger('start.lectric');
   };
 
   TouchSlider.prototype.touchmove = function(e) {
@@ -239,7 +239,7 @@
         e.preventDefault();
       }
 
-      this.element.trigger('lectric.firstMove');
+      this.element.trigger('firstMove.lectric');
     }
 
     this.moved = true;
@@ -265,16 +265,16 @@
       this.currentX = this.nearestPageX(tossedX);
 
       this.update();
-      this.element.trigger('lectric.end');
+      this.element.trigger('end.lectric');
     } else {
-      this.element.trigger('lectric.endNoMove');
+      this.element.trigger('endNoMove.lectric');
     }
 
     this.currentTarget = undefined;
   };
 
   TouchSlider.prototype.webkitTransitionEnd = function(e) {
-    this.element.trigger('lectric.animationEnd');
+    this.element.trigger('animationEnd.lectric');
   };
 
   TouchSlider.prototype.gesturestart = function(e) { this.gesturing = true; };
