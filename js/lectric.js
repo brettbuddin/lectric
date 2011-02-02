@@ -248,7 +248,7 @@
 
     this.currentX = this.limitXBounds(e.touches[0].pageX - this.startX);
 
-    this.update();
+    this.update({animate: false});
   };
 
   TouchSlider.prototype.touchend = function(e) {
