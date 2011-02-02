@@ -144,6 +144,31 @@
     return flip * index * this.structure.itemWidth();
   };
 
+  BaseSlider.prototype.to = function(index) {
+    var previous = this.currentX;
+    this.currentX = this.limitXBounds(this.pageX(index));
+    if (this.currentX !== previous) {
+      this.update();
+    }
+    return this.currentX;
+  };
+
+  BaseSlider.prototype.toElement = function(e) {
+    var previous = this.currentX;
+    var index = this.getItemIndex(e);
+	return this.to(index);
+  };
+	
+  BaseSlider.prototype.getItemIndex = function(e) {
+	var all = this.element.find('.item');
+    
+    var i;
+    var length = all.length;
+	for (i = 0; i < length; i++) {
+      if ($(all[i])[0] == e[0]) { return i; }
+	}
+  };
+
   BaseSlider.prototype.nextPageX = function(currentX) {
     if (this.page(currentX) + 1 <= this.structure.itemCount() - 1) {
       currentX = currentX -this.structure.itemWidth();
