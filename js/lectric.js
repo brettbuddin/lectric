@@ -38,7 +38,8 @@
   BaseSlider.prototype.init = function(element, opts) {
     this.opts = jQuery.extend({
       next: undefined, 
-      previous: undefined, 
+      previous: undefined,
+      item : ".item",
       limitLeft: false,
       limitRight: false, 
       init: undefined
@@ -48,11 +49,12 @@
     this.currentY = 0;
 
     var $element = $(element);
-    $element.find('.item').wrapAll('<div class="items">');
+    $element.find(this.opts.item).wrapAll('<div class="items">');
     $element.css('overflow', 'hidden');
     this.element = $element.find('.items');
+    this.element.itemSelector = this.opts.item;
     this.element.css('width', '1000000px');
-    this.element.find('.item').css('float', 'left');
+    this.element.find(this.element.itemSelector).css('float', 'left');
 
     this.structure = this.structure(this.element);
     
@@ -115,9 +117,9 @@
 
   BaseSlider.prototype.structure = function(element) {
     var structure = {};
-    var first = function() { return element.find('.item').eq(0); };
+    var first = function() { return element.find(element.itemSelector).eq(0); };
 
-    structure.itemCount = function() { return element.find('.item').size(); };
+    structure.itemCount = function() { return element.find(element.itemSelector).size(); };
     structure.itemHeight = function() { return parseInt(first().height(), 10); };
 
     structure.itemSpacing = function() { 
@@ -160,7 +162,7 @@
   };
 	
   BaseSlider.prototype.getItemIndex = function(e) {
-	var all = this.element.find('.item');
+	var all = this.element.find(this.element.itemSelector);
     
     var i;
     var length = all.length;
