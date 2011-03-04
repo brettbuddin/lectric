@@ -167,7 +167,7 @@
       }
     };
 
-    $(this).bind(name + '.lectric', callback);
+    this.element.bind(name + '.lectric', callback);
     return callback;
   };
 
@@ -179,9 +179,9 @@
   // Returns nothing.
   BaseSlider.prototype.unsubscribe = function(name, fn) {
     if (typeof fn !== undefined && $.isFunction(fn)) {
-      $(this).unbind(name + '.lectric', fn);
+      this.element.unbind(name + '.lectric', fn);
     } else {
-      $(this).unbind(name + '.lectric');
+      this.element.unbind(name + '.lectric');
     }
   };
 
