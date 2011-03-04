@@ -18,8 +18,8 @@
     supportsTouch = true;
   } catch (e) {}
 
-  $.fn.cssWithoutUnit = function(attribute) {
-    var measure = $(this).css(attribute);
+  var cssWithoutUnit = function(element, attribute) {
+    var measure = element.css(attribute);
     return (measure !== undefined) ? parseInt(measure.replace('px', ''), 10) : 0;
   };
 
@@ -193,8 +193,8 @@
 
   BaseSlider.prototype._itemWidth = function() {
     var first = this.element.find(this.element.itemSelector).eq(0);
-    var padding = first.cssWithoutUnit('paddingRight') + first.cssWithoutUnit('paddingLeft');
-    return first.cssWithoutUnit('marginRight') + padding + first.width();
+    var padding = cssWithoutUnit(first, 'paddingRight') + cssWithoutUnit(first, 'paddingLeft');
+    return cssWithoutUnit(first, 'marginRight') + padding + first.width();
   };
 
   BaseSlider.prototype._itemCount = function() {
