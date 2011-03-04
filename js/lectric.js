@@ -1,5 +1,5 @@
 /*!
- * Lectric v0.2.3
+ * Lectric v0.3
  * http://github.com/mckinney/lectric
  *
  * Copyright 2010, McKinney
@@ -165,7 +165,8 @@
       if (e.target == self.target[0]) { 
         fn(self, e);
       }
-    }
+    };
+
     $(this).bind(name + '.lectric', callback);
     return callback;
   };
