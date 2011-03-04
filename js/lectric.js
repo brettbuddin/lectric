@@ -1,5 +1,5 @@
 /*!
- * Lectric v0.3
+ * Lectric v0.3.1
  * http://github.com/mckinney/lectric
  *
  * Copyright 2010, McKinney
