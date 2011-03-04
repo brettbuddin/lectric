@@ -157,6 +157,7 @@
   };
 
   BaseSlider.prototype.page = function() {
+    console.log(this._itemWidth());
     return Math.abs(Math.round(this.position.x / this._itemWidth()));
   };
 
@@ -192,7 +193,8 @@
 
   BaseSlider.prototype._itemWidth = function() {
     var first = this.element.find(this.element.itemSelector).eq(0);
-    return first.cssWithoutUnit('marginRight') + first.width();
+    var padding = first.cssWithoutUnit('paddingRight') + first.cssWithoutUnit('paddingLeft');
+    return first.cssWithoutUnit('marginRight') + padding + first.width();
   };
 
   BaseSlider.prototype._itemCount = function() {
