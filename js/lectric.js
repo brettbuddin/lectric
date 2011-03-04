@@ -162,7 +162,7 @@
   BaseSlider.prototype.subscribe = function(name, fn) {
     var self = this;
     var callback = function(e) {
-      if (e.target == self.target[0]) { 
+      if (e.target == self.element[0]) { 
         fn(self, e);
       }
     };
