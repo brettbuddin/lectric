@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bundler/setup'
 require 'closure-compiler'
 require 'jslint'
+require 'webrick'
 
 prefix = File.dirname(__FILE__)
 lectric = File.join(prefix, 'js', 'lectric.js')
@@ -56,4 +57,15 @@ end
 task :version do
   @version = File.read(version).strip
   puts "VERSION: #{@version}"
+end
+
+desc "Starts an HTTP server in the current directory"
+task :server do
+  config = {:Port => 3000, :DocumentRoot => '.'}
+  server = WEBrick::HTTPServer.new config
+  ['INT', 'TERM'].each do |signal|
+    trap(signal) { server.shutdown }
+  end
+
+  server.start
 end
