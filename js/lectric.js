@@ -61,6 +61,7 @@
       itemClassName: 'item',
       limitLeft: false,
       limitRight: false, 
+      animateDuration: 400,
       hooks: {}
     }, opts);
 
@@ -141,7 +142,7 @@
     };
 
     if (options.animate) {
-      this.element.animate({'margin-left': this.position.x + 'px'}).queue(after);
+      this.element.animate({'margin-left': this.position.x + 'px'}, this.opts.animateDuration).queue(after);
     } else {
       this.element.css({'margin-left': this.position.x + 'px'}).queue(after);
     }
@@ -271,6 +272,11 @@
   // Returns nothing.
   TouchSlider.prototype.init = function(target, opts) {
     TouchSlider.superobject.init.call(this, target, opts);
+    this.opts = $.extend({
+      tossFunction: function(x, dx, dt) {
+        return x + dx * 100 / dt;
+      }
+    }, this.opts);
     this.element.parent().addClass('lectric-slider-touch');
 
     this.gesturing = false;
@@ -284,7 +290,7 @@
   // 
   // Returns nothing.
   TouchSlider.prototype.handleEvent = function(event) { 
-    TouchEvents[e.type].call(this, event); 
+    TouchEvents[event.type].call(this, event); 
   };
 
 
@@ -317,7 +323,8 @@
   // 
   // Returns nothing.
   TouchSlider.prototype._decayOn = function() {
-    this.element.css({'-webkit-transition-duration': '0.4s'});
+    var duration = this.opts.animateDuration / 1000;
+    this.element.css({'-webkit-transition-duration': duration + 's'});
     this.element.css({'-webkit-transition-property': '-webkit-transform'});
   };
 
@@ -378,8 +385,10 @@
         var dx = this.position.x - this.lastPosition.x;
         var dt = (new Date()) - this.lastMoveTime + 1; 
         
-        var tossedX = this._limitXBounds(this.position.x + dx * 100 / dt);
+        var tossedX = this._limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
         var width = this._itemWidth();
+
+        // Find the nearest page
         this.position.x = Math.round(this.position.x / width) * width;
 
         this.update();
