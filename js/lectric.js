@@ -10,23 +10,16 @@
  */
 
 (function(window) {
-  var Lectric = {};
-  var Browser = {};
-
   var ua = navigator.userAgent.toLowerCase();
-  Browser.isWebkit = !!ua.match(/applewebkit/i);
-  Browser.isChrome = !!ua.match(/chrome/i);
-  Browser.isIE = !!ua.match(/msie/i);
-  Browser.isFirefox = ua.match(/firefox/);
+  isWebkit = !!ua.match(/applewebkit/i);
+  var supportsTouch = false;
   try {
     document.createEvent("TouchEvent");
-    Browser.supportsTouch = true;
-  } catch (e) {
-    Browser.supportsTouch = false;
-  }
+    supportsTouch = true;
+  } catch (e) {}
 
   var Slider = function() {
-    if (Browser.supportsTouch && Browser.isWebkit) {
+    if (supportsTouch && isWebkit) {
       return new TouchSlider();
     } else {
       return new BaseSlider();
