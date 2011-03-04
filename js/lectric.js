@@ -48,6 +48,12 @@
 
   var BaseSlider = function() {};
 
+  // Initialize the BaseSlider.
+  //
+  // text - The String CSS selector of the slider container.
+  // opts - The Map of extra parameters.
+  // 
+  // Returns nothing.
   BaseSlider.prototype.init = function(target, opts) {
     this.opts = jQuery.extend({
       next: undefined, 
@@ -119,6 +125,13 @@
     this.element.trigger('init.lectric');
   };
 
+  // Update the current position of the slider.
+  //
+  // opts - The Map of extra parameters:
+  //        animate - Boolean of whether or not to animate between two states.
+  //        triggerMove - Boolean of whether or not to trigger the move hook.
+  // 
+  // Returns nothing.
   BaseSlider.prototype.update = function(opts) {
     var options = jQuery.extend({animate: true, triggerMove: true}, opts);
 
@@ -137,6 +150,13 @@
     if (options.triggerMove) { this.element.trigger('move.lectric'); }
   };
 
+
+  // Subscribe a callback function to a hook.
+  //
+  // name - The String name of the hook.
+  // fn - The Function callback to execute when the hook is triggered.
+  // 
+  // Returns the Function callback that was bound to the hook.
   BaseSlider.prototype.subscribe = function(name, fn) {
     var self = this;
     var callback = function(e) {
@@ -148,40 +168,38 @@
     return callback;
   };
 
+  // Unsubscribe a callback function from a hook or unsubscribe all callbacks from a hook.
+  //
+  // name - The String name of the hook.
+  // fn - The Function callback to execute when the hook is triggered.
+  // 
+  // Returns nothing.
   BaseSlider.prototype.unsubscribe = function(name, fn) {
-    if (typeof fn !== undefined && isFunction(fn)) {
+    if (typeof fn !== undefined && $.isFunction(fn)) {
       $(this).unbind(name + '.lectric', fn);
     } else {
       $(this).unbind(name + '.lectric');
     }
   };
 
+
+  // Retrieve the current page of the slider.
+  // 
+  // Returns the Integer page number of the slider.
   BaseSlider.prototype.page = function() {
     return Math.abs(Math.round(this.position.x / this._itemWidth()));
   };
 
+  // Move to a specific page number.
+  //
+  // page - The Integer page number to move to.
+  // 
+  // Returns nothing.
   BaseSlider.prototype.to = function(page) {
     var previous = this.position.x;
     this.position.x = this._limitXBounds(this._xForPage(page));
     if (this.position.x !== previous) {
       this.update();
-    }
-    return this.position.x;
-  };
-
-  BaseSlider.prototype.update = function(opts) {
-    var options = jQuery.extend({animate: true}, opts);
-
-    var self = this;
-    var after = function() {
-      self.element.trigger('animationEnd.lectric');
-      $(this).dequeue();
-    };
-    
-    if (options.animate) {
-      this.element.animate({'margin-left': this.position.x + 'px'}).queue(after);
-    } else {
-      this.element.css('margin-left', this.position.x).queue(after);
     }
   };
 
