@@ -39,12 +39,14 @@ You can specify a few extra parameters when you call the `init` method. Those in
 - `previous` *(selector)*: Previous button
 - `limitLeft` *(boolean)*: Prohibits the slider from moving left
 - `limitRight` *(boolean)*: Prohibits the slider from moving right
-- `init` *(function)*: Function to invoke when we're done setting up the slider
+- `itemClassName` *(string)*: Class name of the individual pages of the slider
+- `itemWrapperClassName` *(string)*: Class name of the container that wraps all items in the slider
+- `hooks` *(map)*: Map of callback functions that should be subscribed various hooks that are called (see next section for more about hooks)
 
 For example, let's provide a slider with next/previous buttons:
 
     var slider = new Lectric.Slider();
-    slider.init('.slider', {next: '.next', previous: '.previous'});
+    slider.init('#slider', {next: '.next', previous: '.previous'});
 
 ## Hook System
 
@@ -52,12 +54,13 @@ Lectric is designed to give you a great deal of visibility of its insides. To he
 
 Subscribing to a hook looks something like this:
 
-    slider.subscribe('move', function(s) {
-      console.log('We just moved! Our current position is:' + s.currentX);
+    slider.subscribe('move', function(s, event) {
+      console.log('We just moved! Our current position is:' + s.position.x);
     });
 
 The hooks available to you are:
 
+- `init`: Triggered when after the slider is initialized
 - `start`: Triggered when the user puts her finger down on the slider
 - `move`: Triggered when the position of the slider is updated
 - `firstMove`: Triggered the first time the position of the slider is updated (for a single touch event)

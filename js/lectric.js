@@ -56,7 +56,7 @@
       itemClassName: 'item',
       limitLeft: false,
       limitRight: false, 
-      callbacks: {}
+      hooks: {}
     }, opts);
 
     this.position = new Position(0, 0);
@@ -106,13 +106,11 @@
     }    
     
     // Bind callbacks passed in at initialization
-    $.each(this.opts.callbacks, function(name, fn) {
-      $(self).bind(name + '.lectric', function(e) {
-        if (e.target == self.target[0]) { 
-          fn(self);
-        }
-      });
+    $.each(this.opts.hooks, function(name, fn) {
+      self.subscribe(name, fn);
     });
+
+    this.element.trigger('init.lectric');
   };
 
   BaseSlider.prototype.update = function(opts) {
@@ -137,7 +135,7 @@
     var self = this;
     var callback = function(e) {
       if (e.target == self.target[0]) { 
-        fn(e);
+        fn(self, e);
       }
     }
     $(this).bind(name + '.lectric', callback);
