@@ -203,21 +203,39 @@
     }
   };
 
+  // Retrieve the current X position.
+  //
+  // page - The Integer page number.
+  // 
+  // Returns the Integer X position of the slider.
   BaseSlider.prototype._xForPage = function(page) {
     var flip = (this.opts.reverse) ? 1 : -1;
     return flip * page * this._itemWidth();
   };
 
+
+  // Retrieve the width of a single item (including margin-right and padding).
+  // 
+  // Returns the Integer width of a single item.
   BaseSlider.prototype._itemWidth = function() {
     var first = this.element.find(this.element.itemSelector).eq(0);
     var padding = cssWithoutUnit(first, 'paddingRight') + cssWithoutUnit(first, 'paddingLeft');
     return cssWithoutUnit(first, 'marginRight') + padding + first.width();
   };
 
+  // Retrieve number of items in the slider.
+  // 
+  // Returns the Integer number of items.
   BaseSlider.prototype._itemCount = function() {
     return this.element.find(this.element.itemSelector).size();
   };
 
+
+  // Constrain the X position to within the slider beginning and end.
+  //
+  // x - The Integer X position
+  //
+  // Returns the Integer X position after being constrained.
   BaseSlider.prototype._limitXBounds = function(x) {
     var itemWidth = this._itemWidth();
     var itemCount = this._itemCount();
@@ -239,6 +257,70 @@
     return x;
   };
 
+
+
+  var TouchSlider = function() {};
+  TouchSlider.prototype = new BaseSlider();
+  TouchSlider.superobject = BaseSlider.prototype;
+
+
+  // Initialize the TouchSlider.
+  //
+  // text - The String CSS selector of the slider container.
+  // opts - The Map of extra parameters.
+  // 
+  // Returns nothing.
+  TouchSlider.prototype.init = function(target, opts) {
+    TouchSlider.superobject.init.call(this, target, opts);
+    this.element.parent().addClass('lectric-slider-touch');
+
+    this.gesturing = false;
+    $(target)[0].addEventListener('touchstart', this, false);
+    $(target)[0].addEventListener('webkitTransitionEnd', this, false);
+  };
+
+  // Proxy the events triggered on the element to another function.
+  //
+  // event - The Event triggered on the element
+  // 
+  // Returns nothing.
+  TouchSlider.prototype.handleEvent = function(event) { 
+    TouchEvents[e.type].call(this, event); 
+  };
+
+
+
+  // Update the current position of the slider.
+  //
+  // opts - The Map of extra parameters:
+  //        animate - Boolean of whether or not to animate between two states.
+  //        triggerMove - Boolean of whether or not to trigger the move hook.
+  // 
+  // Returns nothing.
+  TouchSlider.prototype.update = function(opts) {
+    var options = jQuery.extend({animate: true, triggerMove: true}, opts);
+    if (options.animate) { this._decayOn(); }
+    this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
+
+    if (options.triggerMove) { this.element.trigger('move.lectric'); }
+  };
+
+
+  // Turn off CSS3 animation decay.
+  // 
+  // Returns nothing.
+  TouchSlider.prototype._decayOff = function() {
+    this.element.css({'-webkit-transition-duration': '0s'});
+    this.element.css({'-webkit-transition-property': 'none'});
+  };
+
+  // Turn on CSS3 animation decay.
+  // 
+  // Returns nothing.
+  TouchSlider.prototype._decayOn = function() {
+    this.element.css({'-webkit-transition-duration': '0.4s'});
+    this.element.css({'-webkit-transition-property': '-webkit-transform'});
+  };
 
   var TouchEvents = {
     click: function(e) {
@@ -322,47 +404,10 @@
       this.element.trigger('animationEnd.lectric');
     }
   };
-
-
-  var TouchSlider = function() {};
-  TouchSlider.prototype = new BaseSlider();
-  TouchSlider.superobject = BaseSlider.prototype;
-
-  TouchSlider.prototype.init = function(target, opts) {
-    TouchSlider.superobject.init.call(this, target, opts);
-    this.element.parent().addClass('lectric-slider-touch');
-
-    this.gesturing = false;
-    $(target)[0].addEventListener('touchstart', this, false);
-    $(target)[0].addEventListener('webkitTransitionEnd', this, false);
-  };
-
-  TouchSlider.prototype.handleEvent = function(e) { 
-    TouchEvents[e.type].call(this, e); 
-  };
-
-  TouchSlider.prototype.update = function(opts) {
-    var options = jQuery.extend({animate: true, triggerMove: true}, opts);
-    if (options.animate) { this._decayOn(); }
-    this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
-
-    if (options.triggerMove) { this.element.trigger('move.lectric'); }
-  };
-
-  TouchSlider.prototype._decayOff = function() {
-    this.element.css({'-webkit-transition-duration': '0s'});
-    this.element.css({'-webkit-transition-property': 'none'});
-  };
-
-  TouchSlider.prototype._decayOn = function() {
-    this.element.css({'-webkit-transition-duration': '0.4s'});
-    this.element.css({'-webkit-transition-property': '-webkit-transform'});
-  };
   
   var Lectric = {};
   Lectric.Slider = Slider;
   Lectric.BaseSlider = BaseSlider;
   Lectric.TouchSlider = TouchSlider;
-
   window.Lectric = Lectric;
 })(window);
