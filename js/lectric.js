@@ -26,20 +26,36 @@
     }
   };
 
+  var Position = function(x, y) {
+    if (x && x.hasOwnProperty('x') && x.hasOwnProperty('y')) {
+      x = x.x;
+      y = x.y;
+    }
+    this.x = x;
+    this.y = y;
+  };
+  Position.prototype = {
+    difference: function(p) {
+      return new Position(p.x - this.x, p.y - this.y);
+    }
+  };
+
+
   var BaseSlider = function() {};
 
   BaseSlider.prototype.init = function(element, opts) {
     this.opts = jQuery.extend({
       next: undefined, 
       previous: undefined,
-      item : ".item",
+      item: ".item",
       limitLeft: false,
       limitRight: false, 
       init: undefined
     }, opts);
 
-    this.currentX = 0;
-    this.currentY = 0;
+    this.position = new Position(0, 0);
+    this.startPosition = new Position(this.position);
+    this.lastPosition = new Position(this.position);
 
     var $element = $(element);
     $element.find(this.opts.item).wrapAll('<div class="items">');
@@ -54,9 +70,9 @@
     var self = this;
     if (this.opts.next) {
       $(this.opts.next).bind('click', function() {
-        var previous = self.currentX;
-        self.currentX = self.limitXBounds(self.nextPageX(self.currentX));
-        if (self.currentX !== previous) {
+        var previous = self.position.x;
+        self.position.x = self.limitXBounds(self.nextPageX(self.position.x));
+        if (self.position.x !== previous) {
           self.update();
         }
 
@@ -66,9 +82,9 @@
 
     if (this.opts.previous) {
       $(this.opts.previous).bind('click', function() {
-        var previous = self.currentX;
-        self.currentX = self.limitXBounds(self.previousPageX(self.currentX));
-        if (self.currentX !== previous) {
+        var previous = self.position.x;
+        self.position.x = self.limitXBounds(self.previousPageX(self.position.x));
+        if (self.position.x !== previous) {
           self.update();
         }
 
@@ -91,9 +107,9 @@
     };
 
     if (options.animate) {
-      this.element.animate({'margin-left': this.currentX + 'px'}).queue(after);
+      this.element.animate({'margin-left': this.position.x + 'px'}).queue(after);
     } else {
-      this.element.css({'margin-left': this.currentX + 'px'}).queue(after);
+      this.element.css({'margin-left': this.position.x + 'px'}).queue(after);
     }
 
     if (options.triggerMove) { this.element.trigger('move.lectric'); }
@@ -140,16 +156,16 @@
   };
 
   BaseSlider.prototype.to = function(index) {
-    var previous = this.currentX;
-    this.currentX = this.limitXBounds(this.pageX(index));
-    if (this.currentX !== previous) {
+    var previous = this.position.x;
+    this.position.x = this.limitXBounds(this.pageX(index));
+    if (this.position.x !== previous) {
       this.update();
     }
-    return this.currentX;
+    return this.position.x;
   };
 
   BaseSlider.prototype.toElement = function(e) {
-    var previous = this.currentX;
+    var previous = this.position.x;
     var index = this.getItemIndex(e);
 	return this.to(index);
   };
@@ -193,9 +209,9 @@
       currentX = (currentX > 0) ? 0 : currentX;
     }
 
-    if ((this.currentX - currentX > 0 && this.opts.limitRight) || 
-        (this.currentX - currentX < 0 && this.opts.limitLeft)) {
-      currentX = this.currentX;
+    if ((this.position.x - currentX > 0 && this.opts.limitRight) || 
+        (this.position.x - currentX < 0 && this.opts.limitLeft)) {
+      currentX = this.position.x;
     }
     return currentX;
   };
@@ -219,7 +235,7 @@
   TouchSlider.prototype.update = function(opts) {
     var options = jQuery.extend({animate: true, triggerMove: true}, opts);
     if (options.animate) { this.decayOn(); }
-    this.element.css({'-webkit-transform': 'translate3d(' + this.currentX + 'px, 0, 0)'}); 
+    this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
 
     if (options.triggerMove) { this.element.trigger('move.lectric'); }
   };
@@ -234,8 +250,8 @@
 
   TouchSlider.prototype.touchstart = function(e) {
     this.currentTarget = e.currentTarget;
-    this.startX = e.touches[0].pageX - this.currentX;
-    this.startY = e.touches[0].pageY - this.currentY;
+    this.startPosition.x = e.touches[0].pageX - this.position.x;
+    this.startPosition.y = e.touches[0].pageY - this.position.y;
     this.moved = false;
 
     window.addEventListener('gesturestart', this, false);
@@ -253,8 +269,8 @@
     if (this.gesturing) { return false; }
 
     if (!this.moved) {
-      var deltaY = e.touches[0].pageY - this.startY;
-      var deltaX = e.touches[0].pageX - this.startX;
+      var deltaY = e.touches[0].pageY - this.startPosition.y;
+      var deltaX = e.touches[0].pageX - this.startPosition.x;
       if (Math.abs(deltaY) < 15) {
         e.preventDefault();
       }
@@ -263,10 +279,11 @@
     }
 
     this.moved = true;
-    this.lastX = this.currentX;
+    this.lastPosition.x = this.position.x;
+    this.lastPosition.y = this.position.y;
     this.lastMoveTime = new Date();
 
-    this.currentX = this.limitXBounds(e.touches[0].pageX - this.startX);
+    this.position.x = this.limitXBounds(e.touches[0].pageX - this.startPosition.x);
 
     this.update({animate: false});
   };
@@ -278,11 +295,11 @@
     window.removeEventListener('touchend', this, false);
 
     if (this.moved) {
-      var dx = this.currentX - this.lastX;
+      var dx = this.position.x - this.lastPosition.x;
       var dt = (new Date()) - this.lastMoveTime + 1; 
       
-      var tossedX = this.limitXBounds(this.currentX + dx * 100 / dt);
-      this.currentX = this.nearestPageX(tossedX);
+      var tossedX = this.limitXBounds(this.position.x + dx * 100 / dt);
+      this.position.x = this.nearestPageX(tossedX);
 
       this.update();
       this.element.trigger('end.lectric');
@@ -309,7 +326,8 @@
     this.element.css({'-webkit-transition-duration': '0.4s'});
     this.element.css({'-webkit-transition-property': '-webkit-transform'});
   };
-
+  
+  var Lectric = {};
   Lectric.Slider = Slider;
   Lectric.BaseSlider = BaseSlider;
   Lectric.TouchSlider = TouchSlider;
