@@ -40,8 +40,8 @@ You can specify a few extra parameters when you call the `init` method. Those in
 - `limitLeft` *(boolean)*: Prohibits the slider from moving left
 - `limitRight` *(boolean)*: Prohibits the slider from moving right
 - `itemClassName` *(string)*: Class name of the individual pages of the slider
-- `itemWrapperClassName` *(string)*: Class name of the container that wraps all items in the slider
-- `hooks` *(map)*: Map of callback functions that should be subscribed various hooks that are called (see next section for more about hooks)
+- `itemWrapperClassName` *(string)*: Class name of the container that wraps all items
+- `hooks` *(map)*: Map of callback functions that should be subscribed to the various hooks (see next section for more about hooks)
 
 For example, let's provide a slider with next/previous buttons:
 
