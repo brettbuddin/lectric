@@ -23,14 +23,6 @@
     return (measure !== undefined) ? parseInt(measure.replace('px', ''), 10) : 0;
   };
 
-  var Slider = function() {
-    if (supportsTouch && isWebkit) {
-      return new TouchSlider();
-    } else {
-      return new BaseSlider();
-    }
-  };
-
   var Position = function(x, y) {
     if (x && x.hasOwnProperty('x') && x.hasOwnProperty('y')) {
       x = x.x;
@@ -45,6 +37,13 @@
     }
   };
 
+  var Slider = function() {
+    if (supportsTouch && isWebkit) {
+      return new TouchSlider();
+    } else {
+      return new BaseSlider();
+    }
+  };
 
   var BaseSlider = function() {};
 
