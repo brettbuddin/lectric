@@ -68,4 +68,4 @@ The hooks available to you are:
 - `endNoMove`: Triggered when the user lifts her finger off of the slider and did not move the slider
 - `animationEnd`: Triggered when the slide animation has completed
 
-The callback function that you provide the `subscribe` function will pass your callback a single parameter: the `Slider` or `TouchSlider` instance you are manipulating. Having a reference to the controller object will allow you to augment the behaviour of the slider itself.
+The callback function that you provide the `subscribe` function will pass your callback two parameters: the `Slider` or `TouchSlider` instance you are manipulating and the jQuery event object that was triggered. Having a reference to the controller object will allow you to augment the behaviour of the slider itself.
