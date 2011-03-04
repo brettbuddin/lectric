@@ -80,17 +80,30 @@
 
     var self = this;
     
-    // Bind clicks for the next and previous buttons
-    $(this.opts.next).bind(supportsTouch ? 'touchstart' : 'click', function(e) {
+    var type = supportsTouch ? 'touchstart' : 'click';
+    $(this.opts.next).bind(type, function(e) {
       e.preventDefault();
       var page = self.page();
       self.to(page + 1);
     });
-    $(this.opts.previous).bind(supportsTouch ? 'touchstart' : 'click', function(e) {
+
+    $(this.opts.previous).bind(type, function(e) {
       e.preventDefault();
       var page = self.page();
       self.to(page - 1);
     });
+    
+    // Keep clicks from doing what they do if
+    // we support touch on this device
+    if (supportsTouch) {
+      $(this.opts.next).click(function(e) {
+        e.preventDefault();
+      });
+
+      $(this.opts.previous).click(function(e) {
+        e.preventDefault();
+      });
+    }    
     
     // Bind callbacks passed in at initialization
     $.each(this.opts.callbacks, function(name, fn) {
