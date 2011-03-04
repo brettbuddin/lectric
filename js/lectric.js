@@ -107,7 +107,13 @@
     
     // Bind callbacks passed in at initialization
     $.each(this.opts.hooks, function(name, fn) {
-      self.subscribe(name, fn);
+      if ($.isArray(fn)) {
+        $.each(fn, function(fn2) {
+          self.subscribe(name, fn2);
+        });
+      } else {
+        self.subscribe(name, fn);
+      }
     });
 
     this.element.trigger('init.lectric');
