@@ -18,6 +18,11 @@
     supportsTouch = true;
   } catch (e) {}
 
+  $.fn.cssWithoutUnit = function(attribute) {
+    var measure = $(this).css(attribute);
+    return (measure !== undefined) ? parseInt(measure.replace('px', ''), 10) : 0;
+  };
+
   var Slider = function() {
     if (supportsTouch && isWebkit) {
       return new TouchSlider();
@@ -43,58 +48,58 @@
 
   var BaseSlider = function() {};
 
-  BaseSlider.prototype.init = function(element, opts) {
+  BaseSlider.prototype.init = function(target, opts) {
     this.opts = jQuery.extend({
       next: undefined, 
       previous: undefined,
-      item: ".item",
+      itemWrapperClassName: 'items',
+      itemClassName: 'item',
       limitLeft: false,
       limitRight: false, 
-      init: undefined
+      callbacks: {}
     }, opts);
 
     this.position = new Position(0, 0);
     this.startPosition = new Position(this.position);
     this.lastPosition = new Position(this.position);
+  
+    // Set up the styling of the slider
+    var element = $('<div/>', {
+      className: this.opts.itemWrapperClassName
+    });
+    element.css('width', '1000000px');
 
-    var $element = $(element);
-    $element.find(this.opts.item).wrapAll('<div class="items">');
-    $element.css('overflow', 'hidden');
-    this.element = $element.find('.items');
-    this.element.itemSelector = this.opts.item;
-    this.element.css('width', '1000000px');
-    this.element.find(this.element.itemSelector).css('float', 'left');
+    var itemSelector = '.' + this.opts.itemClassName;
+    var itemWrapperSelector = '.' + this.opts.itemWrapperClassName;
 
-    this.structure = this.structure(this.element);
-    
+    $(target).css('overflow', 'hidden');
+    $(target).find(itemSelector).css('float', 'left').wrapAll(element);
+    this.element = $(target).find(itemWrapperSelector);
+    this.element.itemSelector = itemSelector;
+    this.element.itemWrapperSelector = itemWrapperSelector;
+
     var self = this;
-    if (this.opts.next) {
-      $(this.opts.next).bind('click', function() {
-        var previous = self.position.x;
-        self.position.x = self.limitXBounds(self.nextPageX(self.position.x));
-        if (self.position.x !== previous) {
-          self.update();
+    
+    // Bind clicks for the next and previous buttons
+    $(this.opts.next).bind(supportsTouch ? 'touchstart' : 'click', function(e) {
+      e.preventDefault();
+      var page = self.page();
+      self.to(page + 1);
+    });
+    $(this.opts.previous).bind(supportsTouch ? 'touchstart' : 'click', function(e) {
+      e.preventDefault();
+      var page = self.page();
+      self.to(page - 1);
+    });
+    
+    // Bind callbacks passed in at initialization
+    $.each(this.opts.callbacks, function(name, fn) {
+      $(self).bind(name + '.lectric', function(e) {
+        if (e.target == self.target[0]) { 
+          fn(self);
         }
-
-        return false;
       });
-    }
-
-    if (this.opts.previous) {
-      $(this.opts.previous).bind('click', function() {
-        var previous = self.position.x;
-        self.position.x = self.limitXBounds(self.previousPageX(self.position.x));
-        if (self.position.x !== previous) {
-          self.update();
-        }
-
-        return false;
-      });
-    }
-
-    if (this.opts.init !== undefined) {
-      this.opts.init(this); 
-    }
+    });
   };
 
   BaseSlider.prototype.update = function(opts) {
@@ -117,103 +122,86 @@
 
   BaseSlider.prototype.subscribe = function(name, fn) {
     var self = this;
-    return this.element.bind(name + '.lectric', function(e) {
-      if (e.target == self.element[0]) {
-        fn(self);
+    var callback = function(e) {
+      if (e.target == self.target[0]) { 
+        fn(e);
       }
-    });
+    }
+    $(this).bind(name + '.lectric', callback);
+    return callback;
   };
 
-  BaseSlider.prototype.structure = function(element) {
-    var structure = {};
-    var first = function() { return element.find(element.itemSelector).eq(0); };
-
-    structure.itemCount = function() { return element.find(element.itemSelector).size(); };
-    structure.itemHeight = function() { return parseInt(first().height(), 10); };
-
-    structure.itemSpacing = function() { 
-      var marginRight = first().css('marginRight');
-      return (marginRight !== undefined) ? parseInt(marginRight.replace('px', ''), 10) : 0;
-    };
-    structure.itemWidth = function() { 
-      return (structure.itemSpacing() + parseInt(first().width(), 10)); 
-    };
-
-    return structure;
+  BaseSlider.prototype.unsubscribe = function(name, fn) {
+    if (typeof fn !== undefined && isFunction(fn)) {
+      $(this).unbind(name + '.lectric', fn);
+    } else {
+      $(this).unbind(name + '.lectric');
+    }
   };
 
-  BaseSlider.prototype.page = function(currentX) {
-    return Math.abs(Math.round(currentX / this.structure.itemWidth()));
+
+  BaseSlider.prototype.page = function() {
+    return Math.abs(Math.round(this.position.x / this._itemWidth()));
   };
 
-  BaseSlider.prototype.nearestPageX = function(currentX) {
-    return Math.round(currentX / this.structure.itemWidth()) * this.structure.itemWidth();
-  };
-
-  BaseSlider.prototype.pageX = function(index) {
-    var flip = (this.opts.reverse) ? 1 : -1;
-    return flip * index * this.structure.itemWidth();
-  };
-
-  BaseSlider.prototype.to = function(index) {
+  BaseSlider.prototype.to = function(page) {
     var previous = this.position.x;
-    this.position.x = this.limitXBounds(this.pageX(index));
+    this.position.x = this._limitXBounds(this._xForPage(page));
     if (this.position.x !== previous) {
       this.update();
     }
     return this.position.x;
   };
 
-  BaseSlider.prototype.toElement = function(e) {
-    var previous = this.position.x;
-    var index = this.getItemIndex(e);
-	return this.to(index);
-  };
-	
-  BaseSlider.prototype.getItemIndex = function(e) {
-	var all = this.element.find(this.element.itemSelector);
+  BaseSlider.prototype.update = function(opts) {
+    var options = jQuery.extend({animate: true}, opts);
+
+    var self = this;
+    var after = function() {
+      self.element.trigger('animationEnd.lectric');
+      $(this).dequeue();
+    };
     
-    var i;
-    var length = all.length;
-	for (i = 0; i < length; i++) {
-      if ($(all[i])[0] == e[0]) { return i; }
-	}
-  };
-
-  BaseSlider.prototype.nextPageX = function(currentX) {
-    if (this.page(currentX) + 1 <= this.structure.itemCount() - 1) {
-      currentX = currentX -this.structure.itemWidth();
-    }
-    return currentX;
-  };
-
-  BaseSlider.prototype.previousPageX = function(currentX) {
-    if (this.page(currentX) >= 0) {
-      currentX = currentX + this.structure.itemWidth();
-    }
-    return currentX;
-  };
-
-  BaseSlider.prototype.limitXBounds = function(currentX) {
-    var total_width = this.structure.itemWidth() * this.structure.itemCount();
-    if (this.opts.reverse) {
-      currentX = (currentX > total_width - this.structure.itemWidth()) ? 
-                   total_width - this.structure.itemWidth() : 
-                   currentX;
-
-      currentX = (currentX < 0) ? 0 : currentX;
+    if (options.animate) {
+      this.element.animate({'margin-left': this.position.x + 'px'}).queue(after);
     } else {
-    currentX = (currentX < -total_width + this.structure.itemWidth()) ? 
-                 -total_width + this.structure.itemWidth() : 
-                 currentX;
-      currentX = (currentX > 0) ? 0 : currentX;
+      this.element.css('margin-left', this.position.x).queue(after);
+    }
+  };
+
+  BaseSlider.prototype._xForPage = function(page) {
+    var flip = (this.opts.reverse) ? 1 : -1;
+    return flip * page * this._itemWidth();
+  };
+
+  BaseSlider.prototype._itemWidth = function() {
+    var first = this.element.find(this.element.itemSelector).eq(0);
+    return first.cssWithoutUnit('marginRight') + first.width();
+  };
+
+  BaseSlider.prototype._itemCount = function() {
+    return this.element.find(this.element.itemSelector).size();
+  };
+
+  BaseSlider.prototype._limitXBounds = function(x) {
+    var itemWidth = this._itemWidth();
+    var itemCount = this._itemCount();
+    var totalWidth = itemWidth * itemCount;
+
+    if (this.opts.reverse) {
+      x = (x > totalWidth - itemWidth) ?  totalWidth - itemWidth : x;
+      x = (x < 0) ? 0 : x;
+    } else {
+      x = (x < -totalWidth + itemWidth) ?  -totalWidth + itemWidth : x;
+      x = (x > 0) ? 0 : x;
     }
 
-    if ((this.position.x - currentX > 0 && this.opts.limitRight) || 
-        (this.position.x - currentX < 0 && this.opts.limitLeft)) {
-      currentX = this.position.x;
+    if ((this.position.x - x > 0 && this.opts.limitRight) || 
+        (this.position.x - x < 0 && this.opts.limitRight)) {
+      x = this.position.x;
     }
-    return currentX;
+
+    return x;
   };
 
 
