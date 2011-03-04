@@ -37,6 +37,8 @@
     }
   };
 
+
+
   var Slider = function() {
     if (supportsTouch && isWebkit) {
       return new TouchSlider();
@@ -262,7 +264,6 @@
   var TouchSlider = function() {};
   TouchSlider.prototype = new BaseSlider();
   TouchSlider.superobject = BaseSlider.prototype;
-
 
   // Initialize the TouchSlider.
   //
