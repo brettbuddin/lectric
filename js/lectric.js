@@ -157,7 +157,6 @@
   };
 
   BaseSlider.prototype.page = function() {
-    console.log(this._itemWidth());
     return Math.abs(Math.round(this.position.x / this._itemWidth()));
   };
 
