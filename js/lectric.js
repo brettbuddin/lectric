@@ -139,7 +139,6 @@
     }
   };
 
-
   BaseSlider.prototype.page = function() {
     return Math.abs(Math.round(this.position.x / this._itemWidth()));
   };
@@ -205,112 +204,121 @@
   };
 
 
+  var TouchEvents = {
+    click: function(e) {
+      if (this.moved) { e.preventDefault(); }
+      this.element[0].removeEventListener('click', this, false);
+      return false;
+    },
+
+    touchstart: function(e) {
+      this.currentTarget = e.currentTarget;
+      this.startPosition.x = e.touches[0].pageX - this.position.x;
+      this.startPosition.y = e.touches[0].pageY - this.position.y;
+      this.moved = false;
+
+      window.addEventListener('gesturestart', this, false);
+      window.addEventListener('gestureend', this, false);
+      window.addEventListener('touchmove', this, false);
+      window.addEventListener('touchend', this, false);
+      this.element[0].addEventListener('click', this, false);
+
+      this._decayOff();
+
+      this.element.trigger('start.lectric');
+    },
+
+    touchmove: function(e) {
+      if (this.gesturing) { return false; }
+
+      if (!this.moved) {
+        var deltaY = e.touches[0].pageY - this.startPosition.y;
+        var deltaX = e.touches[0].pageX - this.startPosition.x;
+        if (Math.abs(deltaY) < 15) {
+          e.preventDefault();
+        }
+
+        this.element.trigger('firstMove.lectric');
+      }
+
+      this.moved = true;
+      this.lastPosition.x = this.position.x;
+      this.lastPosition.y = this.position.y;
+      this.lastMoveTime = new Date();
+
+      this.position.x = this._limitXBounds(e.touches[0].pageX - this.startPosition.x);
+
+      this.update({animate: false});
+    },
+
+    touchend: function(e) {
+      window.removeEventListener('gesturestart', this, false);
+      window.removeEventListener('gestureend', this, false);
+      window.removeEventListener('touchmove', this, false);
+      window.removeEventListener('touchend', this, false);
+
+      if (this.moved) {
+        var dx = this.position.x - this.lastPosition.x;
+        var dt = (new Date()) - this.lastMoveTime + 1; 
+        
+        var tossedX = this._limitXBounds(this.position.x + dx * 100 / dt);
+        var width = this._itemWidth();
+        this.position.x = Math.round(this.position.x / width) * width;
+
+        this.update();
+        this.element.trigger('end.lectric');
+      } else {
+        this.element.trigger('endNoMove.lectric');
+      }
+
+      this.currentTarget = undefined;
+    },
+
+    gesturestart: function(e) { 
+      this.gesturing = true; 
+    },
+
+    gestureend: function(e) { 
+      this.gesturing = false; 
+    },
+
+    webkitTransitionEnd: function(e) {
+      this.element.trigger('animationEnd.lectric');
+    }
+  };
+
 
   var TouchSlider = function() {};
   TouchSlider.prototype = new BaseSlider();
   TouchSlider.superobject = BaseSlider.prototype;
 
-  TouchSlider.prototype.init = function(element, structure, opts) {
-    TouchSlider.superobject.init.call(this, element, structure, opts);
+  TouchSlider.prototype.init = function(target, opts) {
+    TouchSlider.superobject.init.call(this, target, opts);
     this.element.parent().addClass('lectric-slider-touch');
 
     this.gesturing = false;
-    var $element = $(element);
-    $element[0].addEventListener('touchstart', this, false);
-    $element[0].addEventListener('webkitTransitionEnd', this, false);
+    $(target)[0].addEventListener('touchstart', this, false);
+    $(target)[0].addEventListener('webkitTransitionEnd', this, false);
+  };
+
+  TouchSlider.prototype.handleEvent = function(e) { 
+    TouchEvents[e.type].call(this, e); 
   };
 
   TouchSlider.prototype.update = function(opts) {
     var options = jQuery.extend({animate: true, triggerMove: true}, opts);
-    if (options.animate) { this.decayOn(); }
+    if (options.animate) { this._decayOn(); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
 
     if (options.triggerMove) { this.element.trigger('move.lectric'); }
   };
 
-  TouchSlider.prototype.handleEvent = function(e) { this[e.type](e); };
-
-  TouchSlider.prototype.click = function(e) {
-    if (this.moved) { e.preventDefault(); }
-    this.element[0].removeEventListener('click', this, false);
-    return false;
-  };
-
-  TouchSlider.prototype.touchstart = function(e) {
-    this.currentTarget = e.currentTarget;
-    this.startPosition.x = e.touches[0].pageX - this.position.x;
-    this.startPosition.y = e.touches[0].pageY - this.position.y;
-    this.moved = false;
-
-    window.addEventListener('gesturestart', this, false);
-    window.addEventListener('gestureend', this, false);
-    window.addEventListener('touchmove', this, false);
-    window.addEventListener('touchend', this, false);
-    this.element[0].addEventListener('click', this, false);
-
-    this.decayOff();
-
-    this.element.trigger('start.lectric');
-  };
-
-  TouchSlider.prototype.touchmove = function(e) {
-    if (this.gesturing) { return false; }
-
-    if (!this.moved) {
-      var deltaY = e.touches[0].pageY - this.startPosition.y;
-      var deltaX = e.touches[0].pageX - this.startPosition.x;
-      if (Math.abs(deltaY) < 15) {
-        e.preventDefault();
-      }
-
-      this.element.trigger('firstMove.lectric');
-    }
-
-    this.moved = true;
-    this.lastPosition.x = this.position.x;
-    this.lastPosition.y = this.position.y;
-    this.lastMoveTime = new Date();
-
-    this.position.x = this.limitXBounds(e.touches[0].pageX - this.startPosition.x);
-
-    this.update({animate: false});
-  };
-
-  TouchSlider.prototype.touchend = function(e) {
-    window.removeEventListener('gesturestart', this, false);
-    window.removeEventListener('gestureend', this, false);
-    window.removeEventListener('touchmove', this, false);
-    window.removeEventListener('touchend', this, false);
-
-    if (this.moved) {
-      var dx = this.position.x - this.lastPosition.x;
-      var dt = (new Date()) - this.lastMoveTime + 1; 
-      
-      var tossedX = this.limitXBounds(this.position.x + dx * 100 / dt);
-      this.position.x = this.nearestPageX(tossedX);
-
-      this.update();
-      this.element.trigger('end.lectric');
-    } else {
-      this.element.trigger('endNoMove.lectric');
-    }
-
-    this.currentTarget = undefined;
-  };
-
-  TouchSlider.prototype.webkitTransitionEnd = function(e) {
-    this.element.trigger('animationEnd.lectric');
-  };
-
-  TouchSlider.prototype.gesturestart = function(e) { this.gesturing = true; };
-  TouchSlider.prototype.gestureend = function(e) { this.gesturing = false; };
-
-  TouchSlider.prototype.decayOff = function() {
+  TouchSlider.prototype._decayOff = function() {
     this.element.css({'-webkit-transition-duration': '0s'});
     this.element.css({'-webkit-transition-property': 'none'});
   };
 
-  TouchSlider.prototype.decayOn = function() {
+  TouchSlider.prototype._decayOn = function() {
     this.element.css({'-webkit-transition-duration': '0.4s'});
     this.element.css({'-webkit-transition-property': '-webkit-transform'});
   };
