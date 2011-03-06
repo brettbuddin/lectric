@@ -6,7 +6,7 @@
  * Licensed under the MIT license.
  * http://github.com/mckinney/lectric/blob/master/LICENSE
  *
- * Author: Brett C. Buddin
+ * Author: Brett C. Buddin (http://github.com/brettbuddin)
  */
 
 (function(window) {
@@ -184,7 +184,6 @@
       this.element.unbind(name + '.lectric');
     }
   };
-
 
   // Retrieve the current page of the slider.
   // 
