@@ -206,6 +206,21 @@
     }
   };
 
+  // Move to a specific item in the slider, regardless of its position.
+  //
+  // item - The DOM Reference of the item you'd like to move to.
+  // 
+  // Returns nothing.
+  BaseSlider.prototype.toItem = function(item) {
+    var all = this.element.find(this.element.itemSelector);
+
+    var i;
+    var length = all.length;
+    for (i = 0; i < length; i++) {
+      if ($(all[i])[0] == item[0]) { this.to(i); }
+    }
+  };
+
   // Retrieve the current X position.
   //
   // page - The Integer page number.
