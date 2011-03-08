@@ -37,15 +37,8 @@
     }
   };
 
+  Lectric.Position = Position;
 
-
-  var Slider = function() {
-    if (supportsTouch && isWebkit) {
-      return new TouchSlider();
-    } else {
-      return new BaseSlider();
-    }
-  };
 
   var BaseSlider = function() {};
 
@@ -277,6 +270,7 @@
     return x;
   };
 
+  Lectric.BaseSlider = BaseSlider;
 
 
   var TouchSlider = function() {};
@@ -312,8 +306,6 @@
     TouchEvents[event.type].call(this, event); 
   };
 
-
-
   // Update the current position of the slider.
   //
   // opts - The Map of extra parameters:
@@ -328,7 +320,6 @@
 
     if (options.triggerMove) { this.element.trigger('move.lectric'); }
   };
-
 
   // Turn off CSS3 animation decay.
   // 
@@ -431,10 +422,17 @@
       this.element.trigger('animationEnd.lectric');
     }
   };
-  
-  var Lectric = {};
-  Lectric.Slider = Slider;
-  Lectric.BaseSlider = BaseSlider;
+
   Lectric.TouchSlider = TouchSlider;
+
+  var Slider = function() {
+    if (supportsTouch && isWebkit) {
+      return new TouchSlider();
+    } else {
+      return new BaseSlider();
+    }
+  };
+  
+  Lectric.Slider = Slider;
   window.Lectric = Lectric;
 })(window);

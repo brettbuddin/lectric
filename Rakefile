@@ -4,22 +4,48 @@ require 'closure-compiler'
 require 'jslint'
 require 'webrick'
 
+build_dir = 'build'
 prefix = File.dirname(__FILE__)
-lectric = File.join(prefix, 'js', 'lectric.js')
-lectric_min = File.join(prefix, 'js', 'lectric.min.js')
+build_prefix = File.join(prefix, build_dir)
+
 version = File.join(prefix, 'VERSION')
+lectric = File.join(build_prefix, 'lectric.js')
+lectric_min = File.join(build_prefix, 'lectric.min.js')
+
+files = ['intro.js', 
+         'position.js', 
+         'base_slider.js', 
+         'touch_slider.js',
+         'outro.js']
+files = files.map {|f| File.join(prefix, 'js', f) }
 
 task :default => :build
 
 desc "Build and minify Lectric."
-task :build => [:lint, :minify] do
+task :build => [:combine, :lint, :minify] do
   puts "Lectric build complete."
+end
+
+task :combine do
+  output = ''
+  files.each do |f|
+    fc = File.read f
+    fc.gsub!(/.function.Lectric..{/, '')
+    fc.gsub!(/}..Lectric.;/, '')
+    output += fc
+  end
+
+  FileUtils.mkdir build_prefix unless Dir.exists?(build_prefix)
+
+  file = File.open(lectric, 'w')
+  file.puts output
+  file.close
 end
 
 desc "Run library against JSLint"
 task :lint do
   lint = JSLint::Lint.new(
-    :paths => ['js/**/*.js'],
+    :paths => ['build/**/*.js'],
     :exclude_paths => ['js/**/*.min.js']
   )
   lint.run
