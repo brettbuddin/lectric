@@ -8,9 +8,9 @@ It's Electric!
 
 ## Building Lectric
 
-  git clone git://github.com/mckinney/lectric.git
-  cd lectric
-  rake build
+    git clone git://github.com/mckinney/lectric.git
+    cd lectric
+    rake build
 
 You'll then have a copy of `lectric.js` and `lectric.min.js` in the `build` directory.
 
