@@ -6,6 +6,14 @@ It's Electric!
 
 **Requires:** [jQuery](http://github.com/jquery/jquery)
 
+## Building Lectric
+
+  git clone git://github.com/mckinney/lectric.git
+  cd lectric
+  rake build
+
+You'll then have a copy of `lectric.js` and `lectric.min.js` in the `build` directory.
+
 ## Installation
 
 Put this in your `<head>`:
