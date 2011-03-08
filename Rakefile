@@ -77,6 +77,11 @@ task :version do
   puts "VERSION: #{@version}"
 end
 
+desc "Remove the build directory"
+task :clean do
+  `rm -rf #{build_prefix}`
+end
+
 desc "Starts an HTTP server in the current directory"
 task :server do
   config = {:Port => 3000, :DocumentRoot => '.'}
