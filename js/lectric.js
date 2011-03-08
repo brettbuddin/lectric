@@ -190,7 +190,7 @@
   // 
   // Returns the Integer page number of the slider.
   BaseSlider.prototype.page = function() {
-    return Math.abs(Math.round(this.position.x / this._itemWidth()));
+    return Math.abs(Math.round(this.position.x / this.itemWidth()));
   };
 
   // Move to a specific page number.
@@ -200,7 +200,7 @@
   // Returns nothing.
   BaseSlider.prototype.to = function(page) {
     var previous = this.position.x;
-    this.position.x = this._limitXBounds(this._xForPage(page));
+    this.position.x = this.limitXBounds(this.xForPage(page));
     if (this.position.x !== previous) {
       this.update();
     }
@@ -226,16 +226,16 @@
   // page - The Integer page number.
   // 
   // Returns the Integer X position of the slider.
-  BaseSlider.prototype._xForPage = function(page) {
+  BaseSlider.prototype.xForPage = function(page) {
     var flip = (this.opts.reverse) ? 1 : -1;
-    return flip * page * this._itemWidth();
+    return flip * page * this.itemWidth();
   };
 
 
   // Retrieve the width of a single item (including margin-right and padding).
   // 
   // Returns the Integer width of a single item.
-  BaseSlider.prototype._itemWidth = function() {
+  BaseSlider.prototype.itemWidth = function() {
     var first = this.element.find(this.element.itemSelector).eq(0);
     var padding = cssWithoutUnit(first, 'paddingRight') + cssWithoutUnit(first, 'paddingLeft');
     return cssWithoutUnit(first, 'marginRight') + padding + first.width();
@@ -244,7 +244,7 @@
   // Retrieve number of items in the slider.
   // 
   // Returns the Integer number of items.
-  BaseSlider.prototype._itemCount = function() {
+  BaseSlider.prototype.itemCount = function() {
     return this.element.find(this.element.itemSelector).size();
   };
 
@@ -254,9 +254,9 @@
   // x - The Integer X position
   //
   // Returns the Integer X position after being constrained.
-  BaseSlider.prototype._limitXBounds = function(x) {
-    var itemWidth = this._itemWidth();
-    var itemCount = this._itemCount();
+  BaseSlider.prototype.limitXBounds = function(x) {
+    var itemWidth = this.itemWidth();
+    var itemCount = this.itemCount();
     var totalWidth = itemWidth * itemCount;
 
     if (this.opts.reverse) {
@@ -321,7 +321,7 @@
   // Returns nothing.
   TouchSlider.prototype.update = function(opts) {
     var options = jQuery.extend({animate: true, triggerMove: true}, opts);
-    if (options.animate) { this._decayOn(); }
+    if (options.animate) { this.decayOn(); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
 
     if (options.triggerMove) { this.element.trigger('move.lectric'); }
@@ -331,7 +331,7 @@
   // Turn off CSS3 animation decay.
   // 
   // Returns nothing.
-  TouchSlider.prototype._decayOff = function() {
+  TouchSlider.prototype.decayOff = function() {
     this.element.css({'-webkit-transition-duration': '0s'});
     this.element.css({'-webkit-transition-property': 'none'});
   };
@@ -339,7 +339,7 @@
   // Turn on CSS3 animation decay.
   // 
   // Returns nothing.
-  TouchSlider.prototype._decayOn = function() {
+  TouchSlider.prototype.decayOn = function() {
     var duration = this.opts.animateDuration / 1000;
     this.element.css({'-webkit-transition-duration': duration + 's'});
     this.element.css({'-webkit-transition-property': '-webkit-transform'});
@@ -364,7 +364,7 @@
       window.addEventListener('touchend', this, false);
       this.element[0].addEventListener('click', this, false);
 
-      this._decayOff();
+      this.decayOff();
 
       this.element.trigger('start.lectric');
     },
@@ -387,7 +387,7 @@
       this.lastPosition.y = this.position.y;
       this.lastMoveTime = new Date();
 
-      this.position.x = this._limitXBounds(e.touches[0].pageX - this.startPosition.x);
+      this.position.x = this.limitXBounds(e.touches[0].pageX - this.startPosition.x);
 
       this.update({animate: false});
     },
@@ -402,8 +402,8 @@
         var dx = this.position.x - this.lastPosition.x;
         var dt = (new Date()) - this.lastMoveTime + 1; 
         
-        var tossedX = this._limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
-        var width = this._itemWidth();
+        var tossedX = this.limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
+        var width = this.itemWidth();
 
         // Find the nearest page
         this.position.x = Math.round(this.position.x / width) * width;
