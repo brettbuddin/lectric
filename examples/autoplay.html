@@ -92,7 +92,6 @@
     var count = 0;
     var timer = setInterval(function() {
       count = (count < slider.itemCount() - 1) ? count+1 : 0;
-      console.log(count);
       slider.to(count);
     }, 5000);
     
