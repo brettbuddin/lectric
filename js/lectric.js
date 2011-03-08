@@ -57,6 +57,7 @@
   // Returns nothing.
   BaseSlider.prototype.init = function(target, opts) {
     this.opts = jQuery.extend({
+      reverse: false,
       next: undefined, 
       previous: undefined,
       itemWrapperClassName: 'items',
