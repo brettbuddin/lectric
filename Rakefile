@@ -33,7 +33,7 @@ task :minify => :version do
    * Lectric v#{@version}
    * http://github.com/mckinney/lectric
    *
-   * Copyright 2010, McKinney
+   * Copyright 2011, McKinney
    * Licensed under the MIT license.
    * http://github.com/mckinney/lectric/blob/master/LICENSE
    *
