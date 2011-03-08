@@ -1,14 +1,3 @@
-/*!
- * Lectric v0.3.1
- * http://github.com/mckinney/lectric
- *
- * Copyright 2010, McKinney
- * Licensed under the MIT license.
- * http://github.com/mckinney/lectric/blob/master/LICENSE
- *
- * Author: Brett C. Buddin (http://github.com/brettbuddin)
- */
-
 (function(window) {
   var ua = navigator.userAgent.toLowerCase();
   isWebkit = !!ua.match(/applewebkit/i);

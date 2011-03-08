@@ -12,16 +12,8 @@ version = File.join(prefix, 'VERSION')
 task :default => :build
 
 desc "Build and minify Lectric."
-task :build => [:lint, :stamp_version, :minify] do
+task :build => [:lint, :minify] do
   puts "Lectric build complete."
-end
-
-desc "Stamp the library with the current version"
-task :stamp_version => :version do
-  contents = File.read(lectric)
-  file = File.open(lectric, 'w')
-  file.puts contents.gsub(/(Lectric v)([\d\w\.-]+)/, "\\1#{@version}")
-  file.close
 end
 
 desc "Run library against JSLint"
