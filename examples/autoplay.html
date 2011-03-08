@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Scrubber</title>
+  <title>Autoplay</title>
   <meta name="viewport" content="width=530, initial-scale=1.0">
   
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
@@ -88,37 +88,23 @@
     // Initialize the slider
     var slider = new Lectric.Slider();
     slider.init('#slider', {next: '.next', previous: '.previous'});
-
-    // Initialize the scrubber
-    var scrubber = new Lectric.Slider();
-    scrubber.init('#scrubber', {reverse: true});
     
-    // Get the relative scale between the two sliders
-    var scale = slider.itemWidth() / scrubber.itemWidth();
+    var count = 0;
+    var timer = setInterval(function() {
+      count = (count < slider.itemCount() - 1) ? count+1 : 0;
+      console.log(count);
+      slider.to(count);
+    }, 5000);
     
-    // Subscribe the scrubber to the slider
-    slider.subscribe('move', function() {
-      scrubber.position.x = -slider.position.x / scale;
-      scrubber.update({triggerMove: false});
+    // Clear the interval if we touch the slider for the first time
+    // or tap one the next or previous buttons
+    slider.subscribe('start', function(s, e) {
+      clearInterval(timer);
+      slider.unsubscribe('start', e.handler); 
     });
-
-    // Subscribe the slider to the scrubber
-    scrubber.subscribe('move', function() {
-      slider.position.x = -scrubber.position.x * scale;
-      slider.update({triggerMove: false});
-    });
-    
-    // Keyboard shortcuts for left and right arrows
-    $(document).keydown(function(e) {
-      if (e.keyCode === 39) { 
-        e.preventDefault();
-        var previous = slider.page();
-        slider.to(previous + 1);
-      } else if (e.keyCode === 37) { 
-        e.preventDefault();
-        var previous = slider.page();
-        slider.to(previous - 1);
-      }
+    $('.next,.previous').click(function(e) {
+      clearInterval(timer); 
+      $(this).unbind('click', e.handler);
     });
   });
   </script>
