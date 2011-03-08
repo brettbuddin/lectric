@@ -94,12 +94,14 @@
       e.preventDefault();
       var page = self.page();
       self.to(page + 1);
+      self.element.trigger('nextButton.lectric');
     });
 
     $(this.opts.previous).bind(type, function(e) {
       e.preventDefault();
       var page = self.page();
       self.to(page - 1);
+      self.element.trigger('previousButton.lectric');
     });
     
     // Keep clicks from doing what they do if

@@ -97,14 +97,13 @@
     
     // Clear the interval if we touch the slider for the first time
     // or tap one the next or previous buttons
-    slider.subscribe('start', function(s, e) {
+    var clearIt = function(s, e) {
       clearInterval(timer);
-      slider.unsubscribe('start', e.handler); 
-    });
-    $('.next,.previous').click(function(e) {
-      clearInterval(timer); 
-      $(this).unbind('click', e.handler);
-    });
+      slider.unsubscribe(e.type, e.handler); 
+    };
+    slider.subscribe('start', clearIt);
+    slider.subscribe('previousButton', clearIt);
+    slider.subscribe('nextButton', clearIt);
   });
   </script>
 </body>
