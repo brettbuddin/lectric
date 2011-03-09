@@ -28,7 +28,7 @@ HTML:
 
 JavaScript:
 
-    var slider = new Lectric.Slider();
+    var slider = new Lectric();
     slider.init('#slider');
 
 ## Optional Parameters
@@ -48,7 +48,7 @@ You can specify a few extra parameters when you call the `init` method. Those in
 
 For example, let's provide a slider with next/previous buttons:
 
-    var slider = new Lectric.Slider();
+    var slider = new Lectric();
     slider.init('#slider', {next: '.next', previous: '.previous'});
 
 ## Hook System

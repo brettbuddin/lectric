@@ -149,7 +149,10 @@
     };
 
     if (options.animate) {
-      this.element.animate({left: this.position.x + 'px'}, this.opts.animateDuration, this.opts.animateEasing).queue(after);
+      this.element.animate({left: this.position.x + 'px'}, 
+                           this.opts.animateDuration, 
+                           this.opts.animateEasing
+      ).queue(after);
     } else {
       this.element.css({left: this.position.x + 'px'}).queue(after);
     }
