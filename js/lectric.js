@@ -148,9 +148,9 @@
     };
 
     if (options.animate) {
-      this.element.animate({'left': this.position.x + 'px'}, this.opts.animateDuration).queue(after);
+      this.element.animate({left: this.position.x + 'px'}, this.opts.animateDuration).queue(after);
     } else {
-      this.element.css({'left': this.position.x + 'px'}).queue(after);
+      this.element.css({left: this.position.x + 'px'}).queue(after);
     }
 
     if (options.triggerMove) { this.element.trigger('move.lectric'); }
