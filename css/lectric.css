@@ -1,5 +1,7 @@
-.lectric-slider .items {
+.lectric-slider,.lectric-slider .items {
   position: relative;
+}
+.lectric-slider .items {
   left: 0;
 }
 .lectric-slider-touch {
