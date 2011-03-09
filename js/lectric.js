@@ -175,11 +175,14 @@
     this.element.bind(name + '.lectric', callback);
     return callback;
   };
+  BaseSlider.prototype.bind = function(name, fn) {
+    this.subscribe(name, fn);
+  };
 
   // Unsubscribe a callback function from a hook or unsubscribe all callbacks from a hook.
   //
   // name - The String name of the hook.
-  // fn - The Function callback to execute when the hook is triggered.
+  // fn - The Function handler to unbind from the element.
   // 
   // Returns nothing.
   BaseSlider.prototype.unsubscribe = function(name, fn) {
@@ -188,6 +191,9 @@
     } else {
       this.element.unbind(name + '.lectric');
     }
+  };
+  BaseSlider.prototype.unbind = function(name, fn) {
+    this.unsubscribe(name, fn);
   };
 
   // Retrieve the current page of the slider.
