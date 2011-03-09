@@ -1,5 +1,6 @@
 .lectric-slider .items {
   position: relative;
+  left: 0;
 }
 .lectric-slider-touch {
   -webkit-transform: translate3d(0, 0, 0);
