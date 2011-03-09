@@ -39,7 +39,7 @@
 
 
 
-  var Slider = function() {
+  var Lectric = function() {
     if (supportsTouch && isWebkit) {
       return new TouchSlider();
     } else {
@@ -449,8 +449,6 @@
     }
   };
   
-  var Lectric = {};
-  Lectric.Slider = Slider;
   Lectric.BaseSlider = BaseSlider;
   Lectric.TouchSlider = TouchSlider;
   window.Lectric = Lectric;
