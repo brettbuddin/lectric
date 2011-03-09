@@ -9,11 +9,14 @@ $(function() {
   });
 
   test("structure", function() {
-    expect(3);
+    expect(6);
 
     equals(slider.itemWidth(), 530, "report the width of each individual item");
     equals(slider.itemCount(), 4, "report the number of pages");
-    ok(slider.element.parent().hasClass('lectric-slider'), "has the lectric-slider class assigned to the items container");
+    equals(slider.element.parent().css('position'), 'relative', "relative positioning set to container");
+    equals(slider.element.css('position'), 'relative', "relative positioning set to items container");
+    equals(slider.element.css('left'), '0px', "assigns an initial value to left");
+    ok(slider.element.parent().hasClass('lectric-slider'), "has the lectric-slider class assigned to the container");
   });
 
   test("movement", function() {
