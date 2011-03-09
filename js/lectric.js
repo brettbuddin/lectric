@@ -83,6 +83,7 @@
 
     $(target).css('overflow', 'hidden');
     $(target).find(itemSelector).css('float', 'left').wrapAll(element);
+    $(target).addClass('lectric-slider');
     this.element = $(target).find(itemWrapperSelector);
     this.element.itemSelector = itemSelector;
     this.element.itemWrapperSelector = itemWrapperSelector;
@@ -147,9 +148,9 @@
     };
 
     if (options.animate) {
-      this.element.animate({'margin-left': this.position.x + 'px'}, this.opts.animateDuration).queue(after);
+      this.element.animate({'left': this.position.x + 'px'}, this.opts.animateDuration).queue(after);
     } else {
-      this.element.css({'margin-left': this.position.x + 'px'}).queue(after);
+      this.element.css({'left': this.position.x + 'px'}).queue(after);
     }
 
     if (options.triggerMove) { this.element.trigger('move.lectric'); }
@@ -296,7 +297,7 @@
         return x + dx * 100 / dt;
       }
     }, this.opts);
-    this.element.parent().addClass('lectric-slider-touch');
+    $(target).addClass('lectric-slider-touch');
 
     this.gesturing = false;
     $(target)[0].addEventListener('touchstart', this, false);
