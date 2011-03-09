@@ -65,7 +65,7 @@
       limitLeft: false,
       limitRight: false, 
       animateEasing: 'swing',
-      animateDuration: $.fx.speeds_default,
+      animateDuration: $.fx.speeds._default,
       hooks: {}
     }, opts);
 
