@@ -61,7 +61,7 @@ Subscribing to a hook looks something like this:
       console.log('We just moved! Our current position is:' + s.position.x);
     });
 
-Unsubscribing a hook looks like this:
+Unsubscribing from a hook looks like this:
 
 
     var handler = slider.subscribe('move', function(s, event) {
