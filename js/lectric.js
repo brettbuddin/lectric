@@ -343,7 +343,16 @@
   // 
   // Returns nothing.
   TouchSlider.prototype.decayOn = function() {
-    var duration = this.opts.animateDuration / 1000;
+    var duration = this.opts.animateDuration;
+    if (typeof duration === "number") {
+      duration = duration / 1000;
+    } else {
+      if (duration in $.fx.speeds) {
+        duration = $.fx.speeds[duration];
+      } else {
+        duration = $.fx.speeds._default;
+      }
+    }
     this.element.css({'-webkit-transition-duration': duration + 's'});
     this.element.css({'-webkit-transition-property': '-webkit-transform'});
   };
