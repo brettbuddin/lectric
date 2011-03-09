@@ -41,6 +41,7 @@ You can specify a few extra parameters when you call the `init` method. Those in
 - `limitRight` *(boolean)*: Prohibits the slider from moving right
 - `itemClassName` *(string)*: Class name of the individual pages of the slider
 - `itemWrapperClassName` *(string)*: Class name of the container that wraps all items
+- `animateEasing` *(string)*: A string indicating which easing function to use for the transition (non-mobile only).
 - `animateDuration` *(integer or string)*: A string (e.g. "fast" or "slow") or number (in milliseconds) determining how long a slide animation will run.
 - `hooks` *(map)*: Map of callback functions that should be subscribed to the various hooks (see next section for more about hooks)
 - `tossFunction` *(function)*: A function to use for calculating the distance (from the touchend point) the slider should be tossed.
