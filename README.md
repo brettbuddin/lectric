@@ -72,10 +72,10 @@ The hooks available to you are:
 
 - `init`: Triggered when after the slider is initialized
 - `start`: Triggered when the user puts her finger down on the slider
-- `move`: Triggered when the position of the slider is updated
-- `firstMove`: Triggered the first time the position of the slider is updated (for a single touch event)
+- `update`: Triggered when the position of the slider is moved
+- `firstUpdate`: Triggered the first time the position of the slider is moved (for a single touch event)
 - `end`: Triggered when the user lifts her finger off of the slider
-- `endNoMove`: Triggered when the user lifts her finger off of the slider and did not move the slider
+- `endNoUpdate`: Triggered when the user lifts her finger off of the slider and did not move the slider
 - `animationEnd`: Triggered when the slide animation has completed
 - `nextButton`: Triggered when the next button is pressed
 - `previousButton`: Triggered when the previous button is pressed

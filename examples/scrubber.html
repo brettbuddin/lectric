@@ -97,13 +97,13 @@
     var scale = slider.itemWidth() / scrubber.itemWidth();
     
     // Subscribe the scrubber to the slider
-    slider.subscribe('move', function() {
+    slider.subscribe('update', function() {
       scrubber.position.x = -slider.position.x / scale;
       scrubber.update({triggerMove: false});
     });
 
     // Subscribe the slider to the scrubber
-    scrubber.subscribe('move', function() {
+    scrubber.subscribe('update', function() {
       slider.position.x = -scrubber.position.x * scale;
       slider.update({triggerMove: false});
     });

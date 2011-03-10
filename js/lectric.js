@@ -157,7 +157,7 @@
       this.element.css({left: this.position.x + 'px'}).queue(after);
     }
 
-    if (options.triggerMove) { this.element.trigger('move.lectric'); }
+    if (options.triggerMove) { this.element.trigger('update.lectric'); }
   };
 
 
@@ -337,7 +337,7 @@
     if (options.animate) { this.decayOn(); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
 
-    if (options.triggerMove) { this.element.trigger('move.lectric'); }
+    if (options.triggerMove) { this.element.trigger('update.lectric'); }
   };
 
 
@@ -401,7 +401,7 @@
           e.preventDefault();
         }
 
-        this.element.trigger('firstMove.lectric');
+        this.element.trigger('firstUpdate.lectric');
       }
 
       this.moved = true;
@@ -433,7 +433,7 @@
         this.update();
         this.element.trigger('end.lectric');
       } else {
-        this.element.trigger('endNoMove.lectric');
+        this.element.trigger('endNoUpdate.lectric');
       }
 
       this.currentTarget = undefined;
