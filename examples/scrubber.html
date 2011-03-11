@@ -99,13 +99,13 @@
     // Subscribe the scrubber to the slider
     slider.subscribe('slide', function() {
       scrubber.position.x = -slider.position.x / scale;
-      scrubber.update({triggerMove: false});
+      scrubber.update({triggerSlide: false});
     });
 
     // Subscribe the slider to the scrubber
     scrubber.subscribe('slide', function() {
       slider.position.x = -scrubber.position.x * scale;
-      slider.update({triggerMove: false});
+      slider.update({triggerSlide: false});
     });
     
     // Keyboard shortcuts for left and right arrows

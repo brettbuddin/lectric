@@ -57,25 +57,25 @@ Lectric is designed to give you a great deal of visibility of its insides. To he
 
 Subscribing to a hook looks something like this:
 
-    slider.subscribe('move', function(s, event) {
+    slider.subscribe('slide', function(s, event) {
       console.log('We just moved! Our current position is:' + s.position.x);
     });
 
 Unsubscribing from a hook looks like this:
 
-    var handler = slider.subscribe('move', function(s, event) {
+    var handler = slider.subscribe('slide', function(s, event) {
       console.log('We just moved! Our current position is:' + s.position.x);
     });
-    slider.unsubscribe('move', handler); // Unsubscribe handler from slider
+    slider.unsubscribe('slide', handler); // Unsubscribe handler from slider
 
 The hooks available to you are:
 
 - `init`: Triggered when after the slider is initialized
 - `start`: Triggered when the user puts her finger down on the slider
-- `update`: Triggered when the position of the slider is moved
-- `firstUpdate`: Triggered the first time the position of the slider is moved (for a single touch event)
+- `slide`: Triggered when the position of the slider is moved
+- `firstSlide`: Triggered the first time the position of the slider is moved (for a single touch event)
 - `end`: Triggered when the user lifts her finger off of the slider
-- `endNoUpdate`: Triggered when the user lifts her finger off of the slider and did not move the slider
+- `endNoSlide`: Triggered when the user lifts her finger off of the slider and did not move the slider
 - `animationEnd`: Triggered when the slide animation has completed
 - `nextButton`: Triggered when the next button is pressed
 - `previousButton`: Triggered when the previous button is pressed
