@@ -136,11 +136,11 @@
   //
   // opts - The Map of extra parameters:
   //        animate - Boolean of whether or not to animate between two states.
-  //        triggerMove - Boolean of whether or not to trigger the move hook.
+  //        triggerSlide - Boolean of whether or not to trigger the move hook.
   // 
   // Returns nothing.
   BaseSlider.prototype.update = function(opts) {
-    var options = jQuery.extend({animate: true, triggerMove: true}, opts);
+    var options = jQuery.extend({animate: true, triggerSlide: true}, opts);
 
     var self = this;
     var after = function() {
@@ -157,7 +157,7 @@
       this.element.css({left: this.position.x + 'px'}).queue(after);
     }
 
-    if (options.triggerMove) { this.element.trigger('update.lectric'); }
+    if (options.triggerSlide) { this.element.trigger('slide.lectric'); }
   };
 
 
@@ -329,15 +329,15 @@
   //
   // opts - The Map of extra parameters:
   //        animate - Boolean of whether or not to animate between two states.
-  //        triggerMove - Boolean of whether or not to trigger the move hook.
+  //        triggerSlide - Boolean of whether or not to trigger the move hook.
   // 
   // Returns nothing.
   TouchSlider.prototype.update = function(opts) {
-    var options = jQuery.extend({animate: true, triggerMove: true}, opts);
+    var options = jQuery.extend({animate: true, triggerSlide: true}, opts);
     if (options.animate) { this.decayOn(); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
 
-    if (options.triggerMove) { this.element.trigger('update.lectric'); }
+    if (options.triggerSlide) { this.element.trigger('slide.lectric'); }
   };
 
 
@@ -401,7 +401,7 @@
           e.preventDefault();
         }
 
-        this.element.trigger('firstUpdate.lectric');
+        this.element.trigger('firstSlide.lectric');
       }
 
       this.moved = true;
@@ -433,7 +433,7 @@
         this.update();
         this.element.trigger('end.lectric');
       } else {
-        this.element.trigger('endNoUpdate.lectric');
+        this.element.trigger('endNoSlide.lectric');
       }
 
       this.currentTarget = undefined;
