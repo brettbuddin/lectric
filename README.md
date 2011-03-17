@@ -81,4 +81,4 @@ The hooks available to you are:
 - `nextButton`: Triggered when the next button is pressed
 - `previousButton`: Triggered when the previous button is pressed
 
-The callback function that you provide the `subscribe` function will pass your callback two parameters: the `Slider` or `TouchSlider` instance you are manipulating and the jQuery event object that was triggered. Having a reference to the controller object will allow you to augment the behaviour of the slider itself.
+The callback function that you provide the `subscribe` function will pass your callback two parameters: slider controller instance you are manipulating and the jQuery event object that was triggered. Having a reference to the controller object will allow you to augment the behaviour of the slider itself.
