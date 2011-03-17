@@ -305,7 +305,8 @@
     this.opts = $.extend({
       tossFunction: function(x, dx, dt) {
         return x + dx * 100 / dt;
-      }
+      },
+      tossing: false
     }, this.opts);
     $(target).addClass('lectric-slider-touch');
 
@@ -424,11 +425,14 @@
         var dx = this.position.x - this.lastPosition.x;
         var dt = (new Date()) - this.lastMoveTime + 1; 
         
-        var tossedX = this.limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
         var width = this.itemWidth();
 
-        // Find the nearest page
-        this.position.x = Math.round(this.position.x / width) * width;
+        if (this.opts.tossing) {
+          var tossedX = this.limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
+          this.position.x = Math.round(tossedX / width) * width;
+        } else {
+          this.position.x = Math.round(this.position.x / width) * width;
+        }
 
         this.update();
         this.element.trigger('end.lectric');
