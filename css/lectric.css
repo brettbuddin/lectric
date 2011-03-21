@@ -3,6 +3,7 @@
 }
 .lectric-slider .items {
   left: 0;
+  width: 100000px;
 }
 .lectric-slider-touch {
   -webkit-transform: translate3d(0, 0, 0);
