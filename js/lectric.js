@@ -281,7 +281,7 @@
     }
 
     if ((this.position.x - x > 0 && this.opts.limitRight) || 
-        (this.position.x - x < 0 && this.opts.limitRight)) {
+        (this.position.x - x < 0 && this.opts.limitLeft)) {
       x = this.position.x;
     }
 
