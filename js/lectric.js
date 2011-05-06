@@ -92,14 +92,14 @@
     var self = this;
     
     var type = supportsTouch ? 'touchstart' : 'click';
-    $(this.opts.next).bind(type, function(e) {
+    $(this.opts.next, target).bind(type, function(e) {
       e.preventDefault();
       var page = self.page();
       self.to(page + 1);
       self.element.trigger('nextButton.lectric');
     });
 
-    $(this.opts.previous).bind(type, function(e) {
+    $(this.opts.previous, target).bind(type, function(e) {
       e.preventDefault();
       var page = self.page();
       self.to(page - 1);
@@ -109,11 +109,11 @@
     // Keep clicks from doing what they do if
     // we support touch on this device
     if (supportsTouch) {
-      $(this.opts.next).click(function(e) {
+      $(this.opts.next, target).click(function(e) {
         e.preventDefault();
       });
 
-      $(this.opts.previous).click(function(e) {
+      $(this.opts.previous, target).click(function(e) {
         e.preventDefault();
       });
     }    
