@@ -75,7 +75,7 @@
   
     // Set up the styling of the slider
     var element = $('<div/>', {
-      className: this.opts.itemWrapperClassName
+      'class': this.opts.itemWrapperClassName
     });
     element.css('width', '1000000px');
 
