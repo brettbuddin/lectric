@@ -9,7 +9,7 @@
  * Author: Brett C. Buddin (http://github.com/brettbuddin)
  */
 
-(function(window) {
+(function(window, $) {
   var ua = navigator.userAgent.toLowerCase();
   isWebkit = !!ua.match(/applewebkit/i);
   var supportsTouch = false;
@@ -459,4 +459,4 @@
   Lectric.BaseSlider = BaseSlider;
   Lectric.TouchSlider = TouchSlider;
   window.Lectric = Lectric;
-})(window);
+})(window, jQuery);
