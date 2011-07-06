@@ -56,7 +56,7 @@
   // 
   // Returns nothing.
   BaseSlider.prototype.init = function(target, opts) {
-    this.opts = jQuery.extend({
+    this.opts = $.extend({
       reverse: false,
       next: undefined, 
       previous: undefined,
@@ -140,7 +140,7 @@
   // 
   // Returns nothing.
   BaseSlider.prototype.update = function(opts) {
-    var options = jQuery.extend({animate: true, triggerSlide: true}, opts);
+    var options = $.extend({animate: true, triggerSlide: true}, opts);
 
     var self = this;
     var after = function() {
@@ -334,7 +334,7 @@
   // 
   // Returns nothing.
   TouchSlider.prototype.update = function(opts) {
-    var options = jQuery.extend({animate: true, triggerSlide: true}, opts);
+    var options = $.extend({animate: true, triggerSlide: true}, opts);
     if (options.animate) { this.decayOn(); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
 
