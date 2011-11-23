@@ -1,10 +1,10 @@
 /*!
  * Lectric v0.4.5
- * http://github.com/mckinney/lectric
+ * http://github.com/brettbuddin/lectric
  *
- * Copyright 2011, McKinney
+ * Copyright 2011, Brett C. Buddin
  * Licensed under the MIT license.
- * http://github.com/mckinney/lectric/blob/master/LICENSE
+ * http://github.com/brettbuddin/lectric/blob/master/LICENSE
  *
  * Author: Brett C. Buddin (http://github.com/brettbuddin)
  */
