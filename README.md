@@ -44,7 +44,7 @@ You can specify a few extra parameters when you call the `init` method. Those in
 - `animateEasing` *(string)*: A string indicating which easing function to use for the transition (non-mobile only).
 - `animateDuration` *(integer or string)*: A string (e.g. "fast" or "slow") or number (in milliseconds) determining how long a slide animation will run.
 - `hooks` *(map)*: Map of callback functions that should be subscribed to the various hooks (see next section for more about hooks)
-- `toss` *(boolean)*: Turns tossing of the slider on. This lets you "toss" the slider ahead more than one page. (defaults to false)
+- `tossing` *(boolean)*: Turns tossing of the slider on. This lets you "toss" the slider ahead more than one page. (defaults to false)
 - `tossFunction` *(function)*: A function to use for calculating the distance (from the touchend point) the slider should be tossed.
 
 For example, let's provide a slider with next/previous buttons:
