@@ -108,15 +108,15 @@
     var type = supportsTouch ? 'touchstart' : 'click';
     $(this.opts.next).bind(type, function(e) {
       e.preventDefault();
-      var page = self.page();
-      self.to(page + 1);
+      var tile = self.tile();
+      self.to(tile + 1);
       self.element.trigger('nextButton.lectric');
     });
 
     $(this.opts.previous).bind(type, function(e) {
       e.preventDefault();
-      var page = self.page();
-      self.to(page - 1);
+      var tile = self.tile();
+      self.to(tile - 1);
       self.element.trigger('previousButton.lectric');
     });
     
@@ -213,21 +213,21 @@
     this.off(name, fn);
   };
 
-  // Retrieve the current page of the slider.
+  // Retrieve the current tile of the slider.
   // 
-  // Returns the Integer page number of the slider.
-  BaseSlider.prototype.page = function() {
+  // Returns the Integer tile number of the slider.
+  BaseSlider.prototype.tile = function() {
     return Math.abs(Math.round(this.position.x / this.itemWidth()));
   };
 
-  // Move to a specific page number.
+  // Move to a specific tile number.
   //
-  // page - The Integer page number to move to.
+  // tile - The Integer tile number to move to.
   // 
   // Returns nothing.
-  BaseSlider.prototype.to = function(page) {
+  BaseSlider.prototype.to = function(tile) {
     var previous = this.position.x;
-    this.position.x = this.limitXBounds(this.xForPage(page));
+    this.position.x = this.limitXBounds(this.xForTile(tile));
     if (this.position.x !== previous) {
       this.update();
     }
@@ -250,12 +250,12 @@
 
   // Retrieve the current X position.
   //
-  // page - The Integer page number.
+  // tile - The Integer tile number.
   // 
   // Returns the Integer X position of the slider.
-  BaseSlider.prototype.xForPage = function(page) {
+  BaseSlider.prototype.xForTile = function(tile) {
     var flip = (this.opts.reverse) ? 1 : -1;
-    return flip * page * this.itemWidth();
+    return flip * tile * this.itemWidth();
   };
 
 
