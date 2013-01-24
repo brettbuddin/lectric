@@ -2,6 +2,9 @@ $(function() {
   var slider = new Lectric();
   slider.init('#slider', {next: '.next', previous: '.previous'});
 
+  var slider2 = new Lectric();
+  slider2.init('#slider2');
+
   test("setup", function() {
     expect(1);
 
@@ -87,5 +90,11 @@ $(function() {
     $('.previous').bind('click', click);
     $('.previous').trigger('click');
     stop();
+  });
+
+  test("tiles per page", function() {
+    expect(1);
+
+    equals(slider2.tilesPerPage(), 3);
   });
 });
