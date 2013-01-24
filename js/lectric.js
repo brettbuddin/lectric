@@ -20,7 +20,7 @@
 
   //GLOBAL
   } else {
-    window.Lectirc = factory(jQuery);
+    window.Lectric = factory(jQuery);
   }
 })(function($) {
   var ua = navigator.userAgent.toLowerCase();
