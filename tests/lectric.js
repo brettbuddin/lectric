@@ -12,7 +12,7 @@ $(function() {
     expect(6);
 
     equals(slider.itemWidth(), 530, "report the width of each individual item");
-    equals(slider.itemCount(), 4, "report the number of pages");
+    equals(slider.itemCount(), 4, "report the number of tiles");
     equals(slider.element.parent().css('position'), 'relative', "relative positioning set to container");
     equals(slider.element.css('position'), 'relative', "relative positioning set to items container");
     equals(slider.element.css('left'), '0px', "assigns an initial value to left");
@@ -25,15 +25,15 @@ $(function() {
     slider.on('animationEnd', function() {
       start(); 
     });
-    equals(slider.page(), 0, "start on item 0");
+    equals(slider.tile(), 0, "start on item 0");
 
     slider.to(1);
     stop();
-    equals(slider.page(), 1, "move to item 1");
+    equals(slider.tile(), 1, "move to item 1");
 
     slider.toItem($('#slider .item').eq(3));
     stop();
-    equals(slider.page(), 3, "move to item 3");
+    equals(slider.tile(), 3, "move to item 3");
   });
 
   test("subscribing to hooks", function() {

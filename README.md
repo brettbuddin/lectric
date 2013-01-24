@@ -20,10 +20,10 @@ Put this in your `<head>`:
 HTML:
 
     <div id="slider">
-      <div class="item">Page 1</div>
-      <div class="item">Page 2</div>
-      <div class="item">Page 3</div>
-      <div class="item">Page 4</div>
+      <div class="item">Tile 1</div>
+      <div class="item">Tile 2</div>
+      <div class="item">Tile 3</div>
+      <div class="item">Tile 4</div>
     </div>
 
 JavaScript:
@@ -35,11 +35,11 @@ JavaScript:
 
 You can specify a few extra parameters when you call the `init` method. Those include:
 
-- `next` *(selector)*: Next button
-- `previous` *(selector)*: Previous button
+- `next` *(selector)*: Next tile button
+- `previous` *(selector)*: Previous tile button
 - `limitLeft` *(boolean)*: Prohibits the slider from moving left
 - `limitRight` *(boolean)*: Prohibits the slider from moving right
-- `itemClassName` *(string)*: Class name of the individual pages of the slider (defaults to "item")
+- `itemClassName` *(string)*: Class name of the individual tiles of the slider (defaults to "item")
 - `itemWrapperClassName` *(string)*: Class name of the container that wraps all items (defaults to "items")
 - `animateEasing` *(string)*: A string indicating which easing function to use for the transition (non-mobile only).
 - `animateDuration` *(integer or string)*: A string (e.g. "fast" or "slow") or number (in milliseconds) determining how long a slide animation will run.
