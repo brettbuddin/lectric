@@ -73,6 +73,8 @@
       reverse: false,
       next: undefined, 
       previous: undefined,
+      nextPage: undefined, 
+      previousPage: undefined,
       itemWrapperClassName: 'items',
       itemClassName: 'item',
       limitLeft: false,
@@ -117,6 +119,21 @@
       e.preventDefault();
       var tile = self.tile();
       self.to(tile - 1);
+      self.element.trigger('previousButton.lectric');
+    });
+    $(this.opts.nextPage).bind(type, function(e) {
+      e.preventDefault();
+      var tile = self.tile();
+      var tilesPerPage = self.tilesPerPage();
+      self.to(tile + tilesPerPage);
+      self.element.trigger('nextButton.lectric');
+    });
+
+    $(this.opts.previousPage).bind(type, function(e) {
+      e.preventDefault();
+      var tile = self.tile();
+      var tilesPerPage = self.tilesPerPage();
+      self.to(tile - tilesPerPage);
       self.element.trigger('previousButton.lectric');
     });
     
@@ -256,6 +273,14 @@
   BaseSlider.prototype.xForTile = function(tile) {
     var flip = (this.opts.reverse) ? 1 : -1;
     return flip * tile * this.itemWidth();
+  };
+
+
+  // Retrieve the number of tiles per page.
+  // 
+  // Returns the Integer number of tiles visibile in the viewport at any time.
+  BaseSlider.prototype.tilesPerPage = function() {
+    return Math.max( Math.floor( this.target.width() / this.itemWidth() ), 1);
   };
 
 
@@ -441,7 +466,7 @@
         var dx = this.position.x - this.lastPosition.x;
         var dt = (new Date()) - this.lastMoveTime + 1; 
         
-        var width = this.itemWidth();
+        var width = this.target.width();
 
         if (this.opts.tossing) {
           var tossedX = this.limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));

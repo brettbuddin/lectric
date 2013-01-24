@@ -37,6 +37,8 @@ You can specify a few extra parameters when you call the `init` method. Those in
 
 - `next` *(selector)*: Next tile button
 - `previous` *(selector)*: Previous tile button
+- `nextPage` *(selector)*: Next page button. This will advance as many tiles as fit in the viewport.
+- `previousPage` *(selector)*: Previous tile button. This will go back as many tiles as fit in the viewport.
 - `limitLeft` *(boolean)*: Prohibits the slider from moving left
 - `limitRight` *(boolean)*: Prohibits the slider from moving right
 - `itemClassName` *(string)*: Class name of the individual tiles of the slider (defaults to "item")

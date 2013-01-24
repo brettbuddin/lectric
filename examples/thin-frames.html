@@ -22,7 +22,7 @@
       padding: 10px;
       background-color: #ccc;
     }
-    .next,.previous {
+    .next,.previous, .nextPage, .previousPage {
       display: block;
       padding: 1em;
       float: left;
@@ -46,12 +46,14 @@
 
   <a href="" class="previous">Previous</a>
   <a href="" class="next">Next</a>
+  <a href="" class="previousPage">Previous Page</a>
+  <a href="" class="nextPage">Next Page</a>
 
   <script type="text/javascript">
   $(function() {
     // Initialize the slider
     var slider = new Lectric();
-    slider.init('#slider', {next: '.next', previous: '.previous'});
+    slider.init('#slider', {next: '.next', previous: '.previous', nextPage: '.nextPage', previousPage: '.previousPage'});
     
     // Keyboard shortcuts for left and right arrows
     $(document).keydown(function(e) {
