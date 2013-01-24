@@ -22,7 +22,7 @@ $(function() {
   test("movement", function() {
     expect(3);
 
-    slider.subscribe('animationEnd', function() {
+    slider.on('animationEnd', function() {
       start(); 
     });
     equals(slider.page(), 0, "start on item 0");
@@ -39,20 +39,20 @@ $(function() {
   test("subscribing to hooks", function() {
     expect(1);
 
-    var handler = slider.subscribe('hello', function(s, e) {
+    var handler = slider.on('hello', function(s, e) {
       equals(e.type, 'hello');
       start();
     });
     slider.element.trigger('hello.lectric');
     stop();
-    slider.unsubscribe('hello', handler);
+    slider.off('hello', handler);
   });
 
   test("unsubscribing from hooks", function() {
     expect(1);
 
     var counter = 0;
-    var handler = slider.subscribe('hello', function(s, e) {
+    var handler = slider.on('hello', function(s, e) {
       counter++;
       start();
     });
@@ -60,7 +60,7 @@ $(function() {
     slider.element.trigger('hello.lectric');
     stop();
 
-    slider.unsubscribe('hello', handler);
+    slider.off('hello', handler);
     slider.element.trigger('hello.lectric');
     equals(counter, 1);
   });

@@ -58,20 +58,20 @@ Lectric is designed to give you a great deal of visibility of its insides. To he
 
 Subscribing to a hook looks something like this:
 
-    slider.subscribe('slide', function(s, event) {
+    slider.on('slide', function(s, event) {
       console.log('We just moved! Our current position is:' + s.position.x);
     });
 
 Unsubscribing from a hook looks like this:
 
-    var handler = slider.subscribe('slide', function(s, event) {
+    var handler = slider.on('slide', function(s, event) {
       console.log('We just moved! Our current position is:' + s.position.x);
     });
-    slider.unsubscribe('slide', handler); // Unsubscribe handler from slider
+    slider.off('slide', handler); // Unsubscribe handler from slider
 
 The hooks available to you are:
 
-- `init`: Triggered when after the slider is initialized
+- `init`: Triggered after the slider is initialized
 - `start`: Triggered when the user puts her finger down on the slider
 - `slide`: Triggered when the position of the slider is moved
 - `firstSlide`: Triggered the first time the position of the slider is moved (for a single touch event)
@@ -81,4 +81,4 @@ The hooks available to you are:
 - `nextButton`: Triggered when the next button is pressed
 - `previousButton`: Triggered when the previous button is pressed
 
-The callback function that you provide the `subscribe` function will pass your callback two parameters: slider controller instance you are manipulating and the jQuery event object that was triggered. Having a reference to the controller object will allow you to augment the behaviour of the slider itself.
+The callback function that you provide the `on` function will pass your callback two parameters: slider controller instance you are manipulating and the jQuery event object that was triggered. Having a reference to the controller object will allow you to augment the behaviour of the slider itself.

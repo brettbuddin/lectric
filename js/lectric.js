@@ -122,10 +122,10 @@
     $.each(this.opts.hooks, function(name, fn) {
       if ($.isArray(fn)) {
         $.each(fn, function(fn2) {
-          self.subscribe(name, fn2);
+          self.on(name, fn2);
         });
       } else {
-        self.subscribe(name, fn);
+        self.on(name, fn);
       }
     });
 
@@ -167,7 +167,7 @@
   // fn - The Function callback to execute when the hook is triggered.
   // 
   // Returns the Function callback that was bound to the hook.
-  BaseSlider.prototype.subscribe = function(name, fn) {
+  BaseSlider.prototype.on = function(name, fn) {
     var self = this;
     var callback = function(e) {
       if (e.target == self.element[0]) { 
@@ -179,7 +179,7 @@
     return callback;
   };
   BaseSlider.prototype.bind = function(name, fn) {
-    this.subscribe(name, fn);
+    this.on(name, fn);
   };
 
   // Unsubscribe a callback function from a hook or unsubscribe all callbacks from a hook.
@@ -188,7 +188,7 @@
   // fn - The Function handler to unbind from the element.
   // 
   // Returns nothing.
-  BaseSlider.prototype.unsubscribe = function(name, fn) {
+  BaseSlider.prototype.off = function(name, fn) {
     if (typeof fn !== undefined && $.isFunction(fn)) {
       this.element.unbind(name + '.lectric', fn);
     } else {
@@ -196,7 +196,7 @@
     }
   };
   BaseSlider.prototype.unbind = function(name, fn) {
-    this.unsubscribe(name, fn);
+    this.off(name, fn);
   };
 
   // Retrieve the current page of the slider.
