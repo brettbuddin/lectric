@@ -82,10 +82,11 @@
     var itemSelector = '.' + this.opts.itemClassName;
     var itemWrapperSelector = '.' + this.opts.itemWrapperClassName;
 
-    $(target).css('overflow', 'hidden');
-    $(target).find(itemSelector).css('float', 'left').wrapAll(element);
-    $(target).addClass('lectric-slider');
-    this.element = $(target).find(itemWrapperSelector);
+    this.target = $(target);
+    this.target.css('overflow', 'hidden');
+    this.target.find(itemSelector).css('float', 'left').wrapAll(element);
+    this.target.addClass('lectric-slider');
+    this.element = this.target.find(itemWrapperSelector);
     this.element.itemSelector = itemSelector;
     this.element.itemWrapperSelector = itemWrapperSelector;
 
@@ -270,7 +271,9 @@
   BaseSlider.prototype.limitXBounds = function(x) {
     var itemWidth = this.itemWidth();
     var itemCount = this.itemCount();
-    var totalWidth = itemWidth * itemCount;
+    var extraSpaceInTarget = this.target.width() - itemWidth;
+    var totalWidth = (itemWidth * itemCount) - extraSpaceInTarget;
+
 
     if (this.opts.reverse) {
       x = (x > totalWidth - itemWidth) ?  totalWidth - itemWidth : x;
