@@ -8,8 +8,21 @@
  *
  * Author: Brett C. Buddin (http://github.com/brettbuddin)
  */
+(function( factory ) {
+  //AMD
+  if(typeof define === 'function' && define.amd) {
+    define(['jquery'], factory);
 
-(function(window, $) {
+  //NODE
+  } else if(typeof module === 'object' && module.exports) {
+    var $ = require('jquery');
+    module.exports = factory($);
+
+  //GLOBAL
+  } else {
+    window.Lectirc = factory(jQuery);
+  }
+})(function($) {
   var ua = navigator.userAgent.toLowerCase();
   isWebkit = !!ua.match(/applewebkit/i);
   var supportsTouch = false;
@@ -458,5 +471,6 @@
   
   Lectric.BaseSlider = BaseSlider;
   Lectric.TouchSlider = TouchSlider;
-  window.Lectric = Lectric;
-})(window, jQuery);
+
+  return Lectric;
+});
