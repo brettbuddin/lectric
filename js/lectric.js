@@ -345,7 +345,7 @@
     TouchSlider.superobject.init.call(this, target, opts);
     this.opts = $.extend({
       tossFunction: function(x, dx, dt) {
-        return x + dx * 100 / dt;
+        return x + dx * 75 / dt;
       },
       tossing: false
     }, this.opts);
@@ -466,9 +466,9 @@
         var dx = this.position.x - this.lastPosition.x;
         var dt = (new Date()) - this.lastMoveTime + 1; 
         
-        var width = this.target.width();
+        var width = this.itemWidth();
 
-        if (this.opts.tossing) {
+        if (this.opts.tossing || this.tilesPerPage() > 1) {
           var tossedX = this.limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
           this.position.x = Math.round(tossedX / width) * width;
         } else {
