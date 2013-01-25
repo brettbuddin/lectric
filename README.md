@@ -35,13 +35,13 @@ JavaScript:
 
 You can specify a few extra parameters when you call the `init` method. Those include:
 
-- `next` *(selector)*: Next tile button
-- `previous` *(selector)*: Previous tile button
-- `nextPage` *(selector)*: Next page button. This will advance as many tiles as fit in the viewport.
-- `previousPage` *(selector)*: Previous tile button. This will go back as many tiles as fit in the viewport.
+- `next` *(selector)*: Next slide button
+- `previous` *(selector)*: Previous slide button
+- `nextPage` *(selector)*: Next page button. This will advance as many slides as fit in the viewport.
+- `previousPage` *(selector)*: Previous tile button. This will go back as many slides as fit in the viewport.
 - `limitLeft` *(boolean)*: Prohibits the slider from moving left
 - `limitRight` *(boolean)*: Prohibits the slider from moving right
-- `itemClassName` *(string)*: Class name of the individual tiles of the slider (defaults to "item")
+- `itemClassName` *(string)*: Class name of the individual slides of the slider (defaults to "item")
 - `itemWrapperClassName` *(string)*: Class name of the container that wraps all items (defaults to "items")
 - `animateEasing` *(string)*: A string indicating which easing function to use for the transition (non-mobile only).
 - `animateDuration` *(integer or string)*: A string (e.g. "fast" or "slow") or number (in milliseconds) determining how long a slide animation will run.
@@ -60,22 +60,22 @@ Lectric is designed to give you a great deal of visibility of its insides. To he
 
 Subscribing to a hook looks something like this:
 
-    slider.on('slide', function(s, event) {
+    slider.on('move', function(s, event) {
       console.log('We just moved! Our current position is:' + s.position.x);
     });
 
 Unsubscribing from a hook looks like this:
 
-    var handler = slider.on('slide', function(s, event) {
+    var handler = slider.on('move', function(s, event) {
       console.log('We just moved! Our current position is:' + s.position.x);
     });
-    slider.off('slide', handler); // Unsubscribe handler from slider
+    slider.off('move', handler); // Unsubscribe handler from slider
 
 The hooks available to you are:
 
 - `init`: Triggered after the slider is initialized
 - `start`: Triggered when the user puts her finger down on the slider
-- `slide`: Triggered when the position of the slider is moved
+- `move`: Triggered when the position of the slider is moved
 - `firstSlide`: Triggered the first time the position of the slider is moved (for a single touch event)
 - `end`: Triggered when the user lifts her finger off of the slider
 - `endNoSlide`: Triggered when the user lifts her finger off of the slider and did not move the slider

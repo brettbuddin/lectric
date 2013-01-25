@@ -14,10 +14,10 @@ $(function() {
   test("structure", function() {
     expect(6);
 
-    equals(slider.itemWidth(), 530, "report the width of each individual item");
-    equals(slider.itemCount(), 4, "report the number of tiles");
+    equals(slider.slideWidth(), 530, "report the width of each individual slide");
+    equals(slider.slideCount(), 4, "report the number of slides");
     equals(slider.element.parent().css('position'), 'relative', "relative positioning set to container");
-    equals(slider.element.css('position'), 'relative', "relative positioning set to items container");
+    equals(slider.element.css('position'), 'relative', "relative positioning set to slides container");
     equals(slider.element.css('left'), '0px', "assigns an initial value to left");
     ok(slider.element.parent().hasClass('lectric-slider'), "has the lectric-slider class assigned to the container");
   });
@@ -28,15 +28,15 @@ $(function() {
     slider.on('animationEnd', function() {
       start(); 
     });
-    equals(slider.tile(), 0, "start on item 0");
+    equals(slider.currentSlide(), 0, "start on slide 0");
 
     slider.to(1);
     stop();
-    equals(slider.tile(), 1, "move to item 1");
+    equals(slider.currentSlide(), 1, "move to slide 1");
 
     slider.toItem($('#slider .item').eq(3));
     stop();
-    equals(slider.tile(), 3, "move to item 3");
+    equals(slider.currentSlide(), 3, "move to slide 3");
   });
 
   test("subscribing to hooks", function() {
@@ -95,6 +95,6 @@ $(function() {
   test("tiles per page", function() {
     expect(1);
 
-    equals(slider2.tilesPerPage(), 3);
+    equals(slider2.slidesPerPage(), 3);
   });
 });

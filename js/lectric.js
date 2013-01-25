@@ -110,30 +110,30 @@
     var type = supportsTouch ? 'touchstart' : 'click';
     $(this.opts.next).bind(type, function(e) {
       e.preventDefault();
-      var tile = self.tile();
-      self.to(tile + 1);
+      var currentSlide = self.currentSlide();
+      self.to(currentSlide + 1);
       self.element.trigger('nextButton.lectric');
     });
 
     $(this.opts.previous).bind(type, function(e) {
       e.preventDefault();
-      var tile = self.tile();
-      self.to(tile - 1);
+      var currentSlide = self.currentSlide();
+      self.to(currentSlide - 1);
       self.element.trigger('previousButton.lectric');
     });
     $(this.opts.nextPage).bind(type, function(e) {
       e.preventDefault();
-      var tile = self.tile();
-      var tilesPerPage = self.tilesPerPage();
-      self.to(tile + tilesPerPage);
+      var currentSlide = self.currentSlide();
+      var slidesPerPage = self.slidesPerPage();
+      self.to(currentSlide + slidesPerPage);
       self.element.trigger('nextButton.lectric');
     });
 
     $(this.opts.previousPage).bind(type, function(e) {
       e.preventDefault();
-      var tile = self.tile();
-      var tilesPerPage = self.tilesPerPage();
-      self.to(tile - tilesPerPage);
+      var currentSlide = self.currentSlide();
+      var slidesPerPage = self.slidesPerPage();
+      self.to(currentSlide - slidesPerPage);
       self.element.trigger('previousButton.lectric');
     });
     
@@ -188,7 +188,7 @@
       this.element.css({left: this.position.x + 'px'}).queue(after);
     }
 
-    if (options.triggerSlide) { this.element.trigger('slide.lectric'); }
+    if (options.triggerSlide) { this.element.trigger('move.lectric'); }
   };
 
 
@@ -230,21 +230,21 @@
     this.off(name, fn);
   };
 
-  // Retrieve the current tile of the slider.
+  // Retrieve the current slide index of the slider.
   // 
-  // Returns the Integer tile number of the slider.
-  BaseSlider.prototype.tile = function() {
-    return Math.abs(Math.round(this.position.x / this.itemWidth()));
+  // Returns the Integer of the current slide index.
+  BaseSlider.prototype.currentSlide = function() {
+    return Math.abs(Math.round(this.position.x / this.slideWidth()));
   };
 
-  // Move to a specific tile number.
+  // Move to a specific slide number.
   //
-  // tile - The Integer tile number to move to.
+  // slide - The Integer slide number to move to.
   // 
   // Returns nothing.
-  BaseSlider.prototype.to = function(tile) {
+  BaseSlider.prototype.to = function(slide) {
     var previous = this.position.x;
-    this.position.x = this.limitXBounds(this.xForTile(tile));
+    this.position.x = this.limitXBounds(this.xForSlide(slide));
     if (this.position.x !== previous) {
       this.update();
     }
@@ -267,27 +267,27 @@
 
   // Retrieve the current X position.
   //
-  // tile - The Integer tile number.
+  // slide - The Integer slide number.
   // 
   // Returns the Integer X position of the slider.
-  BaseSlider.prototype.xForTile = function(tile) {
+  BaseSlider.prototype.xForSlide = function(slide) {
     var flip = (this.opts.reverse) ? 1 : -1;
-    return flip * tile * this.itemWidth();
+    return flip * slide * this.slideWidth();
   };
 
 
-  // Retrieve the number of tiles per page.
+  // Retrieve the number of slides per page.
   // 
-  // Returns the Integer number of tiles visibile in the viewport at any time.
-  BaseSlider.prototype.tilesPerPage = function() {
-    return Math.max( Math.floor( this.target.width() / this.itemWidth() ), 1);
+  // Returns the Integer number of slides visibile in the viewport at any time.
+  BaseSlider.prototype.slidesPerPage = function() {
+    return Math.max( Math.floor( this.target.width() / this.slideWidth() ), 1);
   };
 
 
   // Retrieve the width of a single item (including margin-right and padding).
   // 
   // Returns the Integer width of a single item.
-  BaseSlider.prototype.itemWidth = function() {
+  BaseSlider.prototype.slideWidth = function() {
     var first = this.element.find(this.element.itemSelector).eq(0);
     var padding = cssWithoutUnit(first, 'paddingRight') + cssWithoutUnit(first, 'paddingLeft');
     return cssWithoutUnit(first, 'marginRight') + padding + first.width();
@@ -296,7 +296,7 @@
   // Retrieve number of items in the slider.
   // 
   // Returns the Integer number of items.
-  BaseSlider.prototype.itemCount = function() {
+  BaseSlider.prototype.slideCount = function() {
     return this.element.find(this.element.itemSelector).size();
   };
 
@@ -307,17 +307,17 @@
   //
   // Returns the Integer X position after being constrained.
   BaseSlider.prototype.limitXBounds = function(x) {
-    var itemWidth = this.itemWidth();
-    var itemCount = this.itemCount();
-    var extraSpaceInTarget = this.target.width() - itemWidth;
-    var totalWidth = (itemWidth * itemCount) - extraSpaceInTarget;
+    var slideWidth = this.slideWidth();
+    var slideCount = this.slideCount();
+    var extraSpaceInTarget = this.target.width() - slideWidth;
+    var totalWidth = (slideWidth * slideCount) - extraSpaceInTarget;
 
 
     if (this.opts.reverse) {
-      x = (x > totalWidth - itemWidth) ?  totalWidth - itemWidth : x;
+      x = (x > totalWidth - slideWidth) ?  totalWidth - slideWidth : x;
       x = (x < 0) ? 0 : x;
     } else {
-      x = (x < -totalWidth + itemWidth) ?  -totalWidth + itemWidth : x;
+      x = (x < -totalWidth + slideWidth) ?  -totalWidth + slideWidth : x;
       x = (x > 0) ? 0 : x;
     }
 
@@ -379,7 +379,7 @@
     if (options.animate) { this.decayOn(); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
 
-    if (options.triggerSlide) { this.element.trigger('slide.lectric'); }
+    if (options.triggerSlide) { this.element.trigger('move.lectric'); }
   };
 
 
@@ -466,9 +466,9 @@
         var dx = this.position.x - this.lastPosition.x;
         var dt = (new Date()) - this.lastMoveTime + 1; 
         
-        var width = this.itemWidth();
+        var width = this.slideWidth();
 
-        if (this.opts.tossing || this.tilesPerPage() > 1) {
+        if (this.opts.tossing || this.slidesPerPage() > 1) {
           var tossedX = this.limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
           this.position.x = Math.round(tossedX / width) * width;
         } else {
