@@ -20,10 +20,10 @@ Put this in your `<head>`:
 HTML:
 
     <div id="slider">
-      <div class="item">Tile 1</div>
-      <div class="item">Tile 2</div>
-      <div class="item">Tile 3</div>
-      <div class="item">Tile 4</div>
+      <div class="item">Slide 1</div>
+      <div class="item">Slide 2</div>
+      <div class="item">Slide 3</div>
+      <div class="item">Slide 4</div>
     </div>
 
 JavaScript:
