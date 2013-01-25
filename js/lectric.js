@@ -92,7 +92,10 @@
     var element = $('<div/>', {
       'class': this.opts.itemWrapperClassName
     });
-    element.css('width', '1000000px');
+    element.css({
+      width: '1000000px',
+      position: 'relative'
+    });
 
     var itemSelector = '.' + this.opts.itemClassName;
     var itemWrapperSelector = '.' + this.opts.itemWrapperClassName;
