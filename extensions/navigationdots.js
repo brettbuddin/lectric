@@ -77,7 +77,8 @@
       self.dots.removeClass( config.activeClass );
       self.dots.eq(currentSlide).addClass( config.activeClass );
     };
-
+    
+    this.updateState();
     carousel.on('move', this.updateState);
   };
 
