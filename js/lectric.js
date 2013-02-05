@@ -77,6 +77,7 @@
       previousPage: undefined,
       itemWrapperClassName: 'items',
       itemClassName: 'item',
+      loop: false,
       limitLeft: false,
       limitRight: false, 
       animateEasing: 'swing',
@@ -237,6 +238,10 @@
   // Returns nothing.
   BaseSlider.prototype.to = function(slide) {
     var previous = this.position.x;
+    if (this.opts.loop) {
+      var slideCount = this.slideCount();
+      slide = (slide+slideCount) % slideCount;
+    }
     this.position.x = this.limitXBounds(this.xForSlide(slide));
     if (this.position.x !== previous) {
       this.update();
