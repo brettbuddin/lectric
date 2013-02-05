@@ -20,7 +20,7 @@
 
   var exports = {};
 
-  exports.extend = function( slider, duration, byPageNotSlide ) {
+  exports.extend = function( slider, defaultDuration, byPageNotSlide ) {
     
     var timer;
 
@@ -31,6 +31,7 @@
 
     function advance() {
       slider[nextFn]();
+      var duration = slider.getSlideData('duration') || defaultDuration;
       timer = setTimeout( advance, duration )
     }
 
@@ -39,7 +40,7 @@
       if (startRightNow) {
         advance();
       } else {
-        setTimeout( advance, duration );
+        setTimeout( advance, slider.getSlideData('duration') || defaultDuration );
       }
     };
 

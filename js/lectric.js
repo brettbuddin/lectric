@@ -259,7 +259,7 @@
     var currentSlide = this.currentSlide();
     var slidesPerPage = this.slidesPerPage();
     this.to(currentSlide + slidesPerPage);
-    this.element.trigger('nextButton.lectric');
+    this.element.trigger('nextPageButton.lectric');
   };
 
   // Go back one slide.
@@ -277,7 +277,7 @@
     var currentSlide = this.currentSlide();
     var slidesPerPage = this.slidesPerPage();
     this.to(currentSlide - slidesPerPage);
-    this.element.trigger('previousButton.lectric');
+    this.element.trigger('previousPageButton.lectric');
   };
 
   // Move to a specific item in the slider, regardless of its position.
@@ -328,6 +328,20 @@
   // Returns the Integer number of items.
   BaseSlider.prototype.slideCount = function() {
     return this.element.find(this.element.itemSelector).size();
+  };
+
+  // Retrieves a data-attribute from a slide.
+  //
+  // Returns the value of the attribute or undefined.
+  BaseSlider.prototype.getSlideData = function( property, slide ) {
+    if (slide === undefined) {
+      slide =this.currentSlide();
+    }
+
+    var slideEl = this.element.children()[slide];
+    if (slideEl) {
+      return slideEl.getAttribute('data-'+property);
+    }
   };
 
 
