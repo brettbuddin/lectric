@@ -14,7 +14,7 @@
 
   //GLOBAL
   } else {
-    window.lectircAutoplay = factory();
+    window.lectricAutoplay = factory();
   }
 })(function() {
 
@@ -29,10 +29,16 @@
       nextFn = 'nextPage';
     }
 
+    slider.on('animationEnd.lectric', function() {
+      if (timer) {
+        clearTimeout(timer);
+        var duration = slider.getSlideData('duration') || defaultDuration;
+        timer = setTimeout( advance, duration );
+      }
+    });
+
     function advance() {
       slider[nextFn]();
-      var duration = slider.getSlideData('duration') || defaultDuration;
-      timer = setTimeout( advance, duration )
     }
 
     slider.start = function( startRightNow ) {
@@ -40,7 +46,7 @@
       if (startRightNow) {
         advance();
       } else {
-        setTimeout( advance, slider.getSlideData('duration') || defaultDuration );
+        timer = setTimeout( advance, slider.getSlideData('duration') || defaultDuration );
       }
     };
 
