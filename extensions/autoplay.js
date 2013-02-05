@@ -29,11 +29,17 @@
       nextFn = 'nextPage';
     }
 
-    slider.on('animationEnd.lectric', function() {
+    slider.on('animationEnd', function() {
       if (timer) {
         clearTimeout(timer);
         var duration = slider.getSlideData('duration') || defaultDuration;
         timer = setTimeout( advance, duration );
+      }
+    });
+
+    slider.on('move', function() {
+      if (timer) {
+        clearTimeout(timer);
       }
     });
 
