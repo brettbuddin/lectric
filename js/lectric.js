@@ -113,31 +113,21 @@
     var type = supportsTouch ? 'touchstart' : 'click';
     $(this.opts.next).bind(type, function(e) {
       e.preventDefault();
-      var currentSlide = self.currentSlide();
-      self.to(currentSlide + 1);
-      self.element.trigger('nextButton.lectric');
+      self.next();
     });
 
     $(this.opts.previous).bind(type, function(e) {
       e.preventDefault();
-      var currentSlide = self.currentSlide();
-      self.to(currentSlide - 1);
-      self.element.trigger('previousButton.lectric');
+      self.previous();
     });
     $(this.opts.nextPage).bind(type, function(e) {
       e.preventDefault();
-      var currentSlide = self.currentSlide();
-      var slidesPerPage = self.slidesPerPage();
-      self.to(currentSlide + slidesPerPage);
-      self.element.trigger('nextButton.lectric');
+      self.nextPage();
     });
 
     $(this.opts.previousPage).bind(type, function(e) {
       e.preventDefault();
-      var currentSlide = self.currentSlide();
-      var slidesPerPage = self.slidesPerPage();
-      self.to(currentSlide - slidesPerPage);
-      self.element.trigger('previousButton.lectric');
+      self.previousPage();
     });
     
     // Keep clicks from doing what they do if
@@ -251,6 +241,43 @@
     if (this.position.x !== previous) {
       this.update();
     }
+  };
+
+  // Advance by one slide.
+  //
+  // Returns nothing.
+  BaseSlider.prototype.next = function() {
+    var currentSlide = this.currentSlide();
+    this.to(currentSlide + 1);
+    this.element.trigger('nextButton.lectric');
+  };
+
+  // Advance by one page.
+  //
+  // Returns nothing.
+  BaseSlider.prototype.nextPage = function() {
+    var currentSlide = this.currentSlide();
+    var slidesPerPage = this.slidesPerPage();
+    this.to(currentSlide + slidesPerPage);
+    this.element.trigger('nextButton.lectric');
+  };
+
+  // Go back one slide.
+  //
+  // Returns nothing.
+  BaseSlider.prototype.previous = function() {
+    var currentSlide = this.currentSlide();
+    this.to(currentSlide - 1);
+    this.element.trigger('previousButton.lectric');
+  };
+  // Go back one page.
+  //
+  // Returns nothing.
+  BaseSlider.prototype.previousPage = function() {
+    var currentSlide = this.currentSlide();
+    var slidesPerPage = this.slidesPerPage();
+    this.to(currentSlide - slidesPerPage);
+    this.element.trigger('previousButton.lectric');
   };
 
   // Move to a specific item in the slider, regardless of its position.
