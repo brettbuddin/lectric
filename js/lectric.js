@@ -340,7 +340,7 @@
   // Returns the value of the attribute or undefined.
   BaseSlider.prototype.getSlideData = function( property, slide ) {
     if (slide === undefined) {
-      slide =this.currentSlide();
+      slide = this.currentSlide();
     }
 
     var slideEl = this.element.children()[slide];
