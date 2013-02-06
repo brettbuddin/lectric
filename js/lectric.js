@@ -172,7 +172,7 @@
     var after = function() {
       self.element.trigger('animationEnd.lectric');
       self.lazyLoadNextFrame();
-      $(self).dequeue();
+      $(this).dequeue();
     };
 
     if (options.animate) {
