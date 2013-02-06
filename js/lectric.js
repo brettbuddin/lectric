@@ -154,6 +154,7 @@
       }
     });
 
+    this.lazyLoadNextFrame();
     this.element.trigger('init.lectric');
   };
 
@@ -170,7 +171,8 @@
     var self = this;
     var after = function() {
       self.element.trigger('animationEnd.lectric');
-      $(this).dequeue();
+      self.lazyLoadNextFrame();
+      $(self).dequeue();
     };
 
     if (options.animate) {
@@ -378,6 +380,23 @@
     return x;
   };
 
+  // Lazy load images in the current frame and the next one
+  //
+  // Returns nothing.
+  BaseSlider.prototype.lazyLoadNextFrame = function() {
+    var start = this.currentSlide();
+    var slidesPerPage = this.slidesPerPage();
+    var end = start + (slidesPerPage*2);
+
+    var $slides = this.element.children().slice(start, end);
+    $slides.each(function(i, slide) {
+      $('[data-src]', slide).each(function(i, image) {
+        image.src = image.getAttribute('data-src');
+        image.removeAttribute('data-src');
+      });
+    })
+  };
+
 
 
   var TouchSlider = function() {};
@@ -543,6 +562,7 @@
 
     webkitTransitionEnd: function(e) {
       this.element.trigger('animationEnd.lectric');
+      this.lazyLoadNextFrame();
     }
   };
   
