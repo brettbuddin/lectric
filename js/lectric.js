@@ -496,13 +496,14 @@
       window.addEventListener('touchend', this, false);
       this.element[0].addEventListener('click', this, false);
 
-      this.decayOff();
 
       this.element.trigger('start.lectric');
     },
 
     touchmove: function(e) {
       if (this.gesturing) { return false; }
+      
+      this.decayOff();
 
       if (!this.moved) {
         var deltaY = e.touches[0].pageY - this.startPosition.y;
