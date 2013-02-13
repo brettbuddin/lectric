@@ -29,20 +29,24 @@
       nextFn = 'nextPage';
     }
 
-    slider.on('animationEnd', function() {
+    function stopTimer() {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    }
+    function restartTimer() {
       if (timer) {
         clearTimeout(timer);
         var duration = slider.getSlideData('duration') || defaultDuration;
         timer = setTimeout( advance, duration );
       }
-    });
+    }
 
-    slider.on('move', function() {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    });
+    slider.on('start', stopTimer); // touchstart
 
+    slider.on('move', restartTimer); // slideshow switches slides
+    slider.on('endNoSlide', restartTimer); //touchend without slide. move will catch it otherwise.
+    
     function advance() {
       slider[nextFn]();
     }
