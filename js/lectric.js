@@ -488,6 +488,7 @@
       this.currentTarget = e.currentTarget;
       this.startPosition.x = e.touches[0].pageX - this.position.x;
       this.startPosition.y = e.touches[0].pageY - this.position.y;
+      this.startSlide = this.currentSlide();
       this.moved = false;
 
       window.addEventListener('gesturestart', this, false);
@@ -540,11 +541,18 @@
         if (this.opts.tossing || this.slidesPerPage() > 1) {
           var tossedX = this.limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
           this.position.x = Math.round(tossedX / width) * width;
+          this.update();
+        } else if (dx > 20 || dx < -20) {
+          if (dx < 0) {
+            this.to(this.startSlide+1);
+          } else {
+            this.to(this.startSlide-1);
+          }
         } else {
           this.position.x = Math.round(this.position.x / width) * width;
+          this.update();
         }
 
-        this.update();
         this.element.trigger('end.lectric');
       } else {
         this.element.trigger('endNoSlide.lectric');
