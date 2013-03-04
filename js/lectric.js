@@ -327,7 +327,7 @@
   BaseSlider.prototype.slideWidth = function() {
     var first = this.element.find(this.element.itemSelector).eq(0);
     var padding = cssWithoutUnit(first, 'paddingRight') + cssWithoutUnit(first, 'paddingLeft');
-    return cssWithoutUnit(first, 'marginRight') + padding + first.width();
+    return cssWithoutUnit(first, 'marginRight') + cssWithoutUnit(first, 'marginLeft') + padding + first.width();
   };
 
   // Retrieve number of items in the slider.
