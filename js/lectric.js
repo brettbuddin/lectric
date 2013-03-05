@@ -33,7 +33,8 @@
 
   var cssWithoutUnit = function(element, attribute) {
     var measure = element.css(attribute);
-    return (measure !== undefined) ? parseInt(measure.replace('px', ''), 10) : 0;
+    var val = (typeof measure === 'string') ? parseInt(measure.replace('px', ''), 10) : 0;
+    return val || 0;
   };
 
   var Position = function(x, y) {
