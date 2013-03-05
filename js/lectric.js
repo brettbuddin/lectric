@@ -113,21 +113,21 @@
     var self = this;
     
     var type = supportsTouch ? 'touchstart' : 'click';
-    $(this.opts.next).bind(type, function(e) {
+    $(this.opts.next).on(type, function(e) {
       e.preventDefault();
       self.next();
     });
 
-    $(this.opts.previous).bind(type, function(e) {
+    $(this.opts.previous).on(type, function(e) {
       e.preventDefault();
       self.previous();
     });
-    $(this.opts.nextPage).bind(type, function(e) {
+    $(this.opts.nextPage).on(type, function(e) {
       e.preventDefault();
       self.nextPage();
     });
 
-    $(this.opts.previousPage).bind(type, function(e) {
+    $(this.opts.previousPage).on(type, function(e) {
       e.preventDefault();
       self.previousPage();
     });
