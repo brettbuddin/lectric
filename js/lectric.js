@@ -434,7 +434,13 @@
     TouchEvents[event.type].call(this, event); 
   };
 
+  TouchSlider.prototype.disable = function(){
+      this.handleEvent = {};
+  };
 
+  TouchSlider.prototype.enable = function(){
+      delete this.handleEvent;
+  };
 
   // Update the current position of the slider.
   //
