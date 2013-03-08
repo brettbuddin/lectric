@@ -64,12 +64,11 @@
 
     $(target).append(self.container);
 
-    console.log(self.container);
-
     self.container.on('click', config.elementType, function( event ) {
       event.preventDefault();
       var index = self.dots.index(event.target);
       carousel.to(index);
+      carousel.element.trigger('navigationDotClick', index);
     });
 
     this.updateState = function() {

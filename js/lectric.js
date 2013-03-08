@@ -114,20 +114,24 @@
     
     var type = supportsTouch ? 'touchstart' : 'click';
     $(this.opts.next).on(type, function(e) {
+      self.element.trigger('nextClick.lectric');
       e.preventDefault();
       self.next();
     });
 
     $(this.opts.previous).on(type, function(e) {
+      self.element.trigger('previousClick.lectric');
       e.preventDefault();
       self.previous();
     });
     $(this.opts.nextPage).on(type, function(e) {
+      self.element.trigger('nextPageClick.lectric');
       e.preventDefault();
       self.nextPage();
     });
 
     $(this.opts.previousPage).on(type, function(e) {
+      self.element.trigger('previousPageClick.lectric');
       e.preventDefault();
       self.previousPage();
     });

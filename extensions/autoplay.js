@@ -49,6 +49,7 @@
     
     function advance() {
       slider[nextFn]();
+      slider.element.trigger('autoAdvance.lectric');
     }
 
     slider.start = function( startRightNow ) {
