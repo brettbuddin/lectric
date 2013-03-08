@@ -434,10 +434,16 @@
     TouchEvents[event.type].call(this, event); 
   };
 
+  // Disable touch events on the slider.
+  //
+  // Returns nothing.
   TouchSlider.prototype.disable = function(){
       this.handleEvent = {};
   };
 
+  // Re-enable touch events on the slider.
+  //
+  // Returns nothing.
   TouchSlider.prototype.enable = function(){
       delete this.handleEvent;
   };
