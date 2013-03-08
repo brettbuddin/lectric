@@ -48,8 +48,8 @@
     slider.on('endNoSlide', restartTimer); //touchend without slide. move will catch it otherwise.
     
     function advance() {
-      slider[nextFn]();
       slider.element.trigger('autoAdvance.lectric');
+      slider[nextFn]();
     }
 
     slider.start = function( startRightNow ) {

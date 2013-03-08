@@ -203,7 +203,8 @@
     var self = this;
     var callback = function(e) {
       if (e.target == self.element[0]) { 
-        fn(self, e);
+        var args = Array.prototype.slice.apply( arguments );
+        fn.apply(null, [self].concat(args));
       }
     };
 

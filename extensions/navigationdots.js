@@ -67,8 +67,8 @@
     self.container.on('click', config.elementType, function( event ) {
       event.preventDefault();
       var index = self.dots.index(event.target);
+      carousel.element.trigger('navigationDotClick.lectric', [index]);
       carousel.to(index);
-      carousel.element.trigger('navigationDotClick', index);
     });
 
     this.updateState = function() {
