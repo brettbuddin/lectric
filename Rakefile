@@ -5,22 +5,22 @@ require 'jslint'
 require 'webrick'
 
 prefix = File.dirname(__FILE__)
-lectric = File.join(prefix, 'js', 'lectric.js')
-lectric_min = File.join(prefix, 'js', 'lectric.min.js')
+frankenslide = File.join(prefix, 'js', 'frankenslide.js')
+frankenslide_min = File.join(prefix, 'js', 'frankenslide.min.js')
 version = File.join(prefix, 'VERSION')
 
 task :default => :build
 
-desc "Build and minify Lectric."
+desc "Build and minify frankenslide."
 task :build => [:lint, :stamp_version, :minify] do
-  puts "Lectric build complete."
+  puts "frankenslide build complete."
 end
 
 desc "Stamp the library with the current version"
 task :stamp_version => :version do
-  contents = File.read(lectric)
-  file = File.open(lectric, 'w')
-  file.puts contents.gsub(/(Lectric v)([\d\w\.-]+)/, "\\1#{@version}")
+  contents = File.read(frankenslide)
+  file = File.open(frankenslide, 'w')
+  file.puts contents.gsub(/(frankenslide v)([\d\w\.-]+)/, "\\1#{@version}")
   file.close
 end
 
@@ -35,22 +35,22 @@ end
 
 desc "Compress the library using Google's Closure Compiler"
 task :minify => :version do
-  puts "Minifying Lectric..."
+  puts "Minifying frankenslide..."
   comments = <<-EOS
   /*!
-   * Lectric v#{@version}
-   * http://github.com/mckinney/lectric
+   * frankenslide v#{@version}
+   * http://github.com/mckinney/frankenslide
    *
    * Copyright 2011, McKinney
    * Licensed under the MIT license.
-   * http://github.com/mckinney/lectric/blob/master/LICENSE
+   * http://github.com/mckinney/frankenslide/blob/master/LICENSE
    *
    * Author: Brett C. Buddin
    */
   EOS
 
-  file = File.open(lectric_min, 'w')
-  file.puts comments + Closure::Compiler.new.compile(File.open(lectric, 'r'))
+  file = File.open(frankenslide_min, 'w')
+  file.puts comments + Closure::Compiler.new.compile(File.open(frankenslide, 'r'))
   file.close
 end
 

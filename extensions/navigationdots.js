@@ -1,5 +1,5 @@
 /*!
- * Navigation Dots for Lectric
+ * Navigation Dots for frankenslide
  * Copyright 2013 Stu Kabakoff
  * Licensed under the MIT license.
  */
@@ -67,7 +67,7 @@
     self.container.on('click', config.elementType, function( event ) {
       event.preventDefault();
       var index = self.dots.index(event.target);
-      carousel.element.trigger('navigationDotClick.lectric', [index]);
+      carousel.element.trigger('navigationDotClick.frankenslide', [index]);
       carousel.to(index);
     });
 

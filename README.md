@@ -1,8 +1,6 @@
-# Lectric Slider
+# Frankenslide slider
 
-Lectric is a JavaScript slider that is touch-enabled and takes advantage of hardware acceleration. It looks awesome on Apple touch devices. You can see an early version of this software implemented on [mckinney.com](http://mckinney.com).
-
-It's Electric!
+Frankenslide is a JavaScript slider that is touch-enabled and takes advantage of hardware acceleration. It looks awesome on Apple touch devices. You can see an early version of this software implemented on [mckinney.com](http://mckinney.com).
 
 **Requires:** [jQuery](http://github.com/jquery/jquery)
 
@@ -10,10 +8,10 @@ It's Electric!
 
 Put this in your `<head>`:
     
-    <link href="/path/to/css/lectric.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="/path/to/css/frankenslide.css" rel="stylesheet" type="text/css" media="screen">
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
-    <script src="/path/to/js/lectric.js" type="text/javascript"></script>
+    <script src="/path/to/js/frankenslide.js" type="text/javascript"></script>
 
 ## Usage
 
@@ -28,7 +26,7 @@ HTML:
 
 JavaScript:
 
-    var slider = new Lectric();
+    var slider = new Frankenslide();
     slider.init('#slider');
 
 ## Optional Parameters
@@ -51,12 +49,12 @@ You can specify a few extra parameters when you call the `init` method. Those in
 
 For example, let's provide a slider with next/previous buttons:
 
-    var slider = new Lectric();
+    var slider = new frankenslide();
     slider.init('#slider', {next: '.next', previous: '.previous'});
 
 ## Hook System
 
-Lectric is designed to give you a great deal of visibility of its insides. To help you extend Lectric, we've provided a simple hook system for you to tap into. Hooks have specific names and are invoked at specific times in the execution of the slider's timeline. 
+Frankenslide is designed to give you a great deal of visibility of its insides. To help you extend frankenslide, we've provided a simple hook system for you to tap into. Hooks have specific names and are invoked at specific times in the execution of the slider's timeline. 
 
 Subscribing to a hook looks something like this:
 

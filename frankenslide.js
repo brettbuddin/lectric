@@ -1,5 +1,5 @@
 /*!
- * Lectric v0.4.5
+ * lectric v0.4.5
  * http://github.com/brettbuddin/lectric
  *
  * Copyright 2011, Brett C. Buddin
@@ -7,6 +7,9 @@
  * http://github.com/brettbuddin/lectric/blob/master/LICENSE
  *
  * Author: Brett C. Buddin (http://github.com/brettbuddin)
+ *
+ * Renamed Frankenslide and modifications copyright 2013 by Stu Kabakoff
+ *
  */
 (function( factory ) {
   //AMD
@@ -20,7 +23,7 @@
 
   //GLOBAL
   } else {
-    window.Lectric = factory(jQuery);
+    window.frankenslide = factory(jQuery);
   }
 })(function($) {
   var ua = navigator.userAgent.toLowerCase();
@@ -53,7 +56,7 @@
 
 
 
-  var Lectric = function() {
+  var frankenslide = function() {
     if (supportsTouch && isWebkit) {
       return new TouchSlider();
     } else {
@@ -105,7 +108,7 @@
     this.target = $(target);
     this.target.css('overflow', 'hidden');
     this.target.find(itemSelector).css('float', 'left').wrapAll(element);
-    this.target.addClass('lectric-slider');
+    this.target.addClass('frankenslide-slider');
     this.element = this.target.find(itemWrapperSelector);
     this.element.itemSelector = itemSelector;
     this.element.itemWrapperSelector = itemWrapperSelector;
@@ -114,24 +117,24 @@
     
     var type = supportsTouch ? 'touchstart' : 'click';
     $(this.opts.next).on(type, function(e) {
-      self.element.trigger('nextClick.lectric');
+      self.element.trigger('nextClick.frankenslide');
       e.preventDefault();
       self.next();
     });
 
     $(this.opts.previous).on(type, function(e) {
-      self.element.trigger('previousClick.lectric');
+      self.element.trigger('previousClick.frankenslide');
       e.preventDefault();
       self.previous();
     });
     $(this.opts.nextPage).on(type, function(e) {
-      self.element.trigger('nextPageClick.lectric');
+      self.element.trigger('nextPageClick.frankenslide');
       e.preventDefault();
       self.nextPage();
     });
 
     $(this.opts.previousPage).on(type, function(e) {
-      self.element.trigger('previousPageClick.lectric');
+      self.element.trigger('previousPageClick.frankenslide');
       e.preventDefault();
       self.previousPage();
     });
@@ -160,7 +163,7 @@
     });
 
     this.lazyLoadNextFrame();
-    this.element.trigger('init.lectric');
+    this.element.trigger('init.frankenslide');
   };
 
   // Update the current position of the slider.
@@ -175,7 +178,7 @@
 
     var self = this;
     var after = function() {
-      self.element.trigger('animationEnd.lectric');
+      self.element.trigger('animationEnd.frankenslide');
       self.lazyLoadNextFrame();
       $(this).dequeue();
     };
@@ -189,7 +192,7 @@
       this.element.css({left: this.position.x + 'px'}).queue(after);
     }
 
-    if (options.triggerSlide) { this.element.trigger('move.lectric'); }
+    if (options.triggerSlide) { this.element.trigger('move.frankenslide'); }
   };
 
 
@@ -208,7 +211,7 @@
       }
     };
 
-    this.element.on(name + '.lectric', callback);
+    this.element.on(name + '.frankenslide', callback);
     return callback;
   };
   BaseSlider.prototype.bind = function(name, fn) {
@@ -223,9 +226,9 @@
   // Returns nothing.
   BaseSlider.prototype.off = function(name, fn) {
     if (typeof fn !== undefined && $.isFunction(fn)) {
-      this.element.off(name + '.lectric', fn);
+      this.element.off(name + '.frankenslide', fn);
     } else {
-      this.element.off(name + '.lectric');
+      this.element.off(name + '.frankenslide');
     }
   };
   BaseSlider.prototype.unbind = function(name, fn) {
@@ -262,7 +265,7 @@
   BaseSlider.prototype.next = function() {
     var currentSlide = this.currentSlide();
     this.to(currentSlide + 1);
-    this.element.trigger('nextButton.lectric');
+    this.element.trigger('nextButton.frankenslide');
   };
 
   // Advance by one page.
@@ -272,7 +275,7 @@
     var currentSlide = this.currentSlide();
     var slidesPerPage = this.slidesPerPage();
     this.to(currentSlide + slidesPerPage);
-    this.element.trigger('nextPageButton.lectric');
+    this.element.trigger('nextPageButton.frankenslide');
   };
 
   // Go back one slide.
@@ -281,7 +284,7 @@
   BaseSlider.prototype.previous = function() {
     var currentSlide = this.currentSlide();
     this.to(currentSlide - 1);
-    this.element.trigger('previousButton.lectric');
+    this.element.trigger('previousButton.frankenslide');
   };
   // Go back one page.
   //
@@ -290,7 +293,7 @@
     var currentSlide = this.currentSlide();
     var slidesPerPage = this.slidesPerPage();
     this.to(currentSlide - slidesPerPage);
-    this.element.trigger('previousPageButton.lectric');
+    this.element.trigger('previousPageButton.frankenslide');
   };
 
   // Move to a specific item in the slider, regardless of its position.
@@ -423,7 +426,7 @@
       },
       tossing: false
     }, this.opts);
-    $(target).addClass('lectric-slider-touch');
+    $(target).addClass('frankenslide-slider-touch');
 
     this.gesturing = false;
     $(target)[0].addEventListener('touchstart', this, false);
@@ -465,7 +468,7 @@
     if (options.animate) { this.decayOn(); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
 
-    if (options.triggerSlide) { this.element.trigger('move.lectric'); }
+    if (options.triggerSlide) { this.element.trigger('move.frankenslide'); }
   };
 
 
@@ -516,7 +519,7 @@
       this.element[0].addEventListener('click', this, false);
 
 
-      this.element.trigger('start.lectric');
+      this.element.trigger('start.frankenslide');
     },
 
     touchmove: function(e) {
@@ -531,7 +534,7 @@
           e.preventDefault();
         }
 
-        this.element.trigger('firstSlide.lectric');
+        this.element.trigger('firstSlide.frankenslide');
       }
 
       this.moved = true;
@@ -571,9 +574,9 @@
           this.update();
         }
 
-        this.element.trigger('end.lectric');
+        this.element.trigger('end.frankenslide');
       } else {
-        this.element.trigger('endNoSlide.lectric');
+        this.element.trigger('endNoSlide.frankenslide');
       }
 
       this.currentTarget = undefined;
@@ -588,13 +591,13 @@
     },
 
     webkitTransitionEnd: function(e) {
-      this.element.trigger('animationEnd.lectric');
+      this.element.trigger('animationEnd.frankenslide');
       this.lazyLoadNextFrame();
     }
   };
   
-  Lectric.BaseSlider = BaseSlider;
-  Lectric.TouchSlider = TouchSlider;
+  frankenslide.BaseSlider = BaseSlider;
+  frankenslide.TouchSlider = TouchSlider;
 
-  return Lectric;
+  return frankenslide;
 });

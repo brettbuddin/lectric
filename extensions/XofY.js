@@ -1,5 +1,5 @@
 /*!
- * Autoplay for Lectric
+ * Autoplay for frankenslide
  * Copyright 2013 Stu Kabakoff
  * Licensed under the MIT license.
  */
@@ -15,7 +15,7 @@
 
   //GLOBAL
   } else {
-    window.LectricXofY = factory(jQuery);
+    window.frankenslideXofY = factory(jQuery);
   }
 })(function($) {
 

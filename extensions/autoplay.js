@@ -1,5 +1,5 @@
 /*!
- * Autoplay for Lectric
+ * Autoplay for frankenslide
  * Copyright 2013 Stu Kabakoff
  * Licensed under the MIT license.
  */
@@ -14,7 +14,7 @@
 
   //GLOBAL
   } else {
-    window.lectricAutoplay = factory();
+    window.frankenslideAutoplay = factory();
   }
 })(function() {
 
@@ -48,7 +48,7 @@
     slider.on('endNoSlide', restartTimer); //touchend without slide. move will catch it otherwise.
     
     function advance() {
-      slider.element.trigger('autoAdvance.lectric');
+      slider.element.trigger('autoAdvance.frankenslide');
       slider[nextFn]();
     }
 

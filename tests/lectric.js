@@ -1,14 +1,14 @@
 $(function() {
-  var slider = new Lectric();
+  var slider = new frankenslide();
   slider.init('#slider', {next: '.next', previous: '.previous'});
 
-  var slider2 = new Lectric();
+  var slider2 = new frankenslide();
   slider2.init('#slider2');
 
   test("setup", function() {
     expect(1);
 
-    ok(window.Lectric, 'global Lectric object is created');
+    ok(window.frankenslide, 'global frankenslide object is created');
   });
 
   test("structure", function() {
@@ -19,7 +19,7 @@ $(function() {
     equals(slider.element.parent().css('position'), 'relative', "relative positioning set to container");
     equals(slider.element.css('position'), 'relative', "relative positioning set to slides container");
     equals(slider.element.css('left'), '0px', "assigns an initial value to left");
-    ok(slider.element.parent().hasClass('lectric-slider'), "has the lectric-slider class assigned to the container");
+    ok(slider.element.parent().hasClass('frankenslide-slider'), "has the frankenslide-slider class assigned to the container");
   });
 
   test("movement", function() {
@@ -46,7 +46,7 @@ $(function() {
       equals(e.type, 'hello');
       start();
     });
-    slider.element.trigger('hello.lectric');
+    slider.element.trigger('hello.frankenslide');
     stop();
     slider.off('hello', handler);
   });
@@ -60,11 +60,11 @@ $(function() {
       start();
     });
 
-    slider.element.trigger('hello.lectric');
+    slider.element.trigger('hello.frankenslide');
     stop();
 
     slider.off('hello', handler);
-    slider.element.trigger('hello.lectric');
+    slider.element.trigger('hello.frankenslide');
     equals(counter, 1);
   });
 
