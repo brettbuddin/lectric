@@ -203,7 +203,7 @@
       }
     };
 
-    this.element.bind(name + '.lectric', callback);
+    this.element.on(name + '.lectric', callback);
     return callback;
   };
   BaseSlider.prototype.bind = function(name, fn) {
@@ -218,9 +218,9 @@
   // Returns nothing.
   BaseSlider.prototype.off = function(name, fn) {
     if (typeof fn !== undefined && $.isFunction(fn)) {
-      this.element.unbind(name + '.lectric', fn);
+      this.element.off(name + '.lectric', fn);
     } else {
-      this.element.unbind(name + '.lectric');
+      this.element.off(name + '.lectric');
     }
   };
   BaseSlider.prototype.unbind = function(name, fn) {
