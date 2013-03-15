@@ -1,14 +1,14 @@
 $(function() {
-  var slider = new frankenslide();
+  var slider = new Frankenslide();
   slider.init('#slider', {next: '.next', previous: '.previous'});
 
-  var slider2 = new frankenslide();
+  var slider2 = new Frankenslide();
   slider2.init('#slider2');
 
   test("setup", function() {
     expect(1);
 
-    ok(window.frankenslide, 'global frankenslide object is created');
+    ok(window.Frankenslide, 'global frankenslide object is created');
   });
 
   test("structure", function() {

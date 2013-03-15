@@ -23,7 +23,7 @@
 
   //GLOBAL
   } else {
-    window.frankenslide = factory(jQuery);
+    window.Frankenslide = factory(jQuery);
   }
 })(function($) {
   var ua = navigator.userAgent.toLowerCase();
@@ -56,7 +56,7 @@
 
 
 
-  var frankenslide = function() {
+  var Frankenslide = function() {
     if (supportsTouch && isWebkit) {
       return new TouchSlider();
     } else {
@@ -596,8 +596,8 @@
     }
   };
   
-  frankenslide.BaseSlider = BaseSlider;
-  frankenslide.TouchSlider = TouchSlider;
+  Frankenslide.BaseSlider = BaseSlider;
+  Frankenslide.TouchSlider = TouchSlider;
 
-  return frankenslide;
+  return Frankenslide;
 });
