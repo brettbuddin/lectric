@@ -97,6 +97,7 @@
     if (this.opts.itemClassName) {
       this.opts.itemSelector = '.'+this.opts.itemClassName;
     }
+    var itemWrapperSelector = '.' + this.opts.itemWrapperClassName;
 
     this.target = $(target);
     this.target.css('overflow', 'hidden');
@@ -114,16 +115,15 @@
 
       this.target.find(this.opts.itemSelector).css('float', 'left').wrapAll(element);
       this.target.addClass('frankenslide-slider');
-      this.element = element;
+      this.element = this.target.find(itemWrapperSelector);
 
     } else {
       this.element = element = $(this.opts.element);
       element.css({position: 'relative'});
+      element.addClass(this.opts.itemWrapperClassName);
     }
 
-    element.addClass(this.opts.itemWrapperClassName);
 
-    var itemWrapperSelector = '.' + this.opts.itemWrapperClassName;
 
     this.element.itemSelector = this.opts.itemSelector;
     this.element.itemWrapperSelector = itemWrapperSelector;
