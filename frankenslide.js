@@ -79,8 +79,9 @@
       previous: undefined,
       nextPage: undefined, 
       previousPage: undefined,
+      element: undefined,
       itemWrapperClassName: 'items',
-      itemClassName: 'item',
+      itemSelector: '.item',
       loop: false,
       limitLeft: false,
       limitRight: false, 
@@ -92,25 +93,39 @@
     this.position = new Position(0, 0);
     this.startPosition = new Position(this.position);
     this.lastPosition = new Position(this.position);
-  
-    // Set up the styling of the slider
-    var element = $('<div/>', {
-      'class': this.opts.itemWrapperClassName
-    });
-    element.css({
-      width: '1000000px',
-      position: 'relative'
-    });
-
-    var itemSelector = '.' + this.opts.itemClassName;
-    var itemWrapperSelector = '.' + this.opts.itemWrapperClassName;
+    
+    if (this.opts.itemClassName) {
+      this.opts.itemSelector = '.'+this.opts.itemClassName;
+    }
 
     this.target = $(target);
     this.target.css('overflow', 'hidden');
-    this.target.find(itemSelector).css('float', 'left').wrapAll(element);
-    this.target.addClass('frankenslide-slider');
-    this.element = this.target.find(itemWrapperSelector);
-    this.element.itemSelector = itemSelector;
+
+    // Set up the styling of the slider
+    var element;
+    if (!this.opts.element) {
+      element = $('<div/>', {
+        'class': this.opts.itemWrapperClassName
+      });
+      element.css({
+        width: '1000000px',
+        position: 'relative'
+      });
+
+      this.target.find(this.opts.itemSelector).css('float', 'left').wrapAll(element);
+      this.target.addClass('frankenslide-slider');
+      this.element = element;
+
+    } else {
+      this.element = element = $(this.opts.element);
+      element.css({position: 'relative'});
+    }
+
+    element.addClass(this.opts.itemWrapperClassName);
+
+    var itemWrapperSelector = '.' + this.opts.itemWrapperClassName;
+
+    this.element.itemSelector = this.opts.itemSelector;
     this.element.itemWrapperSelector = itemWrapperSelector;
 
     var self = this;
