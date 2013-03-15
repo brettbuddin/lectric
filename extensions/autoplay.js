@@ -23,6 +23,7 @@
   exports.extend = function( slider, defaultDuration, byPageNotSlide ) {
     
     var timer;
+    defaultDuration = defaultDuration || 12000;
 
     var nextFn = 'next';
     if (byPageNotSlide) {
