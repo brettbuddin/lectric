@@ -23,7 +23,7 @@
     var self = this;
 
     this.update = function() {
-      var slideIndex = self.slider.currentSlide()+1;
+      var slideIndex = self.slider.currentSlide+1;
       var totalSlides = self.slider.slideCount();
       var newText = self.beforeText+' '+slideIndex+' '+self.of+' '+totalSlides+' '+self.afterText;
       self.$container.html( $.trim(newText) );

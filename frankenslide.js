@@ -90,6 +90,7 @@
       hooks: {}
     }, opts);
 
+    this.currentSlide = 0;
     this.position = new Position(0, 0);
     this.startPosition = new Position(this.position);
     this.lastPosition = new Position(this.position);
@@ -177,6 +178,17 @@
       }
     });
 
+    var currentWidth = this.target.width();
+    $(window).resize(function() {
+      var newWidth = self.target.width()
+      if ( newWidth !== currentWidth ) {
+        console.log("RESIZE");
+        self.position.x = self.xForSlide(self.currentSlide);
+        self.update({animate: false, triggerSlide: false});
+        currentWidth = newWidth;
+      }
+    })
+
     this.lazyLoadNextFrame();
     this.element.trigger('init.frankenslide');
   };
@@ -193,7 +205,9 @@
 
     var self = this;
     var after = function() {
-      self.element.trigger('animationEnd.frankenslide');
+      if (options.triggerSlide && options.animate) {
+        self.element.trigger('animationEnd.frankenslide');
+      }
       self.lazyLoadNextFrame();
       $(this).dequeue();
     };
@@ -250,13 +264,6 @@
     this.off(name, fn);
   };
 
-  // Retrieve the current slide index of the slider.
-  // 
-  // Returns the Integer of the current slide index.
-  BaseSlider.prototype.currentSlide = function() {
-    return Math.abs(Math.round(this.position.x / this.slideWidth()));
-  };
-
   // Move to a specific slide number.
   //
   // slide - The Integer slide number to move to.
@@ -268,6 +275,7 @@
       var slideCount = this.slideCount();
       slide = (slide+slideCount) % slideCount;
     }
+    this.currentSlide = slide;
     this.position.x = this.limitXBounds(this.xForSlide(slide));
     if (this.position.x !== previous) {
       this.update();
@@ -278,8 +286,7 @@
   //
   // Returns nothing.
   BaseSlider.prototype.next = function() {
-    var currentSlide = this.currentSlide();
-    this.to(currentSlide + 1);
+    this.to(this.currentSlide + 1);
     this.element.trigger('nextButton.frankenslide');
   };
 
@@ -287,9 +294,8 @@
   //
   // Returns nothing.
   BaseSlider.prototype.nextPage = function() {
-    var currentSlide = this.currentSlide();
     var slidesPerPage = this.slidesPerPage();
-    this.to(currentSlide + slidesPerPage);
+    this.to(this.currentSlide + slidesPerPage);
     this.element.trigger('nextPageButton.frankenslide');
   };
 
@@ -297,17 +303,15 @@
   //
   // Returns nothing.
   BaseSlider.prototype.previous = function() {
-    var currentSlide = this.currentSlide();
-    this.to(currentSlide - 1);
+    this.to(this.currentSlide - 1);
     this.element.trigger('previousButton.frankenslide');
   };
   // Go back one page.
   //
   // Returns nothing.
   BaseSlider.prototype.previousPage = function() {
-    var currentSlide = this.currentSlide();
     var slidesPerPage = this.slidesPerPage();
-    this.to(currentSlide - slidesPerPage);
+    this.to(this.currentSlide - slidesPerPage);
     this.element.trigger('previousPageButton.frankenslide');
   };
 
@@ -365,11 +369,7 @@
   //
   // Returns the value of the attribute or undefined.
   BaseSlider.prototype.getSlideData = function( property, slide ) {
-    if (slide === undefined) {
-      slide = this.currentSlide();
-    }
-
-    var slideEl = this.element.children()[slide];
+    var slideEl = this.element.children()[this.currentSlide];
     if (slideEl) {
       return slideEl.getAttribute('data-'+property);
     }
@@ -408,7 +408,7 @@
   //
   // Returns nothing.
   BaseSlider.prototype.lazyLoadNextFrame = function() {
-    var start = this.currentSlide();
+    var start = this.currentSlide;
     var slidesPerPage = this.slidesPerPage();
     var end = start + (slidesPerPage*2);
 
@@ -524,7 +524,7 @@
       this.currentTarget = e.currentTarget;
       this.startPosition.x = e.touches[0].pageX - this.position.x;
       this.startPosition.y = e.touches[0].pageY - this.position.y;
-      this.startSlide = this.currentSlide();
+      this.startSlide = this.currentSlide;
       this.moved = false;
 
       window.addEventListener('gesturestart', this, false);

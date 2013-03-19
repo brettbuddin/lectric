@@ -72,9 +72,8 @@
     });
 
     this.updateState = function() {
-      var currentSlide = carousel.currentSlide();
       self.dots.removeClass( config.activeClass );
-      self.dots.eq(currentSlide).addClass( config.activeClass );
+      self.dots.eq(carousel.currentSlide).addClass( config.activeClass );
     };
     
     this.updateState();

@@ -28,15 +28,15 @@ $(function() {
     slider.on('animationEnd', function() {
       start(); 
     });
-    equals(slider.currentSlide(), 0, "start on slide 0");
+    equals(slider.currentSlide, 0, "start on slide 0");
 
     slider.to(1);
     stop();
-    equals(slider.currentSlide(), 1, "move to slide 1");
+    equals(slider.currentSlide, 1, "move to slide 1");
 
     slider.toItem($('#slider .item').eq(3));
     stop();
-    equals(slider.currentSlide(), 3, "move to slide 3");
+    equals(slider.currentSlide, 3, "move to slide 3");
   });
 
   test("subscribing to hooks", function() {
