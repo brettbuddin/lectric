@@ -199,17 +199,21 @@
       }
       self.lazyLoadNextFrame();
       $(this).dequeue();
+      self.element.css({'left': percent+'%'});
     };
+
+    // this resets the left to pixels so jQuery can animate it.
+    this.element.css({'left': this.lastPosition.x});
 
     var percent = (this.position.x / this.target.width()) * 100;
 
     if (options.animate) {
-      this.element.animate({left: percent + '%'}, 
+      this.element.animate({left: this.position.x}, 
                            this.opts.animateDuration, 
                            this.opts.animateEasing
       ).queue(after);
     } else {
-      this.element.css({left: percent + '%'}).queue(after);
+      this.element.css({left: this.position.x}).queue(after);
     }
 
     if (options.triggerSlide) { this.element.trigger('move.frankenslide'); }
@@ -261,14 +265,15 @@
   // 
   // Returns nothing.
   BaseSlider.prototype.to = function(slide) {
-    var previous = this.position.x;
+    this.lastPosition.x = this.position.x;
+    this.lastPosition.y = this.position.y;
     if (this.opts.loop) {
       var slideCount = this.slideCount();
       slide = (slide+slideCount) % slideCount;
     }
     this.currentSlide = slide;
     this.position.x = this.limitXBounds(this.xForSlide(slide));
-    if (this.position.x !== previous) {
+    if (this.position.x !== this.lastPosition.x) {
       this.update();
     }
   };
