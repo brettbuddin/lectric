@@ -267,11 +267,12 @@
   BaseSlider.prototype.to = function(slide) {
     this.lastPosition.x = this.position.x;
     this.lastPosition.y = this.position.y;
+    
+    var slideCount = this.slideCount();
     if (this.opts.loop) {
-      var slideCount = this.slideCount();
-      slide = (slide+slideCount) % slideCount;
+      slide = Math.abs((slide+slideCount) % slideCount);
     }
-    this.currentSlide = slide;
+    this.currentSlide = Math.min( Math.max( slide, 0 ), slideCount - this.slidesPerPage() );
     this.position.x = this.limitXBounds(this.xForSlide(slide));
     if (this.position.x !== this.lastPosition.x) {
       this.update();
