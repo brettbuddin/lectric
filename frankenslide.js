@@ -174,6 +174,17 @@
       }
     });
 
+    var currentWidth = this.target.width();
+    $(window).resize(function() {
+      var newWidth = self.target.width()
+      if ( newWidth !== currentWidth ) {
+        console.log("RESIZE");
+        self.position.x = self.xForSlide(self.currentSlide);
+        self.update({animate: false, triggerSlide: false});
+        currentWidth = newWidth;
+      }
+    })
+
     this.lazyLoadNextFrame();
     this.element.trigger('init.frankenslide');
   };
@@ -195,21 +206,15 @@
       }
       self.lazyLoadNextFrame();
       $(this).dequeue();
-      self.element.css({'left': percent+'%'});
     };
 
-    // this resets the left to pixels so jQuery can animate it.
-    this.element.css({'left': this.lastPosition.x});
-
-    var percent = (this.position.x / this.target.width()) * 100;
-
     if (options.animate) {
-      this.element.animate({left: this.position.x}, 
+      this.element.animate({left: this.position.x + 'px'}, 
                            this.opts.animateDuration, 
                            this.opts.animateEasing
       ).queue(after);
     } else {
-      this.element.css({left: this.position.x}).queue(after);
+      this.element.css({left: this.position.x + 'px'}).queue(after);
     }
 
     if (options.triggerSlide) { this.element.trigger('move.frankenslide'); }
@@ -265,12 +270,14 @@
     this.lastPosition.y = this.position.y;
     
     var slideCount = this.slideCount();
+    var previous = this.position.x;
+
     if (this.opts.loop) {
       slide = Math.abs((slide+slideCount) % slideCount);
     }
     this.currentSlide = Math.min( Math.max( slide, 0 ), slideCount - this.slidesPerPage() );
     this.position.x = this.limitXBounds(this.xForSlide(slide));
-    if (this.position.x !== this.lastPosition.x) {
+    if (this.position.x !== previous) {
       this.update();
     }
   };
