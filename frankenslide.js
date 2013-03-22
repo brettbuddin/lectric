@@ -543,9 +543,9 @@
       this.decayOff();
 
       if (!this.moved) {
-        var deltaY = e.touches[0].pageY - this.startPosition.y;
-        var deltaX = e.touches[0].pageX - this.startPosition.x;
-        if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        var deltaY = Math.abs(e.touches[0].pageY - this.startPosition.y - this.position.y);
+        var deltaX = Math.abs(e.touches[0].pageX - this.startPosition.x - this.position.x);
+        if (deltaY < deltaX) {
           e.preventDefault();
         }
 
