@@ -28,11 +28,7 @@
 })(function($) {
   var ua = navigator.userAgent.toLowerCase();
   isWebkit = !!ua.match(/applewebkit/i);
-  var supportsTouch = false;
-  try {
-    document.createEvent("TouchEvent");
-    supportsTouch = true;
-  } catch (e) {}
+  var supportsTouch = "ontouchmove" in window;
 
   var cssWithoutUnit = function(element, attribute) {
     var measure = element.css(attribute);
@@ -542,7 +538,7 @@
       if (!this.moved) {
         var deltaY = e.touches[0].pageY - this.startPosition.y;
         var deltaX = e.touches[0].pageX - this.startPosition.x;
-        if (Math.abs(deltaY) < 15) {
+        if (Math.abs(deltaY) > Math.abs(deltaX)) {
           e.preventDefault();
         }
 

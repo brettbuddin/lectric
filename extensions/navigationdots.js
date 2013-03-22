@@ -37,22 +37,31 @@
 
     var htmlStr;
 
+    function renderDots() {
+      var html = '';
+      var contentStr = '';
+      var dotCount = carousel.slideCount() - carousel.slidesPerPage() + 1;
+      for( var i = 0; i < dotCount; i += 1 ) {
+        if (config.useNumbers) {
+          contentStr = i;
+        }
+        if (config.elementType === 'a') {
+          html += '<a href="#">'+contentStr+'</a>';
+        } else {
+          html += '<'+config.elementType+'>'+contentStr+'</'+config.elementType+'>';
+        }
+      }
+      return html;
+    }
+
     if (config.elementType === 'li') {
       htmlStr = '<ul class="'+config.containerClass+'">';
     } else {
       htmlStr = '<div class="'+config.containerClass+'">';
     }
-    var contentStr = '';
-    for( var i = 0, l = carousel.slideCount(); i < l; i += 1 ) {
-      if (config.useNumbers) {
-        contentStr = i;
-      }
-      if (config.elementType === 'a') {
-        htmlStr += '<a href="#">'+contentStr+'</a>';
-      } else {
-        htmlStr += '<'+config.elementType+'>'+contentStr+'</'+config.elementType+'>';
-      }
-    }
+    
+    htmlStr += renderDots();
+
     if (config.elementType === 'li') {
       htmlStr += '</ul>';
     } else {
@@ -78,6 +87,27 @@
     
     this.updateState();
     carousel.on('move', this.updateState);
+
+    var currentWidth = carousel.target.width();
+    var slidesPerPage = carousel.slidesPerPage();
+    this.updateDotCount = function() {
+      var newWidth = carousel.target.width();
+      if (newWidth !== currentWidth) {
+        var newSlidesPerPage = carousel.slidesPerPage();
+        if (newSlidesPerPage !== slidesPerPage) {
+          self.container.html(renderDots());
+          self.dots = self.container.children();
+          self.updateState();
+
+          slidesPerPage = newSlidesPerPage;
+        }
+        currentWidth = newWidth;
+      }
+    }
+
+    if (config.slidesPerPageMayChange) {
+      $(window).resize(this.updateDots);
+    }
   };
 
   return NavigationDots;
