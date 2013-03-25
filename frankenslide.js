@@ -487,7 +487,7 @@
     if (options.animate) { this.decayOn(opts && opts.easing); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
 
-    //if (options.triggerSlide) { this.element.trigger('move.frankenslide'); }
+    if (options.triggerSlide) { this.element.trigger('move.frankenslide'); }
   };
 
 
@@ -587,6 +587,7 @@
         if (this.opts.tossing || this.slidesPerPage() > 1) {
           var tossedX = this.limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
           this.position.x = Math.round(tossedX / width) * width;
+          this.currentSlide = this.position.x / width;
           this.update({easing: 'ease-out'});
 
         } else if (dx > 20 || dx < -20) {
