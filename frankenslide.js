@@ -87,6 +87,8 @@
     }, opts);
 
     this.currentSlide = 0;
+    this.slideWidth;
+    this.width;
     this.position = new Position(0, 0);
     this.startPosition = new Position(this.position);
     this.lastPosition = new Position(this.position);
@@ -174,17 +176,18 @@
       }
     });
 
-    var currentWidth = this.target.width();
+    this.width = this.target.width();
     $(window).resize(function() {
       var newWidth = self.target.width()
-      if ( newWidth !== currentWidth ) {
-        console.log("RESIZE");
+      if ( self.width !== newWidth ) {
+        self.width = newWidth;
+        self.calculateSlideWidth();
         self.position.x = self.xForSlide(self.currentSlide);
         self.update({animate: false, triggerSlide: false});
         currentWidth = newWidth;
       }
     })
-
+    this.calculateSlideWidth();
     this.lazyLoadNextFrame();
     this.element.trigger('init.frankenslide');
   };
@@ -265,7 +268,7 @@
   // slide - The Integer slide number to move to.
   // 
   // Returns nothing.
-  BaseSlider.prototype.to = function(slide) {
+  BaseSlider.prototype.to = function(slide, options) {
     this.lastPosition.x = this.position.x;
     this.lastPosition.y = this.position.y;
     
@@ -278,7 +281,7 @@
     this.currentSlide = Math.min( Math.max( slide, 0 ), slideCount - this.slidesPerPage() );
     this.position.x = this.limitXBounds(this.xForSlide(slide));
     if (this.position.x !== previous) {
-      this.update();
+      this.update(options);
     }
   };
 
@@ -337,7 +340,7 @@
   // Returns the Integer X position of the slider.
   BaseSlider.prototype.xForSlide = function(slide) {
     var flip = (this.opts.reverse) ? 1 : -1;
-    return flip * slide * this.slideWidth();
+    return flip * slide * this.slideWidth;
   };
 
 
@@ -345,17 +348,17 @@
   // 
   // Returns the Integer number of slides visibile in the viewport at any time.
   BaseSlider.prototype.slidesPerPage = function() {
-    return Math.max( Math.floor( this.target.width() / this.slideWidth() ), 1);
+    return Math.max( Math.floor( this.width / this.slideWidth ), 1);
   };
 
 
   // Retrieve the width of a single item (including margin-right and padding).
   // 
   // Returns the Integer width of a single item.
-  BaseSlider.prototype.slideWidth = function() {
+  BaseSlider.prototype.calculateSlideWidth = function() {
     var first = this.element.find(this.element.itemSelector).eq(0);
     var padding = cssWithoutUnit(first, 'paddingRight') + cssWithoutUnit(first, 'paddingLeft');
-    return cssWithoutUnit(first, 'marginRight') + cssWithoutUnit(first, 'marginLeft') + padding + first.width();
+    this.slideWidth = cssWithoutUnit(first, 'marginRight') + cssWithoutUnit(first, 'marginLeft') + padding + first.width();
   };
 
   // Retrieve number of items in the slider.
@@ -382,9 +385,9 @@
   //
   // Returns the Integer X position after being constrained.
   BaseSlider.prototype.limitXBounds = function(x) {
-    var slideWidth = this.slideWidth();
+    var slideWidth = this.slideWidth;
     var slideCount = this.slideCount();
-    var extraSpaceInTarget = this.target.width() - slideWidth;
+    var extraSpaceInTarget = this.width - slideWidth;
     var totalWidth = (slideWidth * slideCount) - extraSpaceInTarget;
 
 
@@ -442,6 +445,7 @@
       tossing: false
     }, this.opts);
     $(target).addClass('frankenslide-slider-touch');
+    $(target).css({'-webkit-transform':'translateZ(0)'});
 
     this.gesturing = false;
     $(target)[0].addEventListener('touchstart', this, false);
@@ -480,10 +484,10 @@
   // Returns nothing.
   TouchSlider.prototype.update = function(opts) {
     var options = $.extend({animate: true, triggerSlide: true}, opts);
-    if (options.animate) { this.decayOn(); }
+    if (options.animate) { this.decayOn(opts && opts.easing); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
 
-    if (options.triggerSlide) { this.element.trigger('move.frankenslide'); }
+    //if (options.triggerSlide) { this.element.trigger('move.frankenslide'); }
   };
 
 
@@ -498,7 +502,8 @@
   // Turn on CSS3 animation decay.
   // 
   // Returns nothing.
-  TouchSlider.prototype.decayOn = function() {
+  TouchSlider.prototype.decayOn = function( easing ) {
+    easing = easing || 'ease-in-out';
     var duration = this.opts.animateDuration;
     if (typeof duration === "number") {
       duration = duration / 1000;
@@ -509,8 +514,11 @@
         duration = $.fx.speeds._default;
       }
     }
-    this.element.css({'-webkit-transition-duration': duration + 's'});
-    this.element.css({'-webkit-transition-property': '-webkit-transform'});
+
+    this.element.css({'-webkit-transition-duration': duration + 's',
+                      '-webkit-transition-property': '-webkit-transform',
+                      '-webkit-transition-timing-function': easing
+                    });
   };
 
   var TouchEvents = {
@@ -560,29 +568,32 @@
       this.position.x = this.limitXBounds(e.touches[0].pageX - this.startPosition.x);
 
       this.update({animate: false});
+      this.lastDate = new Date();
     },
 
     touchend: function(e) {
+      //console.log(new Date() - this.lastDate);
+      //console.profile('fingerup');
       window.removeEventListener('gesturestart', this, false);
       window.removeEventListener('gestureend', this, false);
       window.removeEventListener('touchmove', this, false);
       window.removeEventListener('touchend', this, false);
-
       if (this.moved) {
         var dx = this.position.x - this.lastPosition.x;
         var dt = (new Date()) - this.lastMoveTime + 1; 
         
-        var width = this.slideWidth();
+        var width = this.slideWidth;
 
         if (this.opts.tossing || this.slidesPerPage() > 1) {
           var tossedX = this.limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
           this.position.x = Math.round(tossedX / width) * width;
-          this.update();
+          this.update({easing: 'ease-out'});
+
         } else if (dx > 20 || dx < -20) {
           if (dx < 0) {
-            this.to(this.startSlide+1);
+            this.to(this.startSlide+1, {easing: 'ease-out'});
           } else {
-            this.to(this.startSlide-1);
+            this.to(this.startSlide-1, {easing: 'ease-out'});
           }
         } else {
           this.position.x = Math.round(this.position.x / width) * width;
@@ -595,6 +606,7 @@
       }
 
       this.currentTarget = undefined;
+      //console.profileEnd('fingerup');
     },
 
     gesturestart: function(e) { 
