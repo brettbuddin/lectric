@@ -597,8 +597,8 @@
             this.to(this.startSlide-1, {easing: 'ease-out'});
           }
         } else {
-          this.position.x = Math.round(this.position.x / width) * width;
-          this.update();
+          var slide = Math.abs( Math.round(this.position.x / width) );
+          this.to(slide);
         }
 
         this.element.trigger('end.frankenslide');
