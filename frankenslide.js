@@ -131,26 +131,26 @@
     
     var type = supportsTouch ? 'touchstart' : 'click';
     $(this.opts.next).on(type, function(e) {
-      self.element.trigger('nextClick.frankenslide');
       e.preventDefault();
       self.next();
+      self.element.trigger('nextClick.frankenslide');
     });
 
     $(this.opts.previous).on(type, function(e) {
-      self.element.trigger('previousClick.frankenslide');
       e.preventDefault();
       self.previous();
+      self.element.trigger('previousClick.frankenslide');
     });
     $(this.opts.nextPage).on(type, function(e) {
-      self.element.trigger('nextPageClick.frankenslide');
       e.preventDefault();
       self.nextPage();
+      self.element.trigger('nextPageClick.frankenslide');
     });
 
     $(this.opts.previousPage).on(type, function(e) {
-      self.element.trigger('previousPageClick.frankenslide');
       e.preventDefault();
       self.previousPage();
+      self.element.trigger('previousPageClick.frankenslide');
     });
     
     // Keep clicks from doing what they do if

@@ -49,8 +49,8 @@
     slider.on('endNoSlide', restartTimer); //touchend without slide. move will catch it otherwise.
     
     function advance() {
-      slider.element.trigger('autoAdvance.frankenslide');
       slider[nextFn]();
+      slider.element.trigger('autoAdvance.frankenslide');
     }
 
     slider.start = function( startRightNow ) {
