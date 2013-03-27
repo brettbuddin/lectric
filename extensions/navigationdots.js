@@ -105,9 +105,7 @@
       }
     }
 
-    if (config.slidesPerPageMayChange) {
-      $(window).resize(this.updateDots);
-    }
+    carousel.on('sizeChange', this.updateDotCount);
   };
 
   return NavigationDots;

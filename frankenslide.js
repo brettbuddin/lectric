@@ -177,16 +177,19 @@
     });
 
     this.width = this.target.width();
-    $(window).resize(function() {
+
+    this.recalculateWidth = function() {
       var newWidth = self.target.width()
       if ( self.width !== newWidth ) {
+        console.log('new width!');
         self.width = newWidth;
         self.calculateSlideWidth();
         self.position.x = self.xForSlide(self.currentSlide);
         self.update({animate: false, triggerSlide: false});
-        currentWidth = newWidth;
+        self.element.trigger('sizeChange.frankenslide');
       }
-    })
+    };
+    $(window).resize(this.recalculateWidth)
     this.calculateSlideWidth();
     this.lazyLoadNextFrame();
     this.element.trigger('init.frankenslide');
@@ -495,30 +498,37 @@
   // 
   // Returns nothing.
   TouchSlider.prototype.decayOff = function() {
-    this.element.css({'-webkit-transition-duration': '0s'});
-    this.element.css({'-webkit-transition-property': 'none'});
+    if (this.decayIsOn !== false) {
+      this.decayIsOn = false;
+      this.element.css({'-webkit-transition-duration': '0s'});
+      this.element.css({'-webkit-transition-property': 'none'});
+    }
   };
 
   // Turn on CSS3 animation decay.
   // 
   // Returns nothing.
   TouchSlider.prototype.decayOn = function( easing ) {
-    easing = easing || 'ease-in-out';
-    var duration = this.opts.animateDuration;
-    if (typeof duration === "number") {
-      duration = duration / 1000;
-    } else {
-      if (duration in $.fx.speeds) {
-        duration = $.fx.speeds[duration];
+    if (!this.decayIsOn || this.easing !== easing) {
+      this.decayIsOn = true;
+      this.easing = easing;
+      easing = easing || 'ease-in-out';
+      var duration = this.opts.animateDuration;
+      if (typeof duration === "number") {
+        duration = duration / 1000;
       } else {
-        duration = $.fx.speeds._default;
+        if (duration in $.fx.speeds) {
+          duration = $.fx.speeds[duration];
+        } else {
+          duration = $.fx.speeds._default;
+        }
       }
-    }
 
-    this.element.css({'-webkit-transition-duration': duration + 's',
-                      '-webkit-transition-property': '-webkit-transform',
-                      '-webkit-transition-timing-function': easing
-                    });
+      this.element.css({'-webkit-transition-duration': duration + 's',
+                        '-webkit-transition-property': '-webkit-transform',
+                        '-webkit-transition-timing-function': easing
+                      });
+    }
   };
 
   var TouchEvents = {
