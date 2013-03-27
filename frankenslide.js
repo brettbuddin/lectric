@@ -181,7 +181,6 @@
     this.recalculateWidth = function() {
       var newWidth = self.target.width()
       if ( self.width !== newWidth ) {
-        console.log('new width!');
         self.width = newWidth;
         self.calculateSlideWidth();
         self.position.x = self.xForSlide(self.currentSlide);
