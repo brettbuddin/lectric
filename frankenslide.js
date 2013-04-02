@@ -594,8 +594,8 @@
         var width = this.slideWidth;
 
         if (this.opts.tossing || this.slidesPerPage() > 1) {
-          var tossedX = this.limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
-          this.position.x = Math.round(tossedX / width) * width;
+          var tossedX = this.opts.tossFunction(this.position.x, dx, dt);
+          this.position.x = this.limitXBounds( Math.round(tossedX / width) * width );
           this.currentSlide = this.position.x / width;
           this.update({easing: 'ease-out'});
 
