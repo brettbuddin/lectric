@@ -442,7 +442,7 @@
     TouchSlider.superobject.init.call(this, target, opts);
     this.opts = $.extend({
       tossFunction: function(x, dx, dt) {
-        return x + dx * 75 / dt;
+        return x + dx * 100 / dt;
       },
       tossing: false
     }, this.opts);
@@ -592,10 +592,13 @@
         var dt = (new Date()) - this.lastMoveTime + 1; 
         
         var width = this.slideWidth;
-
-        if (this.opts.tossing || this.slidesPerPage() > 1) {
+        var slidesPerPage = this.slidesPerPage()
+        if (this.opts.tossing || slidesPerPage > 1) {
           var tossedX = this.opts.tossFunction(this.position.x, dx, dt);
-          this.position.x = this.limitXBounds( Math.round(tossedX / width) * width );
+          if (slidesPerPage === 1) {
+            tossedX = Math.round(tossedX / width) * width;
+          }
+          this.position.x = this.limitXBounds( tossedX );
           this.currentSlide = this.position.x / width;
           this.update({easing: 'ease-out'});
 
