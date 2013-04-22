@@ -534,7 +534,7 @@
     click: function(e) {
       if (this.moved) { e.preventDefault(); }
       this.element[0].removeEventListener('click', this, false);
-      return false;
+      return !this.moved;
     },
 
     touchstart: function(e) {
