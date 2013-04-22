@@ -604,13 +604,21 @@
 
         } else if (dx > 20 || dx < -20) {
           if (dx < 0) {
-            this.to(this.startSlide+1, {easing: 'ease-out'});
+            this.next();
+            this.element.trigger('nextSwipe.frankenslide');
           } else {
-            this.to(this.startSlide-1, {easing: 'ease-out'});
+            this.previous();
+            this.element.trigger('previousSwipe.frankenslide');
           }
         } else {
           var slide = Math.abs( Math.round(this.position.x / width) );
-          this.to(slide);
+          if (slide > this.currentSlide) {
+            this.next();
+            this.element.trigger('nextSwipe.frankenslide');
+          } else if (slide < this.currentSlide) {
+            this.previous();
+            this.element.trigger('previousSwipe.frankenslide');
+          }
         }
 
         this.element.trigger('end.frankenslide');
