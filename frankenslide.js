@@ -618,6 +618,8 @@
           } else if (slide < this.currentSlide) {
             this.previous();
             this.element.trigger('previousSwipe.frankenslide');
+          } else {
+            this.to(this.currentSlide)
           }
         }
 
