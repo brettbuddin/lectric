@@ -1,3 +1,4 @@
+/* global QUnit: false, module: false, test: false, asyncTest: false, expect: false, start: false, stop: false, ok: false, equal: false, deepEqual: false, propEqual: false, strictEqual: false, raises: false, Frankenslide: false, equals: false */
 $(function() {
   var slider = new Frankenslide();
   slider.init('#slider', {next: '.next', previous: '.previous'});
@@ -14,7 +15,7 @@ $(function() {
   test("structure", function() {
     expect(6);
 
-    equals(slider.slideWidth(), 530, "report the width of each individual slide");
+    equals(slider.slideWidth, 530, "report the width of each individual slide");
     equals(slider.slideCount(), 4, "report the number of slides");
     equals(slider.element.parent().css('position'), 'relative', "relative positioning set to container");
     equals(slider.element.css('position'), 'relative', "relative positioning set to slides container");
@@ -31,11 +32,11 @@ $(function() {
     equals(slider.currentSlide, 0, "start on slide 0");
 
     slider.to(1);
-    stop();
+    //stop();
     equals(slider.currentSlide, 1, "move to slide 1");
 
     slider.toItem($('#slider .item').eq(3));
-    stop();
+    //stop();
     equals(slider.currentSlide, 3, "move to slide 3");
   });
 
