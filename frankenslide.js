@@ -108,7 +108,6 @@
         'class': this.opts.itemWrapperClassName
       });
       element.css({
-        width: '1000000px',
         position: 'relative'
       });
 
@@ -176,20 +175,22 @@
       }
     });
 
-    this.width = this.target.width();
+    //this.width = this.target.width();
 
     this.recalculateWidth = function() {
       var newWidth = self.target.width();
       if ( self.width !== newWidth ) {
         self.width = newWidth;
         self.calculateSlideWidth();
+        self.element.css({'width': (self.slideWidth+10) * self.slideCount() }); // add a little for borders and margin
         self.position.x = self.xForSlide(self.currentSlide);
         self.update({animate: false, triggerSlide: false});
         self.element.trigger('sizeChange.frankenslide');
       }
     };
+    this.recalculateWidth();
     $(window).resize(this.recalculateWidth);
-    this.calculateSlideWidth();
+    //this.calculateSlideWidth();
     this.lazyLoadNextFrame();
     this.element.trigger('init.frankenslide');
   };
