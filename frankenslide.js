@@ -512,7 +512,7 @@
     if (!this.decayIsOn || this.easing !== easing) {
       this.decayIsOn = true;
       this.easing = easing;
-      easing = easing || 'ease-in-out';
+      easing = easing || 'ease-out';
       var duration = this.opts.animateDuration;
       if (typeof duration === "number") {
         duration = duration / 1000;
