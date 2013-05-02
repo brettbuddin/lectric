@@ -36,11 +36,12 @@
     config = $.extend({}, defaultConfig, config);
 
     var htmlStr;
+    var dotCount;
 
     function renderDots() {
       var html = '';
       var contentStr = '';
-      var dotCount = carousel.slideCount() - carousel.slidesPerPage() + 1;
+      dotCount = carousel.slideCount() - carousel.slidesPerPage() + 1;
       for( var i = 0; i < dotCount; i += 1 ) {
         if (config.useNumbers) {
           contentStr = i;
@@ -95,15 +96,19 @@
       if (newWidth !== currentWidth) {
         var newSlidesPerPage = carousel.slidesPerPage();
         if (newSlidesPerPage !== slidesPerPage) {
+          self.container.removeClass('dot_count_'+dotCount);
+
           self.container.html(renderDots());
           self.dots = self.container.children();
           self.updateState();
 
           slidesPerPage = newSlidesPerPage;
+
+          self.container.addClass('dot-count-'+dotCount);
         }
         currentWidth = newWidth;
       }
-    }
+    };
 
     carousel.on('sizeChange', this.updateDotCount);
   };
