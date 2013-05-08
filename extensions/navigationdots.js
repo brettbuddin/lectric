@@ -37,6 +37,9 @@
 
     var htmlStr;
     var dotCount;
+    var currentWidth = carousel.target.width();
+    var slidesPerPage = carousel.slidesPerPage();
+    var hidden = false;
 
     function renderDots() {
       var html = '';
@@ -69,34 +72,17 @@
       htmlStr += '</div>';
     }
 
-    self.container = $(htmlStr);
-    self.dots = self.container.children();
-
-    $(target).append(self.container);
-
-    self.container.on('click', config.elementType, function( event ) {
-      event.preventDefault();
-      var index = self.dots.index(event.target);
-      carousel.to(index);
-      carousel.element.trigger('navigationDotClick.frankenslide', [index]);
-    });
-
     this.updateState = function() {
       self.dots.removeClass( config.activeClass );
       self.dots.eq(carousel.currentSlide).addClass( config.activeClass );
     };
     
-    this.updateState();
-    carousel.on('move', this.updateState);
-
-    var currentWidth = carousel.target.width();
-    var slidesPerPage = carousel.slidesPerPage();
-    this.updateDotCount = function() {
+    this.updateDotCount = function( force ) {
       var newWidth = carousel.target.width();
-      if (newWidth !== currentWidth) {
+      if (force || newWidth !== currentWidth) {
         var newSlidesPerPage = carousel.slidesPerPage();
-        if (newSlidesPerPage !== slidesPerPage) {
-          self.container.removeClass('dot_count_'+dotCount);
+        if (force || newSlidesPerPage !== slidesPerPage) {
+          self.container.removeClass('dot-count-'+dotCount);
 
           self.container.html(renderDots());
           self.dots = self.container.children();
@@ -110,6 +96,29 @@
       }
     };
 
+    this.hide = function() {
+      hidden = true;
+      self.container.hide();
+    };
+
+    this.show = function() {
+      hidden = false;
+      self.container.show();
+    };
+
+    self.container = $(htmlStr);
+    self.dots = self.container.children();
+
+    $(target).append(self.container);
+    this.updateState();
+    
+    self.container.on('click', config.elementType, function( event ) {
+      event.preventDefault();
+      var index = self.dots.index(event.target);
+      carousel.to(index);
+      carousel.element.trigger('navigationDotClick.frankenslide', [index]);
+    });
+    carousel.on('move', this.updateState);
     carousel.on('sizeChange', this.updateDotCount);
   };
 
