@@ -78,6 +78,7 @@
       element: undefined,
       itemWrapperClassName: 'items',
       itemSelector: '.item',
+      snapToNearest: false,
       loop: false,
       limitLeft: false,
       limitRight: false, 
@@ -204,7 +205,7 @@
   // Returns nothing.
   BaseSlider.prototype.update = function(opts) {
     var options = $.extend({animate: true, triggerSlide: true}, opts);
-
+    
     var self = this;
     var after = function() {
       if (options.triggerSlide && options.animate) {
@@ -223,7 +224,8 @@
       this.element.css({left: this.position.x + 'px'}).queue(after);
     }
 
-    if (options.triggerSlide) { this.element.trigger('move.frankenslide'); }
+    if (options.triggerSlide) { 
+    	this.element.trigger('move.frankenslide'); }
   };
 
 
@@ -489,8 +491,9 @@
     var options = $.extend({animate: true, triggerSlide: true}, opts);
     if (options.animate) { this.decayOn(opts && opts.easing); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
-
-    if (options.triggerSlide) { this.element.trigger('move.frankenslide'); }
+    if (options.triggerSlide) { 
+    	this.element.trigger('move.frankenslide');
+     }
   };
 
 
@@ -592,17 +595,31 @@
         var dx = this.position.x - this.lastPosition.x;
         var dt = (new Date()) - this.lastMoveTime + 1; 
         
-        var width = this.slideWidth;
-        var slidesPerPage = this.slidesPerPage();
+        var width = this.slideWidth, 
+            slidesPerPage = this.slidesPerPage(),
+            tossedX;
         if (this.opts.tossing || slidesPerPage > 1) {
-          var tossedX = this.opts.tossFunction(this.position.x, dx, dt);
-          if (slidesPerPage === 1) {
-            tossedX = Math.round(tossedX / width) * width;
-          }
-          this.position.x = this.limitXBounds( tossedX );
-          this.currentSlide = this.position.x / width;
-          this.update({easing: 'ease-out'});
-
+	     
+	     if (this.opts.snapToNearest) {
+		 	
+		 	tossedX = this.limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
+		 	this.position.x = Math.round(tossedX / width) * width;
+	        this.currentSlide = Math.abs(Math.round(this.position.x / this.slideWidth));
+		 	this.update();
+		 	
+	     } else {
+		  
+			  tossedX = this.opts.tossFunction(this.position.x, dx, dt);
+	          
+	          if (slidesPerPage === 1) {
+	            tossedX = Math.round(tossedX / width) * width;
+	          }
+	          this.position.x = this.limitXBounds( tossedX );
+	          this.currentSlide = this.position.x / width;
+	          this.update({easing: 'ease-out'});
+			     
+		     }
+          
         } else if (dx > 20 || dx < -20) {
           if (dx < 0) {
             this.next();
