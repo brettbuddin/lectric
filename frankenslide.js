@@ -11,23 +11,23 @@
  * Renamed Frankenslide and modifications copyright 2013 by Stu Kabakoff
  *
  */
-(function( factory ) {
+(function(factory) {
   //AMD
-  if(typeof define === 'function' && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     define(['jquery'], factory);
 
-  //NODE
-  } else if(typeof module === 'object' && module.exports) {
+    //NODE
+  } else if (typeof module === 'object' && module.exports) {
     var $ = require('jquery');
     module.exports = factory($);
 
-  //GLOBAL
+    //GLOBAL
   } else {
     window.Frankenslide = factory(jQuery);
   }
 })(function($) {
   var ua = navigator.userAgent.toLowerCase();
-  var isWebkit = !!ua.match(/applewebkit/i);
+  var isWebkit = !! ua.match(/applewebkit/i);
   var supportsTouch = "ontouchmove" in window;
 
   var cssWithoutUnit = function(element, attribute) {
@@ -71,9 +71,9 @@
   BaseSlider.prototype.init = function(target, opts) {
     this.opts = $.extend({
       reverse: false,
-      next: undefined, 
+      next: undefined,
       previous: undefined,
-      nextPage: undefined, 
+      nextPage: undefined,
       previousPage: undefined,
       element: undefined,
       itemWrapperClassName: 'items',
@@ -81,7 +81,7 @@
       snapToNearest: false,
       loop: false,
       limitLeft: false,
-      limitRight: false, 
+      limitRight: false,
       animateEasing: 'swing',
       animateDuration: $.fx.speeds._default,
       hooks: {}
@@ -93,9 +93,9 @@
     this.position = new Position(0, 0);
     this.startPosition = new Position(this.position);
     this.lastPosition = new Position(this.position);
-    
+
     if (this.opts.itemClassName) {
-      this.opts.itemSelector = '.'+this.opts.itemClassName;
+      this.opts.itemSelector = '.' + this.opts.itemClassName;
     }
     var itemWrapperSelector = '.' + this.opts.itemWrapperClassName;
 
@@ -128,7 +128,7 @@
     this.element.itemWrapperSelector = itemWrapperSelector;
 
     var self = this;
-    
+
     var type = supportsTouch ? 'touchstart' : 'click';
     $(this.opts.next).on(type, function(e) {
       e.preventDefault();
@@ -152,7 +152,7 @@
       self.previousPage();
       self.element.trigger('previousPageClick.frankenslide');
     });
-    
+
     // Keep clicks from doing what they do if
     // we support touch on this device
     if (supportsTouch) {
@@ -163,8 +163,8 @@
       $(this.opts.previous).click(function(e) {
         e.preventDefault();
       });
-    }    
-    
+    }
+
     // Bind callbacks passed in at initialization
     $.each(this.opts.hooks, function(name, fn) {
       if ($.isArray(fn)) {
@@ -180,7 +180,7 @@
 
     this.recalculateWidth = function() {
       var newWidth = self.target.width();
-      if ( self.width !== newWidth ) {
+      if (self.width !== newWidth) {
         self.width = newWidth;
         self.calculateSlideWidth();
         self.element.css({'width': (self.slideWidth+10) * self.slideCount() }); // add a little for borders and margin
@@ -205,7 +205,7 @@
   // Returns nothing.
   BaseSlider.prototype.update = function(opts) {
     var options = $.extend({animate: true, triggerSlide: true}, opts);
-    
+
     var self = this;
     var after = function() {
       if (options.triggerSlide && options.animate) {
@@ -217,14 +217,14 @@
 
     if (options.animate) {
       this.element.animate({left: this.position.x + 'px'}, 
-                           this.opts.animateDuration, 
+      this.opts.animateDuration,
                            this.opts.animateEasing
       ).queue(after);
     } else {
       this.element.css({left: this.position.x + 'px'}).queue(after);
     }
 
-    if (options.triggerSlide) { 
+    if (options.triggerSlide) {
     	this.element.trigger('move.frankenslide'); }
   };
 
@@ -238,8 +238,8 @@
   BaseSlider.prototype.on = function(name, fn) {
     var self = this;
     var callback = function(e) {
-      if (e.target == self.element[0]) { 
-        var args = Array.prototype.slice.apply( arguments );
+      if (e.target == self.element[0]) {
+        var args = Array.prototype.slice.apply(arguments);
         fn.apply(null, [self].concat(args));
       }
     };
@@ -276,14 +276,14 @@
   BaseSlider.prototype.to = function(slide, options) {
     this.lastPosition.x = this.position.x;
     this.lastPosition.y = this.position.y;
-    
+
     var slideCount = this.slideCount();
     var previous = this.position.x;
 
     if (this.opts.loop) {
-      slide = Math.abs((slide+slideCount) % slideCount);
+      slide = Math.abs((slide + slideCount) % slideCount);
     }
-    this.currentSlide = Math.min( Math.max( slide, 0 ), slideCount - this.slidesPerPage() );
+    this.currentSlide = Math.min(Math.max(slide, 0), slideCount - this.slidesPerPage());
     this.position.x = this.limitXBounds(this.xForSlide(slide));
     if (this.position.x !== previous) {
       this.update(options);
@@ -353,7 +353,7 @@
   // 
   // Returns the Integer number of slides visibile in the viewport at any time.
   BaseSlider.prototype.slidesPerPage = function() {
-    return Math.max( Math.floor( this.width / this.slideWidth ), 1);
+    return Math.max(Math.floor(this.width / this.slideWidth), 1);
   };
 
 
@@ -376,10 +376,10 @@
   // Retrieves a data-attribute from a slide.
   //
   // Returns the value of the attribute or undefined.
-  BaseSlider.prototype.getSlideData = function( property, slide ) {
+  BaseSlider.prototype.getSlideData = function(property, slide) {
     var slideEl = this.element.children()[this.currentSlide];
     if (slideEl) {
-      return slideEl.getAttribute('data-'+property);
+      return slideEl.getAttribute('data-' + property);
     }
   };
 
@@ -397,10 +397,10 @@
 
 
     if (this.opts.reverse) {
-      x = (x > totalWidth - slideWidth) ?  totalWidth - slideWidth : x;
+      x = (x > totalWidth - slideWidth) ? totalWidth - slideWidth : x;
       x = (x < 0) ? 0 : x;
     } else {
-      x = (x < -totalWidth + slideWidth) ?  -totalWidth + slideWidth : x;
+      x = (x < -totalWidth + slideWidth) ? -totalWidth + slideWidth : x;
       x = (x > 0) ? 0 : x;
     }
 
@@ -418,7 +418,7 @@
   BaseSlider.prototype.lazyLoadNextFrame = function() {
     var start = this.currentSlide;
     var slidesPerPage = this.slidesPerPage();
-    var end = start + (slidesPerPage*2);
+    var end = start + (slidesPerPage * 2);
 
     var $slides = this.element.children().slice(start, end);
     $slides.each(function(i, slide) {
@@ -462,22 +462,22 @@
   // event - The Event triggered on the element
   // 
   // Returns nothing.
-  TouchSlider.prototype.handleEvent = function(event) { 
-    TouchEvents[event.type].call(this, event); 
+  TouchSlider.prototype.handleEvent = function(event) {
+    TouchEvents[event.type].call(this, event);
   };
 
   // Disable touch events on the slider.
   //
   // Returns nothing.
-  TouchSlider.prototype.disable = function(){
-      this.handleEvent = {};
+  TouchSlider.prototype.disable = function() {
+    this.handleEvent = {};
   };
 
   // Re-enable touch events on the slider.
   //
   // Returns nothing.
-  TouchSlider.prototype.enable = function(){
-      delete this.handleEvent;
+  TouchSlider.prototype.enable = function() {
+    delete this.handleEvent;
   };
 
   // Update the current position of the slider.
@@ -491,9 +491,9 @@
     var options = $.extend({animate: true, triggerSlide: true}, opts);
     if (options.animate) { this.decayOn(opts && opts.easing); }
     this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
-    if (options.triggerSlide) { 
-    	this.element.trigger('move.frankenslide');
-     }
+    if (options.triggerSlide) {
+      this.element.trigger('move.frankenslide');
+    }
   };
 
 
@@ -511,7 +511,7 @@
   // Turn on CSS3 animation decay.
   // 
   // Returns nothing.
-  TouchSlider.prototype.decayOn = function( easing ) {
+  TouchSlider.prototype.decayOn = function(easing) {
     if (!this.decayIsOn || this.easing !== easing) {
       this.decayIsOn = true;
       this.easing = easing;
@@ -528,9 +528,9 @@
       }
 
       this.element.css({'-webkit-transition-duration': duration + 's',
-                        '-webkit-transition-property': '-webkit-transform',
-                        '-webkit-transition-timing-function': easing
-                      });
+        '-webkit-transition-property': '-webkit-transform',
+        '-webkit-transition-timing-function': easing
+      });
     }
   };
 
@@ -560,7 +560,7 @@
 
     touchmove: function(e) {
       if (this.gesturing) { return false; }
-      
+
       this.decayOff();
 
       if (!this.moved) {
@@ -593,33 +593,25 @@
       window.removeEventListener('touchend', this, false);
       if (this.moved) {
         var dx = this.position.x - this.lastPosition.x;
-        var dt = (new Date()) - this.lastMoveTime + 1; 
-        
-        var width = this.slideWidth, 
-            slidesPerPage = this.slidesPerPage(),
-            tossedX;
+        var dt = (new Date()) - this.lastMoveTime + 1;
+
+        var width = this.slideWidth,
+          slidesPerPage = this.slidesPerPage(),
+          tossedX;
         if (this.opts.tossing || slidesPerPage > 1) {
-	     
-	     if (this.opts.snapToNearest) {
-		 	
-		 	tossedX = this.limitXBounds(this.opts.tossFunction(this.position.x, dx, dt));
-		 	this.position.x = Math.round(tossedX / width) * width;
-	        this.currentSlide = Math.abs(Math.round(this.position.x / this.slideWidth));
-		 	this.update();
-		 	
-	     } else {
-		  
-			  tossedX = this.opts.tossFunction(this.position.x, dx, dt);
-	          
-	          if (slidesPerPage === 1) {
-	            tossedX = Math.round(tossedX / width) * width;
-	          }
-	          this.position.x = this.limitXBounds( tossedX );
-	          this.currentSlide = this.position.x / width;
-	          this.update({easing: 'ease-out'});
-			     
-		     }
-          
+
+          tossedX = this.opts.tossFunction(this.position.x, dx, dt);
+
+          if (slidesPerPage === 1 || this.opts.snapToNearest) {
+            tossedX = Math.round(tossedX / width) * width;
+          }
+          this.position.x = this.limitXBounds(tossedX);
+          this.currentSlide = this.position.x / width;
+          this.update({
+            easing: 'ease-out'
+          });
+
+
         } else if (dx > 20 || dx < -20) {
           if (dx < 0) {
             this.next();
@@ -629,7 +621,7 @@
             this.element.trigger('previousSwipe.frankenslide');
           }
         } else {
-          var slide = Math.abs( Math.round(this.position.x / width) );
+          var slide = Math.abs(Math.round(this.position.x / width));
           if (slide > this.currentSlide) {
             this.next();
             this.element.trigger('nextSwipe.frankenslide');
@@ -650,12 +642,12 @@
       //console.profileEnd('fingerup');
     },
 
-    gesturestart: function(e) { 
-      this.gesturing = true; 
+    gesturestart: function(e) {
+      this.gesturing = true;
     },
 
-    gestureend: function(e) { 
-      this.gesturing = false; 
+    gestureend: function(e) {
+      this.gesturing = false;
     },
 
     webkitTransitionEnd: function(e) {
@@ -663,7 +655,7 @@
       this.lazyLoadNextFrame();
     }
   };
-  
+
   Frankenslide.BaseSlider = BaseSlider;
   Frankenslide.TouchSlider = TouchSlider;
 
