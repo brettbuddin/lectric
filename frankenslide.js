@@ -445,8 +445,9 @@
     TouchSlider.superobject.init.call(this, target, opts);
     this.opts = $.extend({
       tossFunction: function(x, dx, dt) {
-        return x + dx * 100 / dt;
+        return x + (dx * 50) / dt;
       },
+      animateDuration: 1000,
       tossing: false
     }, this.opts);
     $(target).addClass('frankenslide-slider-touch');
@@ -542,6 +543,7 @@
     },
 
     touchstart: function(e) {
+      //console.profile('touchstart');
       this.currentTarget = e.currentTarget;
       this.startPosition.x = e.touches[0].pageX - this.position.x;
       this.startPosition.y = e.touches[0].pageY - this.position.y;
@@ -554,11 +556,12 @@
       window.addEventListener('touchend', this, false);
       this.element[0].addEventListener('click', this, false);
 
-
-      this.element.trigger('start.frankenslide');
+      //this.element.trigger('start.frankenslide');
+      //console.profileEnd('touchstart');
     },
 
     touchmove: function(e) {
+      //console.profile('touchmove');
       if (this.gesturing) { return false; }
 
       this.decayOff();
@@ -570,7 +573,7 @@
           e.preventDefault();
         }
 
-        this.element.trigger('firstSlide.frankenslide');
+        //this.element.trigger('firstSlide.frankenslide');
       }
 
       this.moved = true;
@@ -582,6 +585,7 @@
 
       this.update({animate: false});
       this.lastDate = new Date();
+      //console.profileEnd('touchmove');
     },
 
     touchend: function(e) {
