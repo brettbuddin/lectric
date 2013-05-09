@@ -225,7 +225,7 @@
     }
 
     if (options.triggerSlide) {
-    	this.element.trigger('move.frankenslide'); }
+      this.element.trigger('move.frankenslide'); }
   };
 
 
@@ -606,7 +606,7 @@
             tossedX = Math.round(tossedX / width) * width;
           }
           this.position.x = this.limitXBounds(tossedX);
-          this.currentSlide = this.position.x / width;
+          this.currentSlide = Math.abs(this.position.x / width);
           this.update({
             easing: 'ease-out'
           });
