@@ -74,7 +74,7 @@
 
     this.updateState = function() {
       self.dots.removeClass( config.activeClass );
-      self.dots.eq(carousel.currentSlide).addClass( config.activeClass );
+      self.dots.eq(Math.round(carousel.currentSlide)).addClass( config.activeClass );
     };
     
     this.updateDotCount = function( force ) {
