@@ -26,10 +26,15 @@
   var ua = navigator.userAgent.toLowerCase();
   isWebkit = !!ua.match(/applewebkit/i);
   var supportsTouch = false;
-  try {
-    document.createEvent("TouchEvent");
-    supportsTouch = true;
-  } catch (e) {}
+  //UA test for touch devices because Chrome32 emulates and breaks shit
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+
+      try {
+        document.createEvent("TouchEvent");
+        supportsTouch = true;
+      } catch (e) {}
+
+  }
 
   var cssWithoutUnit = function(element, attribute) {
     var measure = element.css(attribute);
@@ -66,17 +71,17 @@
   //
   // text - The String CSS selector of the slider container.
   // opts - The Map of extra parameters.
-  // 
+  //
   // Returns nothing.
   BaseSlider.prototype.init = function(target, opts) {
     this.opts = $.extend({
       reverse: false,
-      next: undefined, 
+      next: undefined,
       previous: undefined,
       itemWrapperClassName: 'items',
       itemClassName: 'item',
       limitLeft: false,
-      limitRight: false, 
+      limitRight: false,
       animateEasing: 'swing',
       animateDuration: $.fx.speeds._default,
       hooks: {}
@@ -85,7 +90,7 @@
     this.position = new Position(0, 0);
     this.startPosition = new Position(this.position);
     this.lastPosition = new Position(this.position);
-  
+
     // Set up the styling of the slider
     var element = $('<div/>', {
       'class': this.opts.itemWrapperClassName
@@ -104,7 +109,7 @@
     this.element.itemWrapperSelector = itemWrapperSelector;
 
     var self = this;
-    
+
     var type = supportsTouch ? 'touchstart' : 'click';
     $(this.opts.next).bind(type, function(e) {
       e.preventDefault();
@@ -119,7 +124,7 @@
       self.to(page - 1);
       self.element.trigger('previousButton.lectric');
     });
-    
+
     // Keep clicks from doing what they do if
     // we support touch on this device
     if (supportsTouch) {
@@ -130,8 +135,8 @@
       $(this.opts.previous).click(function(e) {
         e.preventDefault();
       });
-    }    
-    
+    }
+
     // Bind callbacks passed in at initialization
     $.each(this.opts.hooks, function(name, fn) {
       if ($.isArray(fn)) {
@@ -151,7 +156,7 @@
   // opts - The Map of extra parameters:
   //        animate - Boolean of whether or not to animate between two states.
   //        triggerSlide - Boolean of whether or not to trigger the move hook.
-  // 
+  //
   // Returns nothing.
   BaseSlider.prototype.update = function(opts) {
     var options = $.extend({animate: true, triggerSlide: true}, opts);
@@ -163,8 +168,8 @@
     };
 
     if (options.animate) {
-      this.element.animate({left: this.position.x + 'px'}, 
-                           this.opts.animateDuration, 
+      this.element.animate({left: this.position.x + 'px'},
+                           this.opts.animateDuration,
                            this.opts.animateEasing
       ).queue(after);
     } else {
@@ -179,12 +184,12 @@
   //
   // name - The String name of the hook.
   // fn - The Function callback to execute when the hook is triggered.
-  // 
+  //
   // Returns the Function callback that was bound to the hook.
   BaseSlider.prototype.on = function(name, fn) {
     var self = this;
     var callback = function(e) {
-      if (e.target == self.element[0]) { 
+      if (e.target == self.element[0]) {
         fn(self, e);
       }
     };
@@ -200,7 +205,7 @@
   //
   // name - The String name of the hook.
   // fn - The Function handler to unbind from the element.
-  // 
+  //
   // Returns nothing.
   BaseSlider.prototype.off = function(name, fn) {
     if (typeof fn !== undefined && $.isFunction(fn)) {
@@ -214,7 +219,7 @@
   };
 
   // Retrieve the current page of the slider.
-  // 
+  //
   // Returns the Integer page number of the slider.
   BaseSlider.prototype.page = function() {
     return Math.abs(Math.round(this.position.x / this.itemWidth()));
@@ -223,7 +228,7 @@
   // Move to a specific page number.
   //
   // page - The Integer page number to move to.
-  // 
+  //
   // Returns nothing.
   BaseSlider.prototype.to = function(page) {
     var previous = this.position.x;
@@ -236,7 +241,7 @@
   // Move to a specific item in the slider, regardless of its position.
   //
   // item - The DOM Reference of the item you'd like to move to.
-  // 
+  //
   // Returns nothing.
   BaseSlider.prototype.toItem = function(item) {
     var all = this.element.find(this.element.itemSelector);
@@ -251,7 +256,7 @@
   // Retrieve the current X position.
   //
   // page - The Integer page number.
-  // 
+  //
   // Returns the Integer X position of the slider.
   BaseSlider.prototype.xForPage = function(page) {
     var flip = (this.opts.reverse) ? 1 : -1;
@@ -260,7 +265,7 @@
 
 
   // Retrieve the width of a single item (including margin-right and padding).
-  // 
+  //
   // Returns the Integer width of a single item.
   BaseSlider.prototype.itemWidth = function() {
     var first = this.element.find(this.element.itemSelector).eq(0);
@@ -269,7 +274,7 @@
   };
 
   // Retrieve number of items in the slider.
-  // 
+  //
   // Returns the Integer number of items.
   BaseSlider.prototype.itemCount = function() {
     return this.element.find(this.element.itemSelector).size();
@@ -296,7 +301,7 @@
       x = (x > 0) ? 0 : x;
     }
 
-    if ((this.position.x - x > 0 && this.opts.limitRight) || 
+    if ((this.position.x - x > 0 && this.opts.limitRight) ||
         (this.position.x - x < 0 && this.opts.limitLeft)) {
       x = this.position.x;
     }
@@ -314,7 +319,7 @@
   //
   // text - The String CSS selector of the slider container.
   // opts - The Map of extra parameters.
-  // 
+  //
   // Returns nothing.
   TouchSlider.prototype.init = function(target, opts) {
     TouchSlider.superobject.init.call(this, target, opts);
@@ -334,10 +339,10 @@
   // Proxy the events triggered on the element to another function.
   //
   // event - The Event triggered on the element
-  // 
+  //
   // Returns nothing.
-  TouchSlider.prototype.handleEvent = function(event) { 
-    TouchEvents[event.type].call(this, event); 
+  TouchSlider.prototype.handleEvent = function(event) {
+    TouchEvents[event.type].call(this, event);
   };
 
 
@@ -347,19 +352,19 @@
   // opts - The Map of extra parameters:
   //        animate - Boolean of whether or not to animate between two states.
   //        triggerSlide - Boolean of whether or not to trigger the move hook.
-  // 
+  //
   // Returns nothing.
   TouchSlider.prototype.update = function(opts) {
     var options = $.extend({animate: true, triggerSlide: true}, opts);
     if (options.animate) { this.decayOn(); }
-    this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'}); 
+    this.element.css({'-webkit-transform': 'translate3d(' + this.position.x + 'px, 0, 0)'});
 
     if (options.triggerSlide) { this.element.trigger('slide.lectric'); }
   };
 
 
   // Turn off CSS3 animation decay.
-  // 
+  //
   // Returns nothing.
   TouchSlider.prototype.decayOff = function() {
     this.element.css({'-webkit-transition-duration': '0s'});
@@ -367,7 +372,7 @@
   };
 
   // Turn on CSS3 animation decay.
-  // 
+  //
   // Returns nothing.
   TouchSlider.prototype.decayOn = function() {
     var duration = this.opts.animateDuration;
@@ -439,8 +444,8 @@
 
       if (this.moved) {
         var dx = this.position.x - this.lastPosition.x;
-        var dt = (new Date()) - this.lastMoveTime + 1; 
-        
+        var dt = (new Date()) - this.lastMoveTime + 1;
+
         var width = this.itemWidth();
 
         if (this.opts.tossing) {
@@ -459,19 +464,19 @@
       this.currentTarget = undefined;
     },
 
-    gesturestart: function(e) { 
-      this.gesturing = true; 
+    gesturestart: function(e) {
+      this.gesturing = true;
     },
 
-    gestureend: function(e) { 
-      this.gesturing = false; 
+    gestureend: function(e) {
+      this.gesturing = false;
     },
 
     webkitTransitionEnd: function(e) {
       this.element.trigger('animationEnd.lectric');
     }
   };
-  
+
   Lectric.BaseSlider = BaseSlider;
   Lectric.TouchSlider = TouchSlider;
 
